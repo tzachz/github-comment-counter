@@ -1,26 +1,47 @@
 package com.tzachz.github.commentcounter;
 
-import com.google.common.collect.Lists;
+import com.tzachz.github.commentcounter.api.GHActor;
+import com.tzachz.github.commentcounter.api.GHEvent;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by IntelliJ IDEA.
+ * Created with IntelliJ IDEA.
  * User: tzachz
- * Date: 8/8/13
+ * Date: 09/08/13
+ * Time: 01:28
  */
 public class UserCommentsTest {
 
     @Test
-    public void commentsAndReposCounted() throws Exception {
-        UserComments userComments = new UserComments();
-        List<GHEvent> comments = Lists.newArrayList(new GHEvent("repo1"), new GHEvent("repo1"), new GHEvent("repo2"));
-        userComments.addAll(comments);
-        assertThat(userComments.getReposCount(), is(2));
-        assertThat(userComments.getCount(), is(3));
+    public void leaderBoardSortedDescending() throws Exception {
+        UserComments userComments = createUserComments("aa", "bb", "aa");
+        List<UserComments.Commenter> leaderBoard = userComments.getLeaderBoard();
+        assertThat(leaderBoard.get(0).username, is("aa"));
     }
+
+    @Test
+    public void testAddAnother() throws Exception {
+        UserComments userComments = createUserComments("aa", "aa", "bb");
+        UserComments another = createUserComments("bb", "cc");
+        userComments.addAll(another);
+        assertThat(userComments.getCommentCount("aa"), is(2));
+        assertThat(userComments.getCommentCount("bb"), is(2));
+        assertThat(userComments.getCommentCount("cc"), is(1));
+    }
+
+    private UserComments createUserComments(String... users) {
+        UserComments userComments = new UserComments();
+        for (String user : users) {
+            userComments.addAll(Arrays.asList(new GHEvent("PullRequestReviewCommentEvent", new GHActor(user))));
+        }
+        return userComments;
+    }
+
+
 }
