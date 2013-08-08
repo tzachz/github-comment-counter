@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+project.group = 'com.tzachz'
+project.version = '0.0.1'
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.6'
+}
+
+idea {
+    project {
+        jdkName = '1.7'
+    }
+}
+
+idea.project.ipr {
+     withXml { provider ->
+        def vcsProvider = new File('.svn').exists() ? 'svn' : 'Git'
+        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = vcsProvider
+     }
+}
