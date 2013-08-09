@@ -7,18 +7,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * User: tzachz
  * Date: 08/08/13
  * Time: 23:44
- * A very partial representation of a GitHub Actor (user)
+ * A very partial representation of a GitHub user
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GHActor {
+public class GHUser {
 
     private String login;
-    private String url;
 
-    public GHActor() {
+    @SuppressWarnings("UnusedDeclaration")
+    public GHUser() {
     }
 
-    public GHActor(String login) {
+    public GHUser(String login) {
         this.login = login;
     }
 
@@ -26,7 +26,4 @@ public class GHActor {
         return login;
     }
 
-    public String getUrl() {
-        return url;
-    }
 }

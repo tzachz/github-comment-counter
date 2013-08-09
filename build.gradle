@@ -28,6 +28,7 @@ dependencies {
     compile 'com.sun.jersey:jersey-core:1.17.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.1.4'
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.1.4'
+    compile 'joda-time:joda-time:2.2'
 
     // just for reference... does not provide required functionality
     runtime 'org.kohsuke:github-api:1.43'

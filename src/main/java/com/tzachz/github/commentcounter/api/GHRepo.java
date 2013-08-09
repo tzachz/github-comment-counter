@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class GHRepo {
 
     private String name;
-    private String html_url;
 
     public GHRepo() {
     }
@@ -21,7 +20,4 @@ public class GHRepo {
         return name;
     }
 
-    public String getHtml_url() {
-        return html_url;
-    }
 }

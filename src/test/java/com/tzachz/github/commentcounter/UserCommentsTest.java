@@ -1,7 +1,7 @@
 package com.tzachz.github.commentcounter;
 
-import com.tzachz.github.commentcounter.api.GHActor;
-import com.tzachz.github.commentcounter.api.GHEvent;
+import com.tzachz.github.commentcounter.api.GHUser;
+import com.tzachz.github.commentcounter.api.GHComment;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class UserCommentsTest {
     private UserComments createUserComments(String... users) {
         UserComments userComments = new UserComments();
         for (String user : users) {
-            userComments.addAll(Arrays.asList(new GHEvent("PullRequestReviewCommentEvent", new GHActor(user))));
+            userComments.addAll(Arrays.asList(new GHComment(new GHUser(user))));
         }
         return userComments;
     }

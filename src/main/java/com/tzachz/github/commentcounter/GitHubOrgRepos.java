@@ -23,7 +23,7 @@ public class GitHubOrgRepos extends GitHubClient {
     public Set<String> getRepoNames(String organization) {
         final Set<String> names = Sets.newHashSet();
         WebResource resource = getResource().path("orgs").path(organization).path("repos");
-        scanPages(resource, 0, new GenericType<List<GHRepo>>() {}, new PageProcessor<GHRepo>() {
+        scanPages(resource, new GenericType<List<GHRepo>>() {}, new PageProcessor<GHRepo>() {
                     @Override
                     public void process(List<GHRepo> page) {
                         for (GHRepo repo : page) {

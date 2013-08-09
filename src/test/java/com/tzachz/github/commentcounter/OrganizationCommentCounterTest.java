@@ -15,8 +15,8 @@ public class OrganizationCommentCounterTest {
     public GitHubCredentialsRule credentials = new GitHubCredentialsRule();
 
     @Test
-    public void printLeaderboard() throws Exception {
+    public void printLeaderBoard() throws Exception {
         OrganizationCommentCounter counter = new OrganizationCommentCounter(credentials.getUsername(), credentials.getPassword());
-        counter.printCommentsLeaderBoard("zenexity");
+        counter.printCommentsLeaderBoard("kenshoo", 7);
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class GitHubClient {
 
     private static final String GITHUB_URL = "https://api.github.com";
+    private static final int MAX_PAGES = 20;
 
     private WebResource resource;
 
@@ -30,17 +31,18 @@ public abstract class GitHubClient {
         return resource;
     }
 
-    static protected <T> void scanPages(WebResource resource, int maxPages, GenericType<List<T>> type, PageProcessor<T> processor) {
-        maxPages = maxPages<=0? Integer.MAX_VALUE : maxPages;
+    static protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
         int totalItems = 0;
-        for (int page = 1; page <= maxPages; page++) {
+        int pageSize = -1;
+        for (int page = 1; page <= MAX_PAGES; page++) {
             System.out.println(MessageFormat.format("{0}: reading page {1}...", resource.toString(), page));
             List<T> events = resource.queryParam("page", Integer.toString(page)).get(type);
             totalItems += events.size();
-            if (events.isEmpty()) {
+            processor.process(events);
+            if (events.isEmpty() || events.size() < pageSize) {
                 break;
             } else {
-                processor.process(events);
+                pageSize = events.size();
             }
         }
         System.out.println(MessageFormat.format("{0}: read {1} items.", resource.toString(), totalItems));

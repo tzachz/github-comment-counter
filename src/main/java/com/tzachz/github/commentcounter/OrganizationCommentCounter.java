@@ -1,5 +1,8 @@
 package com.tzachz.github.commentcounter;
 
+import org.joda.time.LocalDate;
+
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -18,12 +21,15 @@ public class OrganizationCommentCounter  {
         commentCounter = new GitHubCommentCounter(username, password);
     }
 
-    public void printCommentsLeaderBoard(String organization) {
+    public void printCommentsLeaderBoard(String organization, int daysBack) {
+        Date since = LocalDate.now().minusDays(daysBack).toDate();
         Set<String> repoNames = repos.getRepoNames(organization);
         UserComments total = new UserComments();
         for (String name : repoNames) {
-            total.addAll(commentCounter.getUserComments(organization, name));
+            total.addAll(commentCounter.getUserComments(organization, name, since));
         }
         System.out.println(total.getLeaderBoard().toString());
     }
+
+
 }

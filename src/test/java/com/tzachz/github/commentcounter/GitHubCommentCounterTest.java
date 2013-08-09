@@ -3,6 +3,8 @@ package com.tzachz.github.commentcounter;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
@@ -17,9 +19,9 @@ public class GitHubCommentCounterTest {
     public GitHubCredentialsRule credentials = new GitHubCredentialsRule();
 
     @Test
-    public void atLeastOneCommentByMeOnThisRepo() throws Exception {
+    public void atLeastOneCommentByAvihayOnFacterJ() throws Exception {
         GitHubCommentCounter gitHubCommentCounter = new GitHubCommentCounter(credentials.getUsername(), credentials.getPassword());
-        UserComments comments = gitHubCommentCounter.getUserComments("tzachz", "github-comment-counter");
-        assertThat(comments.getCommentCount("tzachz"), greaterThan(0));
+        UserComments comments = gitHubCommentCounter.getUserComments("kenshoo", "facterj", new Date(0l));
+        assertThat(comments.getCommentCount("AvihayTsayeg"), greaterThan(0));
     }
 }
