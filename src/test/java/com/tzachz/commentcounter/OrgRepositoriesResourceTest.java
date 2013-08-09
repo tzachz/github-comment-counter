@@ -1,4 +1,4 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,14 +14,14 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
  * Date: 08/08/13
  * Time: 23:58
  */
-public class GitHubOrgReposTest {
+public class OrgRepositoriesResourceTest {
 
     @Rule
-    public GitHubCredentialsRule credentials = new GitHubCredentialsRule();
+    public VMOptsCredentials credentials = new VMOptsCredentials();
 
     @Test
     public void facterjRepoIsInKenshooReposList() throws Exception {
-        GitHubOrgRepos repos = new GitHubOrgRepos(credentials.getUsername(), credentials.getPassword());
+        OrgRepositoriesResource repos = new OrgRepositoriesResource(credentials.getUsername(), credentials.getPassword());
         Set<String> repoNames = repos.getRepoNames("kenshoo");
         assertThat(repoNames, hasItem("facterj"));
     }

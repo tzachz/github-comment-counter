@@ -1,4 +1,4 @@
-package com.tzachz.github.commentcounter.api;
+package com.tzachz.commentcounter.jsonobjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

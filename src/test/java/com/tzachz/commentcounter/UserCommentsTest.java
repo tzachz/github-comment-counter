@@ -1,7 +1,7 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
-import com.tzachz.github.commentcounter.api.GHUser;
-import com.tzachz.github.commentcounter.api.GHComment;
+import com.tzachz.commentcounter.jsonobjects.GHUser;
+import com.tzachz.commentcounter.jsonobjects.GHComment;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class UserCommentsTest {
     }
 
     @Test
-    public void testAddAnother() throws Exception {
+    public void anotherUserCommentAggregated() throws Exception {
         UserComments userComments = createUserComments("aa", "aa", "bb");
         UserComments another = createUserComments("bb", "cc");
         userComments.addAll(another);

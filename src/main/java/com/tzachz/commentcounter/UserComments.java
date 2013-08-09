@@ -1,9 +1,9 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.tzachz.github.commentcounter.api.GHComment;
+import com.tzachz.commentcounter.jsonobjects.GHComment;
 
 import java.util.Collection;
 import java.util.List;

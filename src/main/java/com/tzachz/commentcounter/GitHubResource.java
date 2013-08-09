@@ -1,4 +1,4 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
@@ -14,14 +14,14 @@ import java.util.List;
  * Date: 08/08/13
  * Time: 23:55
  */
-public abstract class GitHubClient {
+public abstract class GitHubResource {
 
     private static final String GITHUB_URL = "https://api.github.com";
     private static final int MAX_PAGES = 20;
 
     private WebResource resource;
 
-    protected GitHubClient(String username, String password) {
+    protected GitHubResource(String username, String password) {
         Client client = Client.create();
         client.addFilter(new HTTPBasicAuthFilter(username, password));
         this.resource = client.resource(GITHUB_URL);
@@ -31,7 +31,7 @@ public abstract class GitHubClient {
         return resource;
     }
 
-    static protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
+    protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
         int totalItems = 0;
         int pageSize = -1;
         for (int page = 1; page <= MAX_PAGES; page++) {

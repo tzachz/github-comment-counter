@@ -1,8 +1,8 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
-import com.tzachz.github.commentcounter.api.GHComment;
+import com.tzachz.commentcounter.jsonobjects.GHComment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,10 +14,11 @@ import java.util.List;
  * User: tzachz
  * Date: 8/8/13
  */
-public class GitHubCommentCounter extends GitHubClient {
+public class RepositoryCommentsResource extends GitHubResource {
 
     private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    public GitHubCommentCounter(String username, String password) {
+
+    public RepositoryCommentsResource(String username, String password) {
         super(username, password);
     }
 

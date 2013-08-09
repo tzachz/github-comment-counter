@@ -1,5 +1,6 @@
-package com.tzachz.github.commentcounter;
+package com.tzachz.commentcounter;
 
+import com.google.common.base.Preconditions;
 import org.junit.rules.ExternalResource;
 
 /**
@@ -7,8 +8,11 @@ import org.junit.rules.ExternalResource;
  * User: tzachz
  * Date: 09/08/13
  * Time: 00:12
+ *
+ * This rule reads username and password passed as JVM options to the tests -
+ * useful to avoid committing credentials required for integration tests
  */
-public class GitHubCredentialsRule extends ExternalResource {
+public class VMOptsCredentials extends ExternalResource {
 
     private String password;
     private String username;
@@ -18,6 +22,8 @@ public class GitHubCredentialsRule extends ExternalResource {
         // expecting credentials to be passed as property to tests:
         username = System.getProperty("username");
         password = System.getProperty("password");
+        Preconditions.checkArgument(username != null && !username.isEmpty(),
+                "You must provide username and password as VM options for these tests, e.g. 'gradle test -Dusername=u -Dpassword=p'");
         super.before();
     }
 
