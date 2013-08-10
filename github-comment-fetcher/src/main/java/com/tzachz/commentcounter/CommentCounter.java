@@ -1,6 +1,8 @@
 package com.tzachz.commentcounter;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.Set;
  * Time: 00:46
  */
 public class CommentCounter {
+
+    private final static Logger logger = LoggerFactory.getLogger(CommentCounter.class);
 
     private final OrgRepositoriesResource repositoriesResource;
     private final RepositoryCommentsResource commentsResource;
@@ -28,7 +32,7 @@ public class CommentCounter {
         for (String name : repoNames) {
             comments.addAll(commentsResource.getUserComments(organization, name, since));
         }
-        System.out.println(comments.getLeaderBoard().toString());
+        logger.info(comments.getLeaderBoard().toString());
     }
 
 

@@ -1,11 +1,30 @@
-apply plugin: 'java'
-apply plugin: 'idea'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
 
-project.group = 'com.tzachz'
-project.version = '0.0.1'
+    project.group = 'com.tzachz'
+    project.version = '0.0.1'
+
+    test {
+        beforeTest { descriptor ->
+            logger.lifecycle("Running " + descriptor)
+        }
+    }
+}
+
+subprojects { project ->
+    dependencies {
+        compile 'com.google.guava:guava:14.0.1'
+        compile 'joda-time:joda-time:2.2'
+        compile 'org.slf4j:slf4j-api:1.7.5'
+
+        testCompile 'junit:junit:4.9'
+        testCompile 'org.hamcrest:hamcrest-library:1.3'
+    }
+}
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '1.6'
+    gradleVersion = '1.6'
 }
 
 idea {
@@ -15,21 +34,8 @@ idea {
 }
 
 idea.project.ipr {
-     withXml { provider ->
-        def vcsProvider = new File('.svn').exists() ? 'svn' : 'Git'
-        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = vcsProvider
-     }
+    withXml { provider ->
+        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+    }
 }
 
-dependencies {
-
-    compile 'com.google.guava:guava:14.0.1'
-    compile 'com.sun.jersey:jersey-client:1.17.1'
-    compile 'com.sun.jersey:jersey-core:1.17.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.1.4'
-    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.1.4'
-    compile 'joda-time:joda-time:2.2'
-
-    testCompile 'junit:junit:4.9'
-    testCompile 'org.hamcrest:hamcrest-library:1.3'
-}
