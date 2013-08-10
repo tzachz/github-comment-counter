@@ -1,4 +1,4 @@
-package com.tzachz.commentcounter;
+package com.tzachz.commentcounter.apifacade;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;

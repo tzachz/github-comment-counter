@@ -1,9 +1,8 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.tzachz.commentcounter.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,30 +47,6 @@ public class UserComments {
         }
         sort(commenters);
         return commenters;
-    }
-
-    public class Commenter implements Comparable<Commenter> {
-
-        final String username;
-        final Integer comments;
-
-        public Commenter(String username, int comments) {
-            this.username = username;
-            this.comments = comments;
-        }
-
-        @Override
-        public int compareTo(Commenter o) {
-            return o.comments.compareTo(comments); // descending by num of comments
-        }
-
-        @Override
-        public String toString() {
-            return Objects.toStringHelper(this)
-                    .add("username", username)
-                    .add("comments", comments)
-                    .toString();
-        }
     }
 
 }

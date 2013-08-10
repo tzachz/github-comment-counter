@@ -1,5 +1,7 @@
 package com.tzachz.commentcounter;
 
+import com.tzachz.commentcounter.apifacade.OrgRepositoriesResource;
+import com.tzachz.commentcounter.apifacade.RepoCommentsResource;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +20,11 @@ public class CommentCounter {
     private final static Logger logger = LoggerFactory.getLogger(CommentCounter.class);
 
     private final OrgRepositoriesResource repositoriesResource;
-    private final RepositoryCommentsResource commentsResource;
+    private final RepoCommentsResource commentsResource;
 
     protected CommentCounter(String username, String password) {
         repositoriesResource = new OrgRepositoriesResource(username, password);
-        commentsResource = new RepositoryCommentsResource(username, password);
+        commentsResource = new RepoCommentsResource(username, password);
     }
 
     public void printCommentsLeaderBoard(String organization, int daysBack) {

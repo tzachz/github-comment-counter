@@ -1,9 +1,9 @@
-package com.tzachz.commentcounter;
+package com.tzachz.commentcounter.apifacade;
 
 import com.google.common.collect.Sets;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
-import com.tzachz.commentcounter.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
 import java.util.List;
 import java.util.Set;

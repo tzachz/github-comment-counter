@@ -1,4 +1,6 @@
 dependencies {
     compile project(':github-comment-fetcher')
     compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
+
+    testCompile 'org.mockito:mockito-all:1.9.5'
 }
