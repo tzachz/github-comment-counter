@@ -4,3 +4,4 @@ gitHubCredentials:
 
 organization: kenshoo
 daysBack: 7
+refreshRateMinutes: 10

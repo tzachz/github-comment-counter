@@ -18,17 +18,29 @@ public class Commenter implements Comparable<Commenter> {
         this.comments = comments;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public Integer getComments() {
-        return comments;
-    }
-
     @Override
     public int compareTo(Commenter o) {
         return o.comments.compareTo(comments); // descending by num of comments
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Commenter commenter = (Commenter) o;
+
+        if (!comments.equals(commenter.comments)) return false;
+        if (!username.equals(commenter.username)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username.hashCode();
+        result = 31 * result + comments.hashCode();
+        return result;
     }
 
     @Override

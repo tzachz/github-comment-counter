@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter.server;
 
+import com.tzachz.commentcounter.CommentFetcher;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacadeImpl;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -11,22 +12,26 @@ import com.yammer.dropwizard.config.Environment;
  * Date: 10/08/13
  * Time: 13:41
  */
-public class LeaderboardService extends Service<LeaderboardServerConfiguration> {
+public class LeaderboardService extends Service<LeaderBoardServerConfiguration> {
 
     public static void main(String[] args) throws Exception {
         new LeaderboardService().run(args);
     }
 
     @Override
-    public void initialize(Bootstrap<LeaderboardServerConfiguration> bootstrap) {
+    public void initialize(Bootstrap<LeaderBoardServerConfiguration> bootstrap) {
         bootstrap.setName("Leaderboard-Server");
     }
 
     @Override
-    public void run(LeaderboardServerConfiguration configuration, Environment environment) throws Exception {
+    public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
         GitHubCredentials gitHubCredentials = configuration.getGitHubCredentials();
         GitHubApiFacadeImpl gitHubApiFacade = new GitHubApiFacadeImpl(gitHubCredentials.getUsername(), gitHubCredentials.getPassword());
-        environment.addResource(new LeaderboardResource());
+        CommentFetcher commentFetcher = new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), configuration.getDaysBack());
+        LeaderBoardStore store = new LeaderBoardStore();
+
         environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
+        environment.addResource(new LeaderBoardResource(store));
+        environment.manage(new RecurringCommentFetcher(commentFetcher, store, configuration.getRefreshRateMinutes()));
     }
 }

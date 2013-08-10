@@ -1,14 +1,11 @@
 package com.tzachz.commentcounter;
 
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -19,11 +16,13 @@ import static org.junit.Assert.assertThat;
  */
 public class UserCommentsTest {
 
+    private final CommentBuilder commentBuilder = new CommentBuilder();
+
     @Test
     public void aggregateUSerComments() throws Exception {
         UserComments userComments = new UserComments();
-        userComments.addAll(createComments("aa", "aa", "bb"));
-        userComments.addAll(createComments("bb", "cc"));
+        userComments.addAll(commentBuilder.createComments("aa", "aa", "bb"));
+        userComments.addAll(commentBuilder.createComments("bb", "cc"));
         assertThat(userComments.getCommentCount("aa"), is(2));
         assertThat(userComments.getCommentCount("bb"), is(2));
         assertThat(userComments.getCommentCount("cc"), is(1));
@@ -32,18 +31,9 @@ public class UserCommentsTest {
     @Test
     public void leaderBoardSortedDescending() throws Exception {
         UserComments userComments = new UserComments();
-        userComments.addAll(createComments("aa", "bb", "aa"));
+        userComments.addAll(commentBuilder.createComments("aa", "bb", "aa"));
         List<Commenter> leaderBoard = userComments.getLeaderBoard();
-        assertThat(leaderBoard.get(0).getUsername(), is("aa"));
+        assertThat(leaderBoard.get(0), equalTo(new Commenter("aa", 2)));
     }
-
-    private List<GHComment> createComments(String... users) {
-        List<GHComment> comments = new ArrayList<>();
-        for (String user : users) {
-            comments.addAll(Arrays.asList(new GHComment(new GHUser(user))));
-        }
-        return comments;
-    }
-
 
 }

@@ -29,13 +29,6 @@ public class UserComments {
         }
     }
 
-    public void addAll(UserComments other) {
-        for (String user : other.userComments.keySet()) {
-            userComments.putIfAbsent(user, new AtomicInteger(0));
-            userComments.get(user).addAndGet(other.userComments.get(user).intValue());
-        }
-    }
-
     public int getCommentCount(String user) {
         return userComments.get(user).intValue();
     }

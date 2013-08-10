@@ -9,7 +9,7 @@ import com.yammer.dropwizard.config.Configuration;
  * Date: 10/08/13
  * Time: 13:33
  */
-public class LeaderboardServerConfiguration extends Configuration {
+public class LeaderBoardServerConfiguration extends Configuration {
 
     @JsonProperty
     private GitHubCredentials gitHubCredentials;
@@ -18,6 +18,9 @@ public class LeaderboardServerConfiguration extends Configuration {
 
     @JsonProperty
     private int daysBack;
+
+    @JsonProperty
+    private int refreshRateMinutes;
 
     public GitHubCredentials getGitHubCredentials() {
         return gitHubCredentials;
@@ -29,5 +32,9 @@ public class LeaderboardServerConfiguration extends Configuration {
 
     public int getDaysBack() {
         return daysBack;
+    }
+
+    public int getRefreshRateMinutes() {
+        return refreshRateMinutes;
     }
 }
