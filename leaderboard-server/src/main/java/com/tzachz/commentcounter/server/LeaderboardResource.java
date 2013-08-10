@@ -1,13 +1,9 @@
 package com.tzachz.commentcounter.server;
 
-import com.tzachz.commentcounter.Commenter;
-import com.yammer.metrics.annotation.Timed;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +12,7 @@ import java.util.List;
  * Time: 13:57
  */
 @Path("/leaderboard")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.TEXT_HTML)
 public class LeaderBoardResource {
 
     private final LeaderBoardStore store;
@@ -26,8 +22,8 @@ public class LeaderBoardResource {
     }
 
     @GET
-    @Timed
-    public List<Commenter> getLeaderBoard() {
-        return store.get();
+    public LeaderBoardView getLeaderBoard() {
+        return new LeaderBoardView(store.get());
     }
+
 }

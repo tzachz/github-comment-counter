@@ -1,4 +1,5 @@
 dependencies {
     compile project(':github-comment-fetcher')
     compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
+    compile 'com.yammer.dropwizard:dropwizard-views:0.6.2'
 }

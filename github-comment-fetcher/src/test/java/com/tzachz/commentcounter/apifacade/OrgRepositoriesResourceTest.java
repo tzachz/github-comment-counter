@@ -1,13 +1,12 @@
-package com.tzachz.commentcounter;
+package com.tzachz.commentcounter.apifacade;
 
-import com.tzachz.commentcounter.apifacade.OrgRepositoriesResource;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItem;
 
 /**
  * Created with IntelliJ IDEA.

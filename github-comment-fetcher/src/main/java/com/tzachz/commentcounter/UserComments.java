@@ -42,4 +42,7 @@ public class UserComments {
         return commenters;
     }
 
+    public int getSize() {
+        return userComments.size();
+    }
 }

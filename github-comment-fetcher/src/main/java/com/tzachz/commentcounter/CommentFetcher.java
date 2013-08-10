@@ -2,6 +2,8 @@ package com.tzachz.commentcounter;
 
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.Set;
  */
 public class CommentFetcher {
 
+    public static final Logger logger = LoggerFactory.getLogger(CommentFetcher.class);
     private final GitHubApiFacade facade;
     private final String organization;
     private final int daysBack;
@@ -32,6 +35,7 @@ public class CommentFetcher {
         for (String name : repoNames) {
             comments.addAll(facade.getRepoComments(this.organization, name, since));
         }
+        logger.info("Fetched comments by {} users from {} repositories", comments.getSize(), repoNames.size());
         return comments.getLeaderBoard();
     }
 

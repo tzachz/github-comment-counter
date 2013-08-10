@@ -5,6 +5,7 @@ import com.tzachz.commentcounter.apifacade.GitHubApiFacadeImpl;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.views.ViewBundle;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,15 +13,16 @@ import com.yammer.dropwizard.config.Environment;
  * Date: 10/08/13
  * Time: 13:41
  */
-public class LeaderboardService extends Service<LeaderBoardServerConfiguration> {
+public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new LeaderboardService().run(args);
+        new LeaderBoardService().run(args);
     }
 
     @Override
     public void initialize(Bootstrap<LeaderBoardServerConfiguration> bootstrap) {
         bootstrap.setName("Leaderboard-Server");
+        bootstrap.addBundle(new ViewBundle());
     }
 
     @Override

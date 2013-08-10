@@ -1,6 +1,6 @@
-package com.tzachz.commentcounter;
+package com.tzachz.commentcounter.apifacade;
 
-import com.tzachz.commentcounter.apifacade.RepoCommentsResource;
+import com.tzachz.commentcounter.UserComments;
 import org.junit.Rule;
 import org.junit.Test;
 

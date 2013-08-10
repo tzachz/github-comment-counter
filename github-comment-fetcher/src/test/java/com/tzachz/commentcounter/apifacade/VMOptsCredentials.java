@@ -1,4 +1,4 @@
-package com.tzachz.commentcounter;
+package com.tzachz.commentcounter.apifacade;
 
 import com.google.common.base.Preconditions;
 import org.junit.rules.ExternalResource;

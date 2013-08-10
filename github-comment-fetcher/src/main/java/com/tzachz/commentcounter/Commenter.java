@@ -8,6 +8,7 @@ import com.google.common.base.Objects;
 * Date: 10/08/13
 * Time: 13:58
 */
+@SuppressWarnings("UnusedDeclaration")
 public class Commenter implements Comparable<Commenter> {
 
     private final String username;
@@ -16,6 +17,14 @@ public class Commenter implements Comparable<Commenter> {
     public Commenter(String username, int comments) {
         this.username = username;
         this.comments = comments;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Integer getComments() {
+        return comments;
     }
 
     @Override
