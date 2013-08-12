@@ -14,7 +14,7 @@ Some of the tests require a github user to activate the API, so you'll need to s
 ./gradlew clean build -Dusername=<a github user> -Dpassword=<her password>
 ```
 
-Alternatively, you can buid without tests:
+Alternatively, you can build without tests:
 ```
 ./gradlew clean build -x test
 ```
