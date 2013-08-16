@@ -7,6 +7,8 @@ import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -34,6 +36,6 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
 
         environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
         environment.addResource(new LeaderBoardResource(store));
-        environment.manage(new RecurringCommentFetcher(commentFetcher, store, configuration.getRefreshRateMinutes()));
+        environment.manage(new RecurringCommentFetcher(commentFetcher, store, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES));
     }
 }

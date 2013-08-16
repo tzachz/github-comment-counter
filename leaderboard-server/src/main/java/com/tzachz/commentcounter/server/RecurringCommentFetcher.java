@@ -17,14 +17,13 @@ public class RecurringCommentFetcher implements Managed {
 
     private final CommentFetcher commentFetcher;
     private final LeaderBoardStore store;
-    private final int refreshRateMinutes;
-
+    private final long period;
     private final Timer timer;
 
-    public RecurringCommentFetcher(CommentFetcher commentFetcher, LeaderBoardStore store, int refreshRateMinutes) {
+    public RecurringCommentFetcher(CommentFetcher commentFetcher, LeaderBoardStore store, int refreshRate, TimeUnit timeUnit) {
         this.commentFetcher = commentFetcher;
         this.store = store;
-        this.refreshRateMinutes = refreshRateMinutes;
+        this.period = timeUnit.toMillis(refreshRate);
         this.timer = new Timer("comment-fetcher");
     }
 
@@ -35,7 +34,7 @@ public class RecurringCommentFetcher implements Managed {
             public void run() {
                 store.set(commentFetcher.getCommentsLeaderBoard());
             }
-        }, 0, TimeUnit.MINUTES.toMillis(refreshRateMinutes));
+        }, 0, period);
     }
 
     @Override
