@@ -1,6 +1,11 @@
 package com.tzachz.commentcounter;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+
+import java.util.List;
 
 /**
 * Created with IntelliJ IDEA.
@@ -12,24 +17,28 @@ import com.google.common.base.Objects;
 public class Commenter implements Comparable<Commenter> {
 
     private final String username;
-    private final Integer comments;
+    private final List<GHComment> comments;
 
-    public Commenter(String username, int comments) {
+    public Commenter(String username) {
         this.username = username;
-        this.comments = comments;
+        this.comments = Lists.newArrayList();
+    }
+
+    public void addComment(GHComment comment) {
+        comments.add(comment);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public Integer getComments() {
-        return comments;
+    public List<GHComment> getComments() {
+        return ImmutableList.copyOf(comments);
     }
 
     @Override
     public int compareTo(Commenter o) {
-        return o.comments.compareTo(comments); // descending by num of comments
+        return Integer.valueOf(o.comments.size()).compareTo(comments.size()); // descending by num of comments
     }
 
     @Override

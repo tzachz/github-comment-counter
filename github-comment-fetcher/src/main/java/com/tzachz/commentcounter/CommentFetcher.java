@@ -44,7 +44,7 @@ public class CommentFetcher {
     public List<Commenter> getCommentsByUser() {
         Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<String> repoNames = facade.getOrgRepoNames(this.organization);
-        UserComments comments = new UserComments();
+        CommentsByUser comments = new CommentsByUser();
         for (String name : repoNames) {
             Collection<GHComment> repoComments = facade.getRepoComments(this.organization, name, since);
             Collection<GHComment> nonSelfComments = filter(repoComments, new Predicate<GHComment>() {

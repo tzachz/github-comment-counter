@@ -2,9 +2,9 @@
     <body>
         <h1>GitHub Reviewers Leader Board:</h1>
         <ol>
-        {{#board}}
-            <li><b>{{comments}}</b> comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></li>
-        {{/board}}
+        {{#records}}
+            <li><b>{{commentCount}}</b> comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></li>
+        {{/records}}
         </ol>
     </body>
 </html>

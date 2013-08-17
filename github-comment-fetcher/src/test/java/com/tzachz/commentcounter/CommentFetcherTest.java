@@ -3,6 +3,8 @@ package com.tzachz.commentcounter;
 import com.google.common.collect.Sets;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,14 +60,14 @@ public class CommentFetcherTest {
 
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasSize(2));
-        assertThat(board, hasItems(new Commenter("user1", 4), new Commenter("user2", 2)));
+        assertThat(board, hasItems(new CommenterMatcher("user1", 4), new CommenterMatcher("user2", 2)));
     }
 
     @Test
     public void commentOnSelfPullRequestIgnored() throws Exception {
         when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
-                .thenReturn(commentBuilder.createComment("user1", "body", "url"));
+                .thenReturn(commentBuilder.createComment("user1", "url"));
         when(facade.getPullRequest("url")).thenReturn(new GHPullRequest("user1"));
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasSize(0));
@@ -75,9 +77,35 @@ public class CommentFetcherTest {
     public void pullRequestNotFoundMeansCommentCounted() throws Exception {
         when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
-                .thenReturn(commentBuilder.createComment("user1", "body", "url"));
+                .thenReturn(commentBuilder.createComment("user1", "url"));
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("bad url"));
         List<Commenter> board = counter.getCommentsByUser();
-        assertThat(board, hasItem(new Commenter("user1", 1)));
+        assertThat(board, hasItem(new CommenterMatcher("user1", 1)));
+    }
+
+    private static class CommenterMatcher extends BaseMatcher<Commenter> {
+
+        private final String expectedUser;
+        private final int expectedCommentCount;
+
+        public CommenterMatcher(String expectedUser, int expectedCommentCount) {
+            this.expectedUser = expectedUser;
+            this.expectedCommentCount = expectedCommentCount;
+        }
+
+        @Override
+        public boolean matches(Object item) {
+            return item instanceof Commenter &&
+                    ((Commenter)item).getUsername().equals(expectedUser) &&
+                    ((Commenter)item).getComments().size() == expectedCommentCount;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("Commenter with user = ")
+                    .appendValue(expectedUser)
+                    .appendText(" and comment count = ")
+                    .appendValue(expectedCommentCount);
+        }
     }
 }

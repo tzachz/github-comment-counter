@@ -1,9 +1,12 @@
 package com.tzachz.commentcounter.server;
 
+import com.google.common.base.Function;
 import com.tzachz.commentcounter.Commenter;
 import com.yammer.dropwizard.views.View;
 
 import java.util.List;
+
+import static com.google.common.collect.Lists.transform;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,15 +16,21 @@ import java.util.List;
  */
 public class LeaderBoardView extends View {
 
-    private final List<Commenter> board;
+    private final List<LeaderBoardRecord> records;
 
-    protected LeaderBoardView(List<Commenter> board) {
+    protected LeaderBoardView(List<Commenter> commenters) {
         super("leaderboard.mustache");
-        this.board = board;
+        records = transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
+            @Override
+            public LeaderBoardRecord apply(Commenter input) {
+                return new LeaderBoardRecord(input.getUsername(), input.getComments().size());
+            }
+        });
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public List<Commenter> getBoard() {
-        return board;
+    public List<LeaderBoardRecord> getRecords() {
+        return records;
     }
+
 }

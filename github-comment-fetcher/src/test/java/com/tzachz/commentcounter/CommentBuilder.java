@@ -18,7 +18,7 @@ public class CommentBuilder {
         return comments;
     }
 
-    public Collection<GHComment> createComment(String username, String body, String pullRequestURL) {
+    public Collection<GHComment> createComment(String username, String pullRequestURL) {
         return Lists.newArrayList(new GHComment(username, pullRequestURL));
     }
 }

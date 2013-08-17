@@ -19,7 +19,7 @@ public class LeaderBoardStoreTest {
 
     @Test
     public void storesCommenters() throws Exception {
-        ArrayList<Commenter> commenters = Lists.newArrayList(new Commenter("user1", 3), new Commenter("user2", 5));
+        ArrayList<Commenter> commenters = Lists.newArrayList(new Commenter("user1"), new Commenter("user2"));
         LeaderBoardStore store = new LeaderBoardStore();
         store.set(commenters);
         assertThat(store.get(), hasItems(commenters.get(0), commenters.get(1)));

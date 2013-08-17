@@ -45,7 +45,7 @@ public class RecurringCommentFetcherTest {
         recurringFetcher.start();
         Thread.sleep((REFRESH_RATE_MS * rounds) + 1);
         recurringFetcher.stop();
-        verify(fetcher, times(rounds+1)).getCommentsByUser();
-        verify(store, times(rounds+1)).set(commenterList);
+        verify(fetcher, atLeast(rounds)).getCommentsByUser();
+        verify(store, atLeast(rounds)).set(commenterList);
     }
 }

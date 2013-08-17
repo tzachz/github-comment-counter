@@ -1,6 +1,6 @@
 package com.tzachz.commentcounter.apifacade;
 
-import com.tzachz.commentcounter.UserComments;
+import com.tzachz.commentcounter.CommentsByUser;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class RepoCommentsResourceTest {
     public void atLeastOneCommentByAvihayOnFacterJ() throws Exception {
         RepoCommentsResource repoCommentsResource =
                 new RepoCommentsResource(credentials.getUsername(), credentials.getPassword());
-        UserComments comments = new UserComments();
+        CommentsByUser comments = new CommentsByUser();
         comments.addAll(repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l)));
         assertThat(comments.getCommentCount("AvihayTsayeg"), greaterThan(0));
     }

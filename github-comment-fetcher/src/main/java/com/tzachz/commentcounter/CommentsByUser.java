@@ -6,9 +6,7 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Collections.sort;
 
@@ -17,27 +15,24 @@ import static java.util.Collections.sort;
  * User: tzachz
  * Date: 8/8/13
  */
-public class UserComments {
+public class CommentsByUser {
 
-    private ConcurrentMap<String, AtomicInteger> userComments = Maps.newConcurrentMap();
+    private ConcurrentMap<String, Commenter> userComments = Maps.newConcurrentMap();
 
     public void addAll(Collection<GHComment> comments) {
         for (GHComment comment : comments) {
             String user = comment.getUser().getLogin();
-            userComments.putIfAbsent(user, new AtomicInteger(0));
-            userComments.get(user).incrementAndGet();
+            userComments.putIfAbsent(user, new Commenter(user));
+            userComments.get(user).addComment(comment);
         }
     }
 
     public int getCommentCount(String user) {
-        return userComments.get(user).intValue();
+        return userComments.get(user).getComments().size();
     }
 
     public List<Commenter> getCommentsByUser() {
-        List<Commenter> commenters = Lists.newArrayList();
-        for (Map.Entry<String, AtomicInteger> user : userComments.entrySet()) {
-            commenters.add(new Commenter(user.getKey(), user.getValue().intValue()));
-        }
+        List<Commenter> commenters = Lists.newArrayList(userComments.values());
         sort(commenters);
         return commenters;
     }

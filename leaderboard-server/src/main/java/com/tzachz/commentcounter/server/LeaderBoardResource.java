@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
  * Time: 13:57
  */
 @Path("/leaderboard")
-@Produces(MediaType.TEXT_HTML)
 public class LeaderBoardResource {
 
     private final LeaderBoardStore store;
@@ -22,7 +21,15 @@ public class LeaderBoardResource {
     }
 
     @GET
+    @Produces(MediaType.TEXT_HTML)
     public LeaderBoardView getLeaderBoard() {
+        return new LeaderBoardView(store.get());
+    }
+
+    @GET
+    @Path("/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public LeaderBoardView getJson() {
         return new LeaderBoardView(store.get());
     }
 
