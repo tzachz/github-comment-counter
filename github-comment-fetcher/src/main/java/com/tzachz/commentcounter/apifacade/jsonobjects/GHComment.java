@@ -26,12 +26,6 @@ public class GHComment {
         this.pullRequestUrl = pullRequestUrl;
     }
 
-    public GHComment(String user, String pullRequestUrl, String body) {
-        this.user = new GHUser(user);
-        this.pullRequestUrl = pullRequestUrl;
-        this.body = body;
-    }
-
     public GHUser getUser() {
         return user;
     }

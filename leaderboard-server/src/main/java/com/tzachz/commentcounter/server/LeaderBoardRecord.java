@@ -15,14 +15,17 @@ public class LeaderBoardRecord {
     private final String username;
     private final int commentCount;
     private final String sampleComment;
+    private final String avatarUrl;
 
     @JsonCreator
     public LeaderBoardRecord(@JsonProperty("username") String username,
                              @JsonProperty("commentCount") int commentCount,
-                             @JsonProperty("sampleComment") String sampleComment) {
+                             @JsonProperty("sampleComment") String sampleComment,
+                             @JsonProperty("avatarUrl") String avatarUrl) {
         this.username = username;
         this.commentCount = commentCount;
         this.sampleComment = sampleComment;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getUsername() {
@@ -35,6 +38,10 @@ public class LeaderBoardRecord {
 
     public String getSampleComment() {
         return sampleComment;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
     @Override

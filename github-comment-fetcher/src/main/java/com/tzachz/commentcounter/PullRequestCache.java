@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PullRequestCache {
 
-    public static final GHPullRequest UNKNOWN = new GHPullRequest("UNKNOWN");
+    public static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", ""));
 
     private static final Logger logger = LoggerFactory.getLogger(PullRequestCache.class);
 

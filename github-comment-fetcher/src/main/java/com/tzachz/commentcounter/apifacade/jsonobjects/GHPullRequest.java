@@ -20,10 +20,6 @@ public class GHPullRequest {
         this.user = user;
     }
 
-    public GHPullRequest(String user) {
-        this.user = new GHUser(user);
-    }
-
     public GHUser getUser() {
         return user;
     }

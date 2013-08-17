@@ -34,7 +34,8 @@ public class LeaderBoardView extends View {
             public LeaderBoardRecord apply(Commenter input) {
                 List<GHComment> comments = input.getComments();
                 GHComment randomComment = comments.get(random.nextInt(comments.size()));
-                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody());
+                String avatarUrl = randomComment.getUser().getAvatarUrl();
+                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody(), avatarUrl);
             }
         });
     }

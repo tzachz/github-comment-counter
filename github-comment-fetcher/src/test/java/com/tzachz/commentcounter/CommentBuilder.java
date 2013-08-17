@@ -2,6 +2,7 @@ package com.tzachz.commentcounter;
 
 import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,15 +11,27 @@ import java.util.List;
 
 public class CommentBuilder {
 
-    Collection<GHComment> createComments(String... users) {
-        List<GHComment> comments = new ArrayList<GHComment>();
+    Collection<GHComment> createEmptyComments(String... users) {
+        List<GHComment> comments = new ArrayList<>();
         for (String user : users) {
-            comments.addAll(Arrays.asList(new GHComment(user, "", "")));
+            comments.addAll(Arrays.asList(createComment(user, "")));
         }
         return comments;
     }
 
-    public Collection<GHComment> createComment(String username, String pullRequestURL) {
-        return Lists.newArrayList(new GHComment(username, pullRequestURL, ""));
+    public Collection<GHComment> createCommentCollection(String username, String pullRequestURL) {
+        return Lists.newArrayList(createComment(username, pullRequestURL));
+    }
+
+    public GHComment createComment(String username, String pullRequestURL) {
+        return createComment(username, pullRequestURL, "", "");
+    }
+
+    public GHComment createComment(String username, String pullRequestURL, String body) {
+        return createComment(username, pullRequestURL, body, "");
+    }
+
+    public GHComment createComment(String username, String pullRequestURL, String body, String avatarURL) {
+        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body);
     }
 }

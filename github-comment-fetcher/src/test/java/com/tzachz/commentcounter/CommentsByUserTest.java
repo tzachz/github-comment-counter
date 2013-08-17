@@ -21,8 +21,8 @@ public class CommentsByUserTest {
     @Test
     public void aggregateUSerComments() throws Exception {
         CommentsByUser commentsByUser = new CommentsByUser();
-        commentsByUser.addAll(commentBuilder.createComments("aa", "aa", "bb"));
-        commentsByUser.addAll(commentBuilder.createComments("bb", "cc"));
+        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "aa", "bb"));
+        commentsByUser.addAll(commentBuilder.createEmptyComments("bb", "cc"));
         assertThat(commentsByUser.getCommentCount("aa"), is(2));
         assertThat(commentsByUser.getCommentCount("bb"), is(2));
         assertThat(commentsByUser.getCommentCount("cc"), is(1));
@@ -31,7 +31,7 @@ public class CommentsByUserTest {
     @Test
     public void leaderBoardSortedDescending() throws Exception {
         CommentsByUser commentsByUser = new CommentsByUser();
-        commentsByUser.addAll(commentBuilder.createComments("aa", "bb", "aa"));
+        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "bb", "aa"));
         List<Commenter> leaderBoard = commentsByUser.getCommentsByUser();
         assertThat(leaderBoard.get(0).getComments().size(), equalTo(2));
     }

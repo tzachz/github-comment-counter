@@ -2,6 +2,7 @@ package com.tzachz.commentcounter;
 
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ public class PullRequestCacheTest {
 
     @Test
     public void getReturnsFacadeResult() throws Exception {
-        GHPullRequest expected = new GHPullRequest("user1");
+        GHPullRequest expected = new GHPullRequest(new GHUser("user1", ""));
         when(facade.getPullRequest("url")).thenReturn(expected);
         GHPullRequest result = cache.get("url");
         assertThat(result, equalTo(expected));
@@ -41,7 +42,7 @@ public class PullRequestCacheTest {
 
     @Test
     public void successfulFetchOccursOnce() throws Exception {
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest("user1"));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
         cache.get("url");
         cache.get("url");
         verify(facade, times(1)).getPullRequest("url");

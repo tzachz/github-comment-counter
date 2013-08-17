@@ -15,14 +15,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GHUser {
 
     private final String login;
+    private final String avatarUrl;
 
     @JsonCreator
-    public GHUser(@JsonProperty("login") String login) {
+    public GHUser(@JsonProperty("login") String login, @JsonProperty("avatar_url") String avatarUrl) {
         this.login = login;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getLogin() {
         return login;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
     @Override

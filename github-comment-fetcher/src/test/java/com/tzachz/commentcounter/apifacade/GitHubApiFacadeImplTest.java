@@ -23,6 +23,6 @@ public class GitHubApiFacadeImplTest {
     public void pullRequestFetched() throws Exception {
         GitHubApiFacadeImpl facade = new GitHubApiFacadeImpl(credentials.getUsername(), credentials.getPassword());
         GHPullRequest result = facade.getPullRequest("https://api.github.com/repos/kenshoo/facterj/pulls/1");
-        assertThat(result.getUser(), equalTo(new GHUser("AvihayTsayeg")));
+        assertThat(result.getUser(), equalTo(new GHUser("AvihayTsayeg", "")));
     }
 }

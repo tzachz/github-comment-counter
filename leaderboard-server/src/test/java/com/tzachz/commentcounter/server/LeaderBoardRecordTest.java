@@ -16,7 +16,7 @@ public class LeaderBoardRecordTest {
 
     @Test
     public void testSerialization() throws Exception {
-        LeaderBoardRecord record = new LeaderBoardRecord("user", 4, "some thoughts on the state of the union");
+        LeaderBoardRecord record = new LeaderBoardRecord("user", 4, "some thoughts on the state of the union", "http://something");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(record);
         LeaderBoardRecord result = mapper.readValue(json, LeaderBoardRecord.class);

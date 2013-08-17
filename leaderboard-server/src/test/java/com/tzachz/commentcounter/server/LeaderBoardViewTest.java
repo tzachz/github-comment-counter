@@ -1,8 +1,8 @@
 package com.tzachz.commentcounter.server;
 
 import com.google.common.collect.Lists;
+import com.tzachz.commentcounter.CommentBuilder;
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.both;
@@ -20,10 +20,12 @@ import static org.junit.Assert.assertThat;
  */
 public class LeaderBoardViewTest {
 
+    private CommentBuilder commentBuilder = new CommentBuilder();
+
     @Test
     public void singleCommentAlwaysChosen() throws Exception {
         Commenter commenter = new Commenter("user1");
-        commenter.addComment(new GHComment("user1", "some-url", "body"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "body"));
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
         assertThat(view.getRecords().get(0).getSampleComment(), equalTo("body"));
     }
@@ -31,9 +33,9 @@ public class LeaderBoardViewTest {
     @Test
     public void fewCommentsRandomChosen() throws Exception {
         Commenter commenter = new Commenter("user1");
-        commenter.addComment(new GHComment("user1", "some-url", "body1"));
-        commenter.addComment(new GHComment("user1", "some-url", "body2"));
-        commenter.addComment(new GHComment("user1", "some-url", "body3"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "body1"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "body2"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "body3"));
         int body1Chosen = 0;
         for (int i = 0; i < 100; i++) {
             LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);

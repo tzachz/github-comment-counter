@@ -2,6 +2,8 @@ dependencies {
     compile project(':github-comment-fetcher')
     compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
     compile 'com.yammer.dropwizard:dropwizard-views:0.6.2'
+
+    testCompile project (path: ":github-comment-fetcher", configuration: 'testArtifacts')
 }
 
 // package server module into fatJar, as recommended for dropwizard services:

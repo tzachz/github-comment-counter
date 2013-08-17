@@ -3,6 +3,7 @@ package com.tzachz.commentcounter;
 import com.google.common.collect.Sets;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.joda.time.LocalDate;
@@ -55,8 +56,8 @@ public class CommentFetcherTest {
     public void aggregatesRepos() throws Exception {
         when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1", "repo2"));
         when(facade.getRepoComments(anyString(), anyString(), any(Date.class)))
-                .thenReturn(commentBuilder.createComments("user1", "user2", "user1"));
-        when(facade.getPullRequest("")).thenReturn(new GHPullRequest("user3"));
+                .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
+        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "")));
 
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasSize(2));
@@ -67,8 +68,8 @@ public class CommentFetcherTest {
     public void commentOnSelfPullRequestIgnored() throws Exception {
         when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
-                .thenReturn(commentBuilder.createComment("user1", "url"));
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest("user1"));
+                .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasSize(0));
     }
@@ -77,7 +78,7 @@ public class CommentFetcherTest {
     public void pullRequestNotFoundMeansCommentCounted() throws Exception {
         when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
-                .thenReturn(commentBuilder.createComment("user1", "url"));
+                .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("bad url"));
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasItem(new CommenterMatcher("user1", 1)));

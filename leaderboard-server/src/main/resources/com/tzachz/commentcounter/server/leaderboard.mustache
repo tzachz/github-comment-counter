@@ -9,16 +9,17 @@
             {{^records}}
             No comments! Start reviewing...
             {{/records}}
-            <ol style="font-weight: bold;">
+            <table>
             {{#records}}
-                <li>
-                    <table>
-                        <tr><td><b>{{commentCount}} comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:</td></tr>
-                        <tr><td>{{sampleComment}}</td></tr>
-                    </table>
-                </li>
+                <tr>
+                    <td><img src="{{avatarUrl}}" alt="{{username}}" width="50" height="50"></td>
+                    <td><b>{{commentCount}} comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:
+                        <br>
+                        {{sampleComment}}
+                    </td>
+                </tr>
             {{/records}}
-            </ol>
+            </table>
         {{/loaded}}
     </body>
 </html>
