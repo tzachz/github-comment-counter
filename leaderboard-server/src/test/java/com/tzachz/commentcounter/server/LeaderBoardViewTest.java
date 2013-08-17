@@ -7,9 +7,11 @@ import com.yammer.dropwizard.views.mustache.MustacheViewRenderer;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -21,15 +23,41 @@ import static org.junit.Assert.assertThat;
 public class LeaderBoardViewTest {
 
     @Test
-    public void renderWithMustache() throws Exception {
+    public void mustacheRendersOrgNameIntoHeadline() throws Exception {
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true);
+        String result = render(view);
+        assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"https://github.com/org1"));
+    }
+
+    @Test
+    public void stillLoadingSaysStillLoading() throws Exception {
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", false);
+        String result = render(view);
+        assertThat(result, containsString("Still Loading! Please wait while we fetch your organization's data from GitHub..."));
+        assertThat(result, not(containsString("No comments! Start reviewing...")));
+    }
+
+    @Test
+    public void loadedEmptyRecordsListSaysNoComments() throws Exception {
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true);
+        String result = render(view);
+        assertThat(result, containsString("No comments! Start reviewing..."));
+    }
+
+    @Test
+    public void existingLoadedRecordsRenderedWithLink() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(new GHComment("user1", "some-url"));
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter));
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+        String result = render(view);
+        assertThat(result, containsString("<b>1</b> comments by "));
+        assertThat(result, containsString("https://github.com/user1"));
+    }
+
+    private String render(LeaderBoardView view) throws IOException {
         MustacheViewRenderer renderer = new MustacheViewRenderer();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         renderer.render(view, Locale.getDefault(), outputStream);
-        String result = outputStream.toString();
-        assertThat(result, containsString("<b>1</b> comments by "));
-        assertThat(result, containsString("https://github.com/user1"));
+        return outputStream.toString();
     }
 }

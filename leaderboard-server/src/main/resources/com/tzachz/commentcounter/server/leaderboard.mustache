@@ -1,11 +1,20 @@
 <html>
+    <meta http-equiv="refresh" content="5">
     <body>
-        <h1>GitHub Reviewers Leader Board:</h1>
-        <ol>
-        {{#records}}
-            <li><b>{{commentCount}}</b> comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></li>
-        {{/records}}
-        </ol>
+        <h1>GitHub Reviewers Leader Board: <a href="https://github.com/{{orgName}}" target="_blank">{{orgName}}</a></h1>
+        {{^loaded}}
+        Still Loading! Please wait while we fetch your organization's data from GitHub...
+        {{/loaded}}
+        {{#loaded}}
+            {{^records}}
+            No comments! Start reviewing...
+            {{/records}}
+            <ol>
+            {{#records}}
+                <li><b>{{commentCount}}</b> comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></li>
+            {{/records}}
+            </ol>
+        {{/loaded}}
     </body>
 </html>
 

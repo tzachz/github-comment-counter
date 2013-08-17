@@ -15,22 +15,24 @@ import javax.ws.rs.core.MediaType;
 public class LeaderBoardResource {
 
     private final LeaderBoardStore store;
+    private final String orgName;
 
-    public LeaderBoardResource(LeaderBoardStore store) {
+    public LeaderBoardResource(LeaderBoardStore store, String orgName) {
         this.store = store;
+        this.orgName = orgName;
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
     public LeaderBoardView getLeaderBoard() {
-        return new LeaderBoardView(store.get());
+        return new LeaderBoardView(store.get(), orgName, store.isLoaded());
     }
 
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
     public LeaderBoardView getJson() {
-        return new LeaderBoardView(store.get());
+        return new LeaderBoardView(store.get(), orgName, store.isLoaded());
     }
 
 }
