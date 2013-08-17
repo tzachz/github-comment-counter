@@ -50,7 +50,7 @@ public class CommentFetcher {
             Collection<GHComment> nonSelfComments = filter(repoComments, new Predicate<GHComment>() {
                 @Override
                 public boolean apply(GHComment input) {
-                    GHUser pullRequestUser = pullRequestCache.get(input.getPull_request_url()).getUser();
+                    GHUser pullRequestUser = pullRequestCache.get(input.getPullRequestUrl()).getUser();
                     return !pullRequestUser.equals(input.getUser());
                 }
             });

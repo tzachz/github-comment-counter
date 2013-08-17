@@ -13,12 +13,12 @@ public class CommentBuilder {
     Collection<GHComment> createComments(String... users) {
         List<GHComment> comments = new ArrayList<GHComment>();
         for (String user : users) {
-            comments.addAll(Arrays.asList(new GHComment(user, "")));
+            comments.addAll(Arrays.asList(new GHComment(user, "", "")));
         }
         return comments;
     }
 
     public Collection<GHComment> createComment(String username, String pullRequestURL) {
-        return Lists.newArrayList(new GHComment(username, pullRequestURL));
+        return Lists.newArrayList(new GHComment(username, pullRequestURL, ""));
     }
 }

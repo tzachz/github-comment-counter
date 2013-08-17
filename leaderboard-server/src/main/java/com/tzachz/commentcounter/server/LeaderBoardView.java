@@ -2,9 +2,11 @@ package com.tzachz.commentcounter.server;
 
 import com.google.common.base.Function;
 import com.tzachz.commentcounter.Commenter;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.yammer.dropwizard.views.View;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.google.common.collect.Lists.transform;
 
@@ -17,6 +19,8 @@ import static com.google.common.collect.Lists.transform;
 @SuppressWarnings("UnusedDeclaration")
 public class LeaderBoardView extends View {
 
+    private final static Random random = new Random();
+
     private final List<LeaderBoardRecord> records;
     private final String orgName;
     private final boolean loaded;
@@ -28,7 +32,9 @@ public class LeaderBoardView extends View {
         this.records = transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
             @Override
             public LeaderBoardRecord apply(Commenter input) {
-                return new LeaderBoardRecord(input.getUsername(), input.getComments().size());
+                List<GHComment> comments = input.getComments();
+                GHComment randomComment = comments.get(random.nextInt(comments.size()));
+                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody());
             }
         });
     }

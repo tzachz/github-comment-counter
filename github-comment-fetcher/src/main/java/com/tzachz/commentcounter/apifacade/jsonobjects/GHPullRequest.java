@@ -1,6 +1,8 @@
 package com.tzachz.commentcounter.apifacade.jsonobjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,10 +13,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class GHPullRequest {
 
-    private GHUser user;
+    private final GHUser user;
 
-    @SuppressWarnings("UnusedDeclaration")
-    public GHPullRequest() {
+    @JsonCreator
+    public GHPullRequest(@JsonProperty("user") GHUser user) {
+        this.user = user;
     }
 
     public GHPullRequest(String user) {

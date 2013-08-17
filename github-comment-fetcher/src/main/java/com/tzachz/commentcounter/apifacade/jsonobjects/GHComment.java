@@ -1,6 +1,8 @@
 package com.tzachz.commentcounter.apifacade.jsonobjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,23 +13,34 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class GHComment {
 
-    private GHUser user;
-    private String pull_request_url;
+    private final GHUser user;
+    private final String pullRequestUrl;
+    private final String body;
 
-    @SuppressWarnings("UnusedDeclaration")
-    public GHComment() {
+    @JsonCreator
+    public GHComment(@JsonProperty("user") GHUser user,
+                     @JsonProperty("pull_request_url") String pullRequestUrl,
+                     @JsonProperty("body") String body) {
+        this.body = body;
+        this.user = user;
+        this.pullRequestUrl = pullRequestUrl;
     }
 
-    public GHComment(String user, String pull_request_url) {
+    public GHComment(String user, String pullRequestUrl, String body) {
         this.user = new GHUser(user);
-        this.pull_request_url = pull_request_url;
+        this.pullRequestUrl = pullRequestUrl;
+        this.body = body;
     }
 
     public GHUser getUser() {
         return user;
     }
 
-    public String getPull_request_url() {
-        return pull_request_url;
+    public String getPullRequestUrl() {
+        return pullRequestUrl;
+    }
+
+    public String getBody() {
+        return body;
     }
 }

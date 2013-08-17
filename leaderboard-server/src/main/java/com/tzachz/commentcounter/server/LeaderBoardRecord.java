@@ -14,11 +14,15 @@ public class LeaderBoardRecord {
 
     private final String username;
     private final int commentCount;
+    private final String sampleComment;
 
     @JsonCreator
-    public LeaderBoardRecord(@JsonProperty("username") String username, @JsonProperty("commentCount") int commentCount) {
+    public LeaderBoardRecord(@JsonProperty("username") String username,
+                             @JsonProperty("commentCount") int commentCount,
+                             @JsonProperty("sampleComment") String sampleComment) {
         this.username = username;
         this.commentCount = commentCount;
+        this.sampleComment = sampleComment;
     }
 
     public String getUsername() {
@@ -29,15 +33,21 @@ public class LeaderBoardRecord {
         return commentCount;
     }
 
+    public String getSampleComment() {
+        return sampleComment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LeaderBoardRecord record = (LeaderBoardRecord) o;
+        LeaderBoardRecord that = (LeaderBoardRecord) o;
 
-        if (commentCount != record.commentCount) return false;
-        if (username != null ? !username.equals(record.username) : record.username != null) return false;
+        if (commentCount != that.commentCount) return false;
+        if (sampleComment != null ? !sampleComment.equals(that.sampleComment) : that.sampleComment != null)
+            return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
 
         return true;
     }
@@ -46,6 +56,7 @@ public class LeaderBoardRecord {
     public int hashCode() {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + commentCount;
+        result = 31 * result + (sampleComment != null ? sampleComment.hashCode() : 0);
         return result;
     }
 }

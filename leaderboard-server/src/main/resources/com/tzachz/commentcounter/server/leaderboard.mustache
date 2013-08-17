@@ -1,5 +1,5 @@
 <html>
-    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="10">
     <body>
         <h1>GitHub Reviewers Leader Board: <a href="https://github.com/{{orgName}}" target="_blank">{{orgName}}</a></h1>
         {{^loaded}}
@@ -9,9 +9,14 @@
             {{^records}}
             No comments! Start reviewing...
             {{/records}}
-            <ol>
+            <ol style="font-weight: bold;">
             {{#records}}
-                <li><b>{{commentCount}}</b> comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></li>
+                <li>
+                    <table>
+                        <tr><td><b>{{commentCount}} comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:</td></tr>
+                        <tr><td>{{sampleComment}}</td></tr>
+                    </table>
+                </li>
             {{/records}}
             </ol>
         {{/loaded}}

@@ -1,6 +1,8 @@
 package com.tzachz.commentcounter.apifacade.jsonobjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,13 +14,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GHUser {
 
-    private String login;
+    private final String login;
 
-    @SuppressWarnings("UnusedDeclaration")
-    public GHUser() {
-    }
-
-    public GHUser(String login) {
+    @JsonCreator
+    public GHUser(@JsonProperty("login") String login) {
         this.login = login;
     }
 
