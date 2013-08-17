@@ -45,12 +45,7 @@ java -jar <path to fat jar> server <path to yml file>
 You should be able to see the results at http://localhost:8080/leaderboard
 
 Result should look something like:
-    <h2>GitHub Reviewers Leader Board:</h2>
-    <ul>
-        <li><b>36</b> comments by <a href="https://github.com/user1" target="_blank">user1</a></li>
-        <li><b>20</b> comments by <a href="https://github.com/user2" target="_blank">user2</a></li>
-        <li><b>12</b> comments by <a href="https://github.com/user3" target="_blank">user3</a></li>
-    </ul>
-    
+<img src="https://raw.github.com/tzachz/github-comment-counter/master/github-comment-counter-yammer-sample.png" alt="sample">
+
 Yeah, I know, some styling can do it justice, and of course there's much more interesting data to show (latest comments, number of repos etc.). Stay tuned or contribute!
     
