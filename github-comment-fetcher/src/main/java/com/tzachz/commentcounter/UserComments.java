@@ -33,7 +33,7 @@ public class UserComments {
         return userComments.get(user).intValue();
     }
 
-    public List<Commenter> getLeaderBoard() {
+    public List<Commenter> getCommentsByUser() {
         List<Commenter> commenters = Lists.newArrayList();
         for (Map.Entry<String, AtomicInteger> user : userComments.entrySet()) {
             commenters.add(new Commenter(user.getKey(), user.getValue().intValue()));

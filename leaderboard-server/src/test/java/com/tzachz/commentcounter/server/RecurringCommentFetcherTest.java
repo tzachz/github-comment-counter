@@ -36,7 +36,7 @@ public class RecurringCommentFetcherTest {
     public void setUp() throws Exception {
         initMocks(this);
         recurringFetcher = new RecurringCommentFetcher(fetcher, store, REFRESH_RATE_MS, TimeUnit.MILLISECONDS);
-        when(fetcher.getCommentsLeaderBoard()).thenReturn(commenterList);
+        when(fetcher.getCommentsByUser()).thenReturn(commenterList);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class RecurringCommentFetcherTest {
         recurringFetcher.start();
         Thread.sleep((REFRESH_RATE_MS * rounds) + 1);
         recurringFetcher.stop();
-        verify(fetcher, times(rounds+1)).getCommentsLeaderBoard();
+        verify(fetcher, times(rounds+1)).getCommentsByUser();
         verify(store, times(rounds+1)).set(commenterList);
     }
 }

@@ -5,6 +5,8 @@ A [dropwizard](https://github.com/codahale/dropwizard)-based server displaying n
 
 Can be used to identify and celebrate top reviewers.
 
+Counts all recent in-code comments on organization's opened and closed Pull Requests, excluding comments on one's own Pull Requests.
+
 Queries [GitHub API](http://developer.github.com/v3/) every X minutes and displays the result.
 
 Build

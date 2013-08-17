@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
  * User: tzachz
  * Date: 8/8/13
  */
-public class RepositoryCommentsResourceTest {
+public class RepoCommentsResourceTest {
 
     @Rule
     public VMOptsCredentials credentials = new VMOptsCredentials();

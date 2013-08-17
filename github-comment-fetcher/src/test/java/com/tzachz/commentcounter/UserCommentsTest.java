@@ -32,7 +32,7 @@ public class UserCommentsTest {
     public void leaderBoardSortedDescending() throws Exception {
         UserComments userComments = new UserComments();
         userComments.addAll(commentBuilder.createComments("aa", "bb", "aa"));
-        List<Commenter> leaderBoard = userComments.getLeaderBoard();
+        List<Commenter> leaderBoard = userComments.getCommentsByUser();
         assertThat(leaderBoard.get(0), equalTo(new Commenter("aa", 2)));
     }
 

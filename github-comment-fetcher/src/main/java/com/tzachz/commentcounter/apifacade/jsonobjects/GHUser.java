@@ -26,4 +26,20 @@ public class GHUser {
         return login;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GHUser ghUser = (GHUser) o;
+
+        if (login != null ? !login.equals(ghUser.login) : ghUser.login != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return login != null ? login.hashCode() : 0;
+    }
 }

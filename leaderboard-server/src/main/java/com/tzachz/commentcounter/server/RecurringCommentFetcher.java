@@ -32,7 +32,7 @@ public class RecurringCommentFetcher implements Managed {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                store.set(commentFetcher.getCommentsLeaderBoard());
+                store.set(commentFetcher.getCommentsByUser());
             }
         }, 0, period);
     }

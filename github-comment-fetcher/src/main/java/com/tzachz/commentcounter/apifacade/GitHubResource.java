@@ -22,12 +22,17 @@ public abstract class GitHubResource {
     private static final String GITHUB_URL = "https://api.github.com";
     private static final int MAX_PAGES = 20;
 
-    private WebResource resource;
+    private final Client client;
+    private final WebResource resource;
 
     protected GitHubResource(String username, String password) {
-        Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter(username, password));
+        this.client = Client.create();
+        this.client.addFilter(new HTTPBasicAuthFilter(username, password));
         this.resource = client.resource(GITHUB_URL);
+    }
+
+    protected Client getClient() {
+        return client;
     }
 
     protected WebResource getResource() {
