@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.CommentFetcher;
 import com.tzachz.commentcounter.Commenter;
@@ -35,7 +36,7 @@ public class RecurringCommentFetcherTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        recurringFetcher = new RecurringCommentFetcher(fetcher, store, REFRESH_RATE_MS, TimeUnit.MILLISECONDS);
+        recurringFetcher = new RecurringCommentFetcher(ImmutableMap.of("today", fetcher), store, REFRESH_RATE_MS, TimeUnit.MILLISECONDS);
         when(fetcher.getCommentsByUser()).thenReturn(commenterList);
     }
 
@@ -46,6 +47,6 @@ public class RecurringCommentFetcherTest {
         Thread.sleep((REFRESH_RATE_MS * rounds) + 1);
         recurringFetcher.stop();
         verify(fetcher, atLeast(rounds)).getCommentsByUser();
-        verify(store, atLeast(rounds)).set(commenterList);
+        verify(store, atLeast(rounds)).set("today", commenterList);
     }
 }

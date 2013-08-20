@@ -24,8 +24,9 @@ public class LeaderBoardView extends View {
     private final List<LeaderBoardRecord> records;
     private final String orgName;
     private final boolean loaded;
+    private final String period;
 
-    protected LeaderBoardView(List<Commenter> commenters, String orgName, boolean loaded) {
+    protected LeaderBoardView(List<Commenter> commenters, String orgName, boolean loaded, String period) {
         super("leaderboard.mustache");
         this.orgName = orgName;
         this.loaded = loaded;
@@ -38,6 +39,7 @@ public class LeaderBoardView extends View {
                 return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody(), avatarUrl);
             }
         });
+        this.period = period;
     }
 
     public List<LeaderBoardRecord> getRecords() {
@@ -50,5 +52,9 @@ public class LeaderBoardView extends View {
 
     public boolean isLoaded() {
         return loaded;
+    }
+
+    public String getPeriod() {
+        return period;
     }
 }
