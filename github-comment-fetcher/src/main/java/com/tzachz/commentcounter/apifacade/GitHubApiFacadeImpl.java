@@ -2,8 +2,6 @@ package com.tzachz.commentcounter.apifacade;
 
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Date;
@@ -16,8 +14,6 @@ import java.util.Set;
  * Time: 14:44
  */
 public class GitHubApiFacadeImpl extends GitHubResource implements GitHubApiFacade {
-
-    private final static Logger logger = LoggerFactory.getLogger(GitHubApiFacadeImpl.class);
 
     private final OrgResource orgResource;
     private final OrgRepositoriesResource orgRepositoriesResource;
@@ -47,7 +43,6 @@ public class GitHubApiFacadeImpl extends GitHubResource implements GitHubApiFaca
 
     @Override
     public GHPullRequest getPullRequest(String url) {
-        logger.info("fetching URL: " + url);
-        return getClient().resource(url).get(GHPullRequest.class);
+        return getResource(url, GHPullRequest.class);
     }
 }
