@@ -1,3 +1,5 @@
+http:
+    rootPath: /service/*
 gitHubCredentials:
     username: tzachz
     password:

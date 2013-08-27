@@ -1,12 +1,18 @@
 package com.tzachz.commentcounter.server;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.tzachz.commentcounter.CommentFetcher;
+import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacadeImpl;
 import com.yammer.dropwizard.Service;
+import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,22 +31,49 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     public void initialize(Bootstrap<LeaderBoardServerConfiguration> bootstrap) {
         bootstrap.setName("Leaderboard-Server");
         bootstrap.addBundle(new ViewBundle());
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
     }
 
     @Override
     public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
         GitHubCredentials gitHubCredentials = configuration.getGitHubCredentials();
         GitHubApiFacadeImpl gitHubApiFacade = new GitHubApiFacadeImpl(gitHubCredentials.getUsername(), gitHubCredentials.getPassword());
-        final CommentFetcher commentFetcher = new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), configuration.getDaysBack());
         final LeaderBoardStore store = new LeaderBoardStore();
-
         environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
         environment.addResource(new LeaderBoardResource(store, configuration.getOrganization()));
-        environment.managedScheduledExecutorService("comment-fetcher", 1).scheduleAtFixedRate(new Runnable() {
+        startFetchers(buildRunnables(store, getFetchers(configuration, gitHubApiFacade)),
+                environment,
+                configuration.getRefreshRateMinutes());
+
+
+    }
+
+    private Iterable<Runnable> buildRunnables(final LeaderBoardStore store, Map<String, CommentFetcher> fetchers) {
+        return Iterables.transform(fetchers.entrySet(), new Function<Map.Entry<String, CommentFetcher>, Runnable>() {
             @Override
-            public void run() {
-                store.set(commentFetcher.getCommentsByUser());
+            public Runnable apply(final Map.Entry<String, CommentFetcher> fetcherEntry) {
+                return new Runnable() {
+                    @Override
+                    public void run() {
+                        store.set(fetcherEntry.getKey(), fetcherEntry.getValue().getCommentsByUser());
+                    }
+                };
             }
-        }, 0, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES);
+        });
+    }
+
+    private void startFetchers(Iterable<Runnable> fetchers, Environment environment, int refreshRateMinutes) {
+        for (final Runnable fetcher : fetchers) {
+            environment.managedScheduledExecutorService("comment-fetcher", 1)
+                    .scheduleAtFixedRate(fetcher, 0, refreshRateMinutes, TimeUnit.MINUTES);
+        }
+    }
+
+    private Map<String, CommentFetcher> getFetchers(LeaderBoardServerConfiguration configuration, GitHubApiFacade gitHubApiFacade) {
+        return ImmutableMap.of(
+                "today", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 1),
+                "week", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 7),
+                "month", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 30)
+        );
     }
 }
