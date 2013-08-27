@@ -4,6 +4,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,20 +24,19 @@ public abstract class GitHubResource {
     private static final int MAX_PAGES = 20;
 
     private final Client client;
-    private final WebResource resource;
 
     protected GitHubResource(String username, String password) {
         this.client = Client.create();
         this.client.addFilter(new HTTPBasicAuthFilter(username, password));
-        this.resource = client.resource(GITHUB_URL);
-    }
-
-    protected Client getClient() {
-        return client;
     }
 
     protected WebResource getResource() {
-        return resource;
+        return client.resource(GITHUB_URL);
+    }
+
+    protected GHPullRequest getResource(String url, Class<GHPullRequest> clazz) {
+        logger.info("fetching URL: " + url);
+        return client.resource(url).get(clazz);
     }
 
     protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {

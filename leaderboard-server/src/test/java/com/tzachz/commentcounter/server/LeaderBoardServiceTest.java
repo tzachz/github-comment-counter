@@ -6,7 +6,12 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -28,6 +33,9 @@ public class LeaderBoardServiceTest {
     @Mock
     private LeaderBoardServerConfiguration configuration;
 
+    @Mock
+    private ScheduledExecutorService executorService;
+
     @InjectMocks
     private LeaderBoardService service;
 
@@ -37,6 +45,7 @@ public class LeaderBoardServiceTest {
         when(credentials.getUsername()).thenReturn("user1");
         when(credentials.getPassword()).thenReturn("pass1");
         when(configuration.getGitHubCredentials()).thenReturn(credentials);
+        when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
     }
 
     @Test
@@ -46,9 +55,9 @@ public class LeaderBoardServiceTest {
     }
 
     @Test
-    public void runMethodWiresRecurringFetcher() throws Exception {
+    public void runMethodWiresScheduledExecutorService() throws Exception {
         service.run(configuration, environment);
-        verify(environment).manage(any(RecurringCommentFetcher.class));
+        verify(environment, times(3)).managedScheduledExecutorService("comment-fetcher", 1);
     }
 
     @Test

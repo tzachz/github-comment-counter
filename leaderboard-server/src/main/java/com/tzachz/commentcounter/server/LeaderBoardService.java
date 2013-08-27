@@ -1,7 +1,8 @@
 package com.tzachz.commentcounter.server;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 import com.tzachz.commentcounter.CommentFetcher;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacadeImpl;
@@ -12,7 +13,6 @@ import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
 
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,13 +38,35 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
         GitHubCredentials gitHubCredentials = configuration.getGitHubCredentials();
         GitHubApiFacadeImpl gitHubApiFacade = new GitHubApiFacadeImpl(gitHubCredentials.getUsername(), gitHubCredentials.getPassword());
-
-        LeaderBoardStore store = new LeaderBoardStore();
-
+        final LeaderBoardStore store = new LeaderBoardStore();
         environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
         environment.addResource(new LeaderBoardResource(store, configuration.getOrganization()));
-        environment.manage(new RecurringCommentFetcher(getFetchers(configuration, gitHubApiFacade),
-                store, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES));
+        startFetchers(buildRunnables(store, getFetchers(configuration, gitHubApiFacade)),
+                environment,
+                configuration.getRefreshRateMinutes());
+
+
+    }
+
+    private Iterable<Runnable> buildRunnables(final LeaderBoardStore store, Map<String, CommentFetcher> fetchers) {
+        return Iterables.transform(fetchers.entrySet(), new Function<Map.Entry<String, CommentFetcher>, Runnable>() {
+            @Override
+            public Runnable apply(final Map.Entry<String, CommentFetcher> fetcherEntry) {
+                return new Runnable() {
+                    @Override
+                    public void run() {
+                        store.set(fetcherEntry.getKey(), fetcherEntry.getValue().getCommentsByUser());
+                    }
+                };
+            }
+        });
+    }
+
+    private void startFetchers(Iterable<Runnable> fetchers, Environment environment, int refreshRateMinutes) {
+        for (final Runnable fetcher : fetchers) {
+            environment.managedScheduledExecutorService("comment-fetcher", 1)
+                    .scheduleAtFixedRate(fetcher, 0, refreshRateMinutes, TimeUnit.MINUTES);
+        }
     }
 
     private Map<String, CommentFetcher> getFetchers(LeaderBoardServerConfiguration configuration, GitHubApiFacade gitHubApiFacade) {
