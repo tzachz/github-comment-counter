@@ -7,12 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -44,6 +45,7 @@ public class LeaderBoardServiceTest {
         when(credentials.getUsername()).thenReturn("user1");
         when(credentials.getPassword()).thenReturn("pass1");
         when(configuration.getGitHubCredentials()).thenReturn(credentials);
+
         when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
     }
 
@@ -55,8 +57,10 @@ public class LeaderBoardServiceTest {
 
     @Test
     public void runMethodWiresScheduledExecutorService() throws Exception {
+        Integer refresh = 5;
+        when(configuration.getRefreshRateMinutes()).thenReturn(refresh);
         service.run(configuration, environment);
-        verify(environment).managedScheduledExecutorService("comment-fetcher", 1);
+        verify(executorService, times(3)).scheduleAtFixedRate(any(Runnable.class), eq(0l), eq(Long.valueOf(refresh)), eq(TimeUnit.MINUTES));
     }
 
     @Test

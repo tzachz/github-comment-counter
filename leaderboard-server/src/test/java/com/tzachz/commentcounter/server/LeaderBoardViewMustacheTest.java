@@ -26,14 +26,14 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"https://github.com/org1"));
     }
 
     @Test
     public void stillLoadingSaysStillLoading() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", false);
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", false, "today");
         String result = render(view);
         assertThat(result, containsString("Still Loading! Please wait while we fetch your organization's data from GitHub..."));
         assertThat(result, not(containsString("No comments! Start reviewing...")));
@@ -41,7 +41,7 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void loadedEmptyRecordsListSaysNoComments() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("No comments! Start reviewing..."));
     }
@@ -50,7 +50,7 @@ public class LeaderBoardViewMustacheTest {
     public void existingLoadedRecordsRenderedWithLink() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url"));
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("1 comments by "));
         assertThat(result, containsString("https://github.com/user1"));
@@ -60,7 +60,7 @@ public class LeaderBoardViewMustacheTest {
     public void sampleCommentDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"));
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("a very intelligent comment indeed"));
     }
@@ -69,7 +69,7 @@ public class LeaderBoardViewMustacheTest {
     public void avatarImageDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"));
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<img src=\"avatar-url\" alt=\"user1\""));
     }
