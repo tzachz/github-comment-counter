@@ -13,6 +13,7 @@ import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.views.ViewBundle;
 
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -63,9 +64,9 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     }
 
     private void startFetchers(Iterable<Runnable> fetchers, Environment environment, int refreshRateMinutes) {
+        ScheduledExecutorService executorService = environment.managedScheduledExecutorService("comment-fetcher", 1);
         for (final Runnable fetcher : fetchers) {
-            environment.managedScheduledExecutorService("comment-fetcher", 1)
-                    .scheduleAtFixedRate(fetcher, 0, refreshRateMinutes, TimeUnit.MINUTES);
+            executorService.scheduleAtFixedRate(fetcher, 0, refreshRateMinutes, TimeUnit.MINUTES);
         }
     }
 
