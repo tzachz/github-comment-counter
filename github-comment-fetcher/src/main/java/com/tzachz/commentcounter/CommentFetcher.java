@@ -42,22 +42,32 @@ public class CommentFetcher {
     }
 
     public List<Commenter> getCommentsByUser() {
-        Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
+        final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<String> repoNames = facade.getOrgRepoNames(this.organization);
         CommentsByUser comments = new CommentsByUser();
         for (String name : repoNames) {
-            Collection<GHComment> repoComments = facade.getRepoComments(this.organization, name, since);
-            Collection<GHComment> nonSelfComments = filter(repoComments, new Predicate<GHComment>() {
-                @Override
-                public boolean apply(GHComment input) {
-                    GHUser pullRequestUser = pullRequestCache.get(input.getPullRequestUrl()).getUser();
-                    return !pullRequestUser.equals(input.getUser());
-                }
-            });
-            comments.addAll(nonSelfComments);
+            comments.addAll(getRepoComments(since, name));
         }
         logger.info("Fetched comments by {} users from {} repositories", comments.getSize(), repoNames.size());
         return comments.getCommentsByUser();
+    }
+
+    private Collection<GHComment> getRepoComments(final Date since, String repoName) {
+        Collection<GHComment> repoComments = facade.getRepoComments(this.organization, repoName, since);
+        Predicate<GHComment> selfCommentsFilter = new Predicate<GHComment>() {
+            @Override
+            public boolean apply(GHComment input) {
+                GHUser pullRequestUser = pullRequestCache.get(input.getPullRequestUrl()).getUser();
+                return !pullRequestUser.equals(input.getUser());
+            }
+        };
+        Predicate<GHComment> oldCommentsFilter = new Predicate<GHComment>() {
+            @Override
+            public boolean apply(GHComment input) {
+                return input.getCreateDate().after(since);
+            }
+        };
+        return filter(filter(repoComments, oldCommentsFilter), selfCommentsFilter);
     }
 
 

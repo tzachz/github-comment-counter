@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class CommentBuilder {
 
@@ -31,7 +28,11 @@ public class CommentBuilder {
         return createComment(username, pullRequestURL, body, "");
     }
 
+    public GHComment createComment(String username, String pullRequestURL, Date createDate) {
+        return new GHComment(new GHUser(username, ""), pullRequestURL, "", "", createDate);
+    }
+
     public GHComment createComment(String username, String pullRequestURL, String body, String avatarURL) {
-        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body, "");
+        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body, "", new Date());
     }
 }

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -82,6 +83,16 @@ public class CommentFetcherTest {
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("bad url"));
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasItem(new CommenterMatcher("user1", 1)));
+    }
+
+    @Test
+    public void oldCommentFilteredOut() throws Exception {
+        when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "")));
+        when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
+                .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
+        List<Commenter> board = counter.getCommentsByUser();
+        assertThat(board, hasSize(0));
     }
 
     private static class CommenterMatcher extends BaseMatcher<Commenter> {
