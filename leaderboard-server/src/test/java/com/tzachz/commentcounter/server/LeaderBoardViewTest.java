@@ -26,7 +26,7 @@ public class LeaderBoardViewTest {
     public void singleCommentAlwaysChosen() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "body"));
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         assertThat(view.getRecords().get(0).getSampleComment(), equalTo("body"));
     }
 
@@ -38,7 +38,7 @@ public class LeaderBoardViewTest {
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "body3"));
         int body1Chosen = 0;
         for (int i = 0; i < 100; i++) {
-            LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true);
+            LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
             body1Chosen += view.getRecords().get(0).getSampleComment().equals("body1") ? 1 : 0;
         }
         assertThat(body1Chosen, is(both(greaterThan(10)).and(lessThan(60))));
