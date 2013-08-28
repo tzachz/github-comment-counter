@@ -72,8 +72,8 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
 
     private Map<String, CommentFetcher> getFetchers(LeaderBoardServerConfiguration configuration, GitHubApiFacade gitHubApiFacade) {
         return ImmutableMap.of(
-                "today", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 1),
-                "week", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 7),
+                "today", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 0),
+                "week", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 6),
                 "month", new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), 30)
         );
     }

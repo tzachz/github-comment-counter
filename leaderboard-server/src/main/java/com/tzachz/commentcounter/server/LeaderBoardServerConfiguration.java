@@ -17,9 +17,6 @@ public class LeaderBoardServerConfiguration extends Configuration {
     private String organization;
 
     @JsonProperty
-    private int daysBack;
-
-    @JsonProperty
     private int refreshRateMinutes;
 
     public GitHubCredentials getGitHubCredentials() {
@@ -28,10 +25,6 @@ public class LeaderBoardServerConfiguration extends Configuration {
 
     public String getOrganization() {
         return organization;
-    }
-
-    public int getDaysBack() {
-        return daysBack;
     }
 
     public int getRefreshRateMinutes() {
