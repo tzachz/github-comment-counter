@@ -4,7 +4,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +33,9 @@ public abstract class GitHubResource {
         return client.resource(GITHUB_URL);
     }
 
-    protected GHPullRequest getResource(String url, Class<GHPullRequest> clazz) {
+    protected <T> T get(String url, final Class<T> type) {
         logger.info("fetching URL: " + url);
-        return client.resource(url).get(clazz);
+        return client.resource(url).get(type);
     }
 
     protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
