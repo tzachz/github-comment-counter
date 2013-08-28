@@ -16,14 +16,17 @@ public class GHComment {
     private final GHUser user;
     private final String pullRequestUrl;
     private final String body;
+    private final String htmlUrl;
 
     @JsonCreator
     public GHComment(@JsonProperty("user") GHUser user,
                      @JsonProperty("pull_request_url") String pullRequestUrl,
-                     @JsonProperty("body") String body) {
+                     @JsonProperty("body") String body,
+                     @JsonProperty("html_url") String htmlUrl) {
         this.body = body;
         this.user = user;
         this.pullRequestUrl = pullRequestUrl;
+        this.htmlUrl = htmlUrl;
     }
 
     public GHUser getUser() {
@@ -36,5 +39,9 @@ public class GHComment {
 
     public String getBody() {
         return body;
+    }
+
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 }

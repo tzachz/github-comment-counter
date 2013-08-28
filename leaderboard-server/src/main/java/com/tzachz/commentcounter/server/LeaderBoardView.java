@@ -36,7 +36,7 @@ public class LeaderBoardView extends View {
                 List<GHComment> comments = input.getComments();
                 GHComment randomComment = comments.get(random.nextInt(comments.size()));
                 String avatarUrl = randomComment.getUser().getAvatarUrl();
-                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody(), avatarUrl);
+                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody(), randomComment.getHtmlUrl(), avatarUrl);
             }
         });
         this.period = period;

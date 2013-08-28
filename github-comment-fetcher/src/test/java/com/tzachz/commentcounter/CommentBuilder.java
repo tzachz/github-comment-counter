@@ -32,6 +32,6 @@ public class CommentBuilder {
     }
 
     public GHComment createComment(String username, String pullRequestURL, String body, String avatarURL) {
-        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body);
+        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body, "");
     }
 }
