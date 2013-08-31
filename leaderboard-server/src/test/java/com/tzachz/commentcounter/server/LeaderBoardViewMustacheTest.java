@@ -54,7 +54,7 @@ public class LeaderBoardViewMustacheTest {
         commenter.addComment(commentBuilder.createComment("user1", "some-url"), repo);
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
-        assertThat(result, containsString("1 comments by "));
+        assertThat(result, containsString("1 comments in 1 repos by "));
         assertThat(result, containsString("https://github.com/user1"));
     }
 

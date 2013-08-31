@@ -2,6 +2,7 @@
 build/
 out/
 
+*.yml
 *.iml
 *.ipr
 *.iws

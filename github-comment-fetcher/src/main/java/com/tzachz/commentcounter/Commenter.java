@@ -11,6 +11,8 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.primitives.Ints.max;
+
 /**
 * Created with IntelliJ IDEA.
 * User: tzachz
@@ -47,9 +49,13 @@ public class Commenter implements Comparable<Commenter> {
         return ImmutableSet.copyOf(repos);
     }
 
+    public int getScore() {
+        return comments.size() + max(0, (repos.size() - 1)) * 4;
+    }
+
     @Override
     public int compareTo(Commenter o) {
-        return Integer.valueOf(o.comments.size()).compareTo(comments.size()); // descending by num of comments
+        return Integer.valueOf(o.getScore()).compareTo(getScore()); // descending by score
     }
 
     @Override
