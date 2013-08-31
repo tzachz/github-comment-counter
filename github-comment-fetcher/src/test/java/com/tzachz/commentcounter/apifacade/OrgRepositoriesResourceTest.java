@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter.apifacade;
 
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -21,8 +22,8 @@ public class OrgRepositoriesResourceTest {
 
     @Test
     public void facterjRepoIsInKenshooReposList() throws Exception {
-        OrgRepositoriesResource repos = new OrgRepositoriesResource(credentials.getUsername(), credentials.getPassword());
-        Set<String> repoNames = repos.getRepoNames("kenshoo");
-        assertThat(repoNames, hasItem("facterj"));
+        OrgRepositoriesResource reposResource = new OrgRepositoriesResource(credentials.getUsername(), credentials.getPassword());
+        Set<GHRepo> repos = reposResource.getRepos("kenshoo");
+        assertThat(repos, hasItem(new GHRepo("facterj")));
     }
 }

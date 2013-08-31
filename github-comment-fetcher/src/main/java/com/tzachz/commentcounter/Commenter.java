@@ -2,10 +2,14 @@ package com.tzachz.commentcounter;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * Created with IntelliJ IDEA.
@@ -18,14 +22,17 @@ public class Commenter implements Comparable<Commenter> {
 
     private final String username;
     private final List<GHComment> comments;
+    private final Set<GHRepo> repos;
 
     public Commenter(String username) {
         this.username = username;
         this.comments = Lists.newArrayList();
+        this.repos = Sets.newHashSet();
     }
 
-    public void addComment(GHComment comment) {
+    public void addComment(GHComment comment, GHRepo repo) {
         comments.add(comment);
+        repos.add(repo);
     }
 
     public String getUsername() {
@@ -34,6 +41,10 @@ public class Commenter implements Comparable<Commenter> {
 
     public List<GHComment> getComments() {
         return ImmutableList.copyOf(comments);
+    }
+
+    public Set<GHRepo> getRepos() {
+        return ImmutableSet.copyOf(repos);
     }
 
     @Override
@@ -49,6 +60,7 @@ public class Commenter implements Comparable<Commenter> {
         Commenter commenter = (Commenter) o;
 
         if (!comments.equals(commenter.comments)) return false;
+        if (!repos.equals(commenter.repos)) return false;
         if (!username.equals(commenter.username)) return false;
 
         return true;
@@ -58,6 +70,7 @@ public class Commenter implements Comparable<Commenter> {
     public int hashCode() {
         int result = username.hashCode();
         result = 31 * result + comments.hashCode();
+        result = 31 * result + repos.hashCode();
         return result;
     }
 
@@ -66,6 +79,7 @@ public class Commenter implements Comparable<Commenter> {
         return Objects.toStringHelper(this)
                 .add("username", username)
                 .add("comments", comments)
+                .add("repos", repos)
                 .toString();
     }
 }

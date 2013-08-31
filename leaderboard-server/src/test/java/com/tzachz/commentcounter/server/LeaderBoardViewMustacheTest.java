@@ -3,6 +3,7 @@ package com.tzachz.commentcounter.server;
 import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.CommentBuilder;
 import com.tzachz.commentcounter.Commenter;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.yammer.dropwizard.views.mustache.MustacheViewRenderer;
 import org.junit.Test;
 
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertThat;
 public class LeaderBoardViewMustacheTest {
 
     private CommentBuilder commentBuilder = new CommentBuilder();
+    private GHRepo repo = new GHRepo("my-repo");
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {
@@ -49,7 +51,7 @@ public class LeaderBoardViewMustacheTest {
     @Test
     public void existingLoadedRecordsRenderedWithLink() throws Exception {
         Commenter commenter = new Commenter("user1");
-        commenter.addComment(commentBuilder.createComment("user1", "some-url"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url"), repo);
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("1 comments by "));
@@ -59,7 +61,7 @@ public class LeaderBoardViewMustacheTest {
     @Test
     public void sampleCommentDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
-        commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("a very intelligent comment indeed"));
@@ -68,7 +70,7 @@ public class LeaderBoardViewMustacheTest {
     @Test
     public void avatarImageDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
-        commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"));
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"), repo);
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<img src=\"avatar-url\" alt=\"user1\""));

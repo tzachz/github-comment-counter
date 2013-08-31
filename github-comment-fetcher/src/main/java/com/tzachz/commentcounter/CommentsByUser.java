@@ -3,6 +3,7 @@ package com.tzachz.commentcounter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,11 +20,11 @@ public class CommentsByUser {
 
     private ConcurrentMap<String, Commenter> userComments = Maps.newConcurrentMap();
 
-    public void addAll(Collection<GHComment> comments) {
+    public void addAll(Collection<GHComment> comments, GHRepo repo) {
         for (GHComment comment : comments) {
             String user = comment.getUser().getLogin();
             userComments.putIfAbsent(user, new Commenter(user));
-            userComments.get(user).addComment(comment);
+            userComments.get(user).addComment(comment, repo);
         }
     }
 

@@ -2,6 +2,7 @@ package com.tzachz.commentcounter.apifacade;
 
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,8 @@ public class GitHubApiFacadeImpl extends GitHubResource implements GitHubApiFaca
     }
 
     @Override
-    public Set<String> getOrgRepoNames(String orgName) {
-        return orgRepositoriesResource.getRepoNames(orgName);
+    public Set<GHRepo> getOrgRepos(String orgName) {
+        return orgRepositoriesResource.getRepos(orgName);
     }
 
     @Override

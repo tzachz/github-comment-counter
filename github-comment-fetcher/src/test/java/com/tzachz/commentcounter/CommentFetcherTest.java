@@ -1,8 +1,10 @@
 package com.tzachz.commentcounter;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -14,10 +16,10 @@ import org.mockito.Mock;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static com.google.common.collect.Lists.transform;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -55,7 +57,7 @@ public class CommentFetcherTest {
 
     @Test
     public void aggregatesRepos() throws Exception {
-        when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1", "repo2"));
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1", "repo2"));
         when(facade.getRepoComments(anyString(), anyString(), any(Date.class)))
                 .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
         when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "")));
@@ -67,7 +69,7 @@ public class CommentFetcherTest {
 
     @Test
     public void commentOnSelfPullRequestIgnored() throws Exception {
-        when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
         when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
@@ -77,7 +79,7 @@ public class CommentFetcherTest {
 
     @Test
     public void pullRequestNotFoundMeansCommentCounted() throws Exception {
-        when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("bad url"));
@@ -87,12 +89,21 @@ public class CommentFetcherTest {
 
     @Test
     public void oldCommentFilteredOut() throws Exception {
-        when(facade.getOrgRepoNames(ORG_NAME)).thenReturn(Sets.newHashSet("repo1"));
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "")));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
         List<Commenter> board = counter.getCommentsByUser();
         assertThat(board, hasSize(0));
+    }
+
+    private Set<GHRepo> getRepos(String... repoNames) {
+        return Sets.newHashSet(transform(Arrays.asList(repoNames), new Function<String, GHRepo>() {
+            @Override
+            public GHRepo apply(String name) {
+                return new GHRepo(name);
+            }
+        }));
     }
 
     private static class CommenterMatcher extends BaseMatcher<Commenter> {
