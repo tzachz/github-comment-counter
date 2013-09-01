@@ -13,19 +13,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LeaderBoardRecord {
 
     private final String username;
+    private final int score;
     private final int commentCount;
+    private final int repoCount;
     private final String sampleComment;
     private final String sampleCommentUrl;
     private final String avatarUrl;
 
     @JsonCreator
     public LeaderBoardRecord(@JsonProperty("username") String username,
+                             @JsonProperty("score") int score,
                              @JsonProperty("commentCount") int commentCount,
+                             @JsonProperty("repoCount") int repoCount,
                              @JsonProperty("sampleComment") String sampleComment,
                              @JsonProperty("sampleCommentUrl") String sampleCommentUrl,
                              @JsonProperty("avatarUrl") String avatarUrl) {
         this.username = username;
+        this.score = score;
         this.commentCount = commentCount;
+        this.repoCount = repoCount;
         this.sampleComment = sampleComment;
         this.sampleCommentUrl = sampleCommentUrl;
         this.avatarUrl = avatarUrl;
@@ -51,6 +57,14 @@ public class LeaderBoardRecord {
         return sampleCommentUrl;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public int getRepoCount() {
+        return repoCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,7 +73,12 @@ public class LeaderBoardRecord {
         LeaderBoardRecord that = (LeaderBoardRecord) o;
 
         if (commentCount != that.commentCount) return false;
+        if (repoCount != that.repoCount) return false;
+        if (score != that.score) return false;
+        if (avatarUrl != null ? !avatarUrl.equals(that.avatarUrl) : that.avatarUrl != null) return false;
         if (sampleComment != null ? !sampleComment.equals(that.sampleComment) : that.sampleComment != null)
+            return false;
+        if (sampleCommentUrl != null ? !sampleCommentUrl.equals(that.sampleCommentUrl) : that.sampleCommentUrl != null)
             return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
 
@@ -69,8 +88,12 @@ public class LeaderBoardRecord {
     @Override
     public int hashCode() {
         int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + score;
         result = 31 * result + commentCount;
+        result = 31 * result + repoCount;
         result = 31 * result + (sampleComment != null ? sampleComment.hashCode() : 0);
+        result = 31 * result + (sampleCommentUrl != null ? sampleCommentUrl.hashCode() : 0);
+        result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
         return result;
     }
 }

@@ -20,8 +20,8 @@ public class OrgRepositoriesResource extends GitHubResource {
         super(username, password);
     }
 
-    public Set<String> getRepoNames(String organization) {
-        final Set<String> names = Sets.newHashSet();
+    public Set<GHRepo> getRepos(String organization) {
+        final Set<GHRepo> ghRepos = Sets.newHashSet();
         WebResource resource = getResource()
                 .path("orgs")
                 .path(organization)
@@ -29,12 +29,10 @@ public class OrgRepositoriesResource extends GitHubResource {
         scanPages(resource, new GenericType<List<GHRepo>>() {}, new PageProcessor<GHRepo>() {
                     @Override
                     public void process(List<GHRepo> page) {
-                        for (GHRepo repo : page) {
-                            names.add(repo.getName());
-                        }
+                        ghRepos.addAll(page);
                     }
                 }
         );
-        return names;
+        return ghRepos;
     }
 }
