@@ -33,7 +33,6 @@ gitHubCredentials:
     password: my-pass
 
 organization: my-org    # organization to show stats for
-daysBack: 7             # comments from the last week will be counted
 refreshRateMinutes: 10  # interval between API activations
 ```
 
@@ -43,9 +42,3 @@ java -jar <path to fat jar> server <path to yml file>
 ```
 
 You should be able to see the results at http://localhost:8080/leaderboard
-
-Result should look something like:
-<img src="https://raw.github.com/tzachz/github-comment-counter/master/github-comment-counter-yammer-sample.png" alt="sample">
-
-Yeah, I know, some styling can do it justice, and of course there's much more interesting data to show (latest comments, number of repos etc.). Stay tuned or contribute!
-    
