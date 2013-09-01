@@ -22,8 +22,9 @@
                 <table class="table table-striped table-hover">
                 {{#records}}
                     <tr>
+                        <td><p class="text-success">Score<br><b>{{score}}</b></p>
                         <td><img src="{{avatarUrl}}" alt="{{username}}" width="50" height="50"></td>
-                        <td><b>{{commentCount}} comments by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:
+                        <td><b> {{commentCount}} comments in {{repoCount}} repos by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:
                             <br>
                             {{sampleComment}}&nbsp;<a href="{{sampleCommentUrl}}" target="_blank">[discussion]</a>
                         </td>

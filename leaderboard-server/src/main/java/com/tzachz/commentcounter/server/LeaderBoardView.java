@@ -32,11 +32,13 @@ public class LeaderBoardView extends View {
         this.loaded = loaded;
         this.records = transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
             @Override
-            public LeaderBoardRecord apply(Commenter input) {
-                List<GHComment> comments = input.getComments();
+            public LeaderBoardRecord apply(Commenter commenter) {
+                List<GHComment> comments = commenter.getComments();
                 GHComment randomComment = comments.get(random.nextInt(comments.size()));
                 String avatarUrl = randomComment.getUser().getAvatarUrl();
-                return new LeaderBoardRecord(input.getUsername(), comments.size(), randomComment.getBody(), randomComment.getHtmlUrl(), avatarUrl);
+                return new LeaderBoardRecord(commenter.getUsername(),
+                        commenter.getScore(), comments.size(), commenter.getRepos().size(),
+                        randomComment.getBody(), randomComment.getHtmlUrl(), avatarUrl);
             }
         });
         this.period = period;

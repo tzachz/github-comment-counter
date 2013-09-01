@@ -3,6 +3,7 @@ package com.tzachz.commentcounter;
 import com.google.common.base.Predicate;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +44,12 @@ public class CommentFetcher {
 
     public List<Commenter> getCommentsByUser() {
         final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
-        Set<String> repoNames = facade.getOrgRepoNames(this.organization);
+        Set<GHRepo> repos = facade.getOrgRepos(this.organization);
         CommentsByUser comments = new CommentsByUser();
-        for (String name : repoNames) {
-            comments.addAll(getRepoComments(since, name));
+        for (GHRepo repo : repos) {
+            comments.addAll(getRepoComments(since, repo.getName()), repo);
         }
-        logger.info("Fetched comments by {} users from {} repositories", comments.getSize(), repoNames.size());
+        logger.info("Fetched comments by {} users from {} repositories", comments.getSize(), repos.size());
         return comments.getCommentsByUser();
     }
 

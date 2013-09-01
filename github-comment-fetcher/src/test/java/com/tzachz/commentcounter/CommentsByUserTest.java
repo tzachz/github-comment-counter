@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter;
 
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,22 +19,26 @@ public class CommentsByUserTest {
 
     private final CommentBuilder commentBuilder = new CommentBuilder();
 
+    private final GHRepo defaultRepo = new GHRepo("default-repo");
+
     @Test
     public void aggregateUSerComments() throws Exception {
         CommentsByUser commentsByUser = new CommentsByUser();
-        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "aa", "bb"));
-        commentsByUser.addAll(commentBuilder.createEmptyComments("bb", "cc"));
+        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "aa", "bb"), defaultRepo);
+        commentsByUser.addAll(commentBuilder.createEmptyComments("bb", "cc"), defaultRepo);
         assertThat(commentsByUser.getCommentCount("aa"), is(2));
         assertThat(commentsByUser.getCommentCount("bb"), is(2));
         assertThat(commentsByUser.getCommentCount("cc"), is(1));
     }
 
     @Test
-    public void leaderBoardSortedDescending() throws Exception {
+    public void leaderBoardSortedByDescendingScore() throws Exception {
         CommentsByUser commentsByUser = new CommentsByUser();
-        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "bb", "aa"));
+        commentsByUser.addAll(commentBuilder.createEmptyComments("aa", "bb", "aa"), defaultRepo);
+        commentsByUser.addAll(commentBuilder.createEmptyComments("bb"), new GHRepo("another-repo"));
         List<Commenter> leaderBoard = commentsByUser.getCommentsByUser();
-        assertThat(leaderBoard.get(0).getComments().size(), equalTo(2));
+        // bb should win since he's got two repos
+        assertThat(leaderBoard.get(0).getUsername(), equalTo("bb"));
     }
 
 }

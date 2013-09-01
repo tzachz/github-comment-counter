@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.apifacade;
 
 import com.tzachz.commentcounter.CommentsByUser;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class RepoCommentsResourceTest {
         RepoCommentsResource repoCommentsResource =
                 new RepoCommentsResource(credentials.getUsername(), credentials.getPassword());
         CommentsByUser comments = new CommentsByUser();
-        comments.addAll(repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l)));
+        comments.addAll(repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l)), new GHRepo("facterj"));
         assertThat(comments.getCommentCount("AvihayTsayeg"), greaterThan(0));
     }
 }
