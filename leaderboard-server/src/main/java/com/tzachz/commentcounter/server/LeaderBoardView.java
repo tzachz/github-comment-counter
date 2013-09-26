@@ -5,10 +5,12 @@ import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.yammer.dropwizard.views.View;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static com.google.common.collect.Lists.transform;
+import static java.util.Collections.sort;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +32,13 @@ public class LeaderBoardView extends View {
         super("leaderboard.mustache");
         this.orgName = orgName;
         this.loaded = loaded;
-        this.records = transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
+        this.period = period;
+        this.records = new ArrayList<>(transformToRecords(commenters));
+        sort(records);
+    }
+
+    private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters) {
+        return transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
             @Override
             public LeaderBoardRecord apply(Commenter commenter) {
                 List<GHComment> comments = commenter.getComments();
@@ -41,7 +49,6 @@ public class LeaderBoardView extends View {
                         randomComment.getBody(), randomComment.getHtmlUrl(), avatarUrl);
             }
         });
-        this.period = period;
     }
 
     public List<LeaderBoardRecord> getRecords() {

@@ -20,7 +20,7 @@ import static com.google.common.primitives.Ints.max;
 * Time: 13:58
 */
 @SuppressWarnings("UnusedDeclaration")
-public class Commenter implements Comparable<Commenter> {
+public class Commenter {
 
     private final String username;
     private final List<GHComment> comments;
@@ -51,11 +51,6 @@ public class Commenter implements Comparable<Commenter> {
 
     public int getScore() {
         return comments.size() + max(0, (repos.size() - 1)) * 4;
-    }
-
-    @Override
-    public int compareTo(Commenter o) {
-        return Integer.valueOf(o.getScore()).compareTo(getScore()); // descending by score
     }
 
     @Override

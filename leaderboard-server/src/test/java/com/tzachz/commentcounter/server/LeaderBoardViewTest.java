@@ -1,7 +1,7 @@
 package com.tzachz.commentcounter.server;
 
 import com.google.common.collect.Lists;
-import com.tzachz.commentcounter.CommentBuilder;
+import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
  */
 public class LeaderBoardViewTest {
 
-    private CommentBuilder commentBuilder = new CommentBuilder();
+    private GHCommentBuilder commentBuilder = new GHCommentBuilder();
 
     private GHRepo repo = new GHRepo("my-repo");
 
@@ -45,5 +45,18 @@ public class LeaderBoardViewTest {
             body1Chosen += view.getRecords().get(0).getSampleComment().equals("body1") ? 1 : 0;
         }
         assertThat(body1Chosen, is(both(greaterThan(10)).and(lessThan(60))));
+    }
+
+    @Test
+    public void commentersSortedByScore() throws Exception {
+        Commenter commenterScore6 = new Commenter("user1");
+        commenterScore6.addComment(commentBuilder.createComment("user1", "url"), repo);
+        commenterScore6.addComment(commentBuilder.createComment("user1", "url"), new GHRepo("anotherRepo"));
+        Commenter commenterScore5 = new Commenter("user2");
+        for (int i = 0; i < 5; i++) {
+            commenterScore5.addComment(commentBuilder.createComment("user2", "url"), repo);
+        }
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), "org1", true, "today");
+        assertThat(view.getRecords().get(0).getUsername(), is("user1"));
     }
 }

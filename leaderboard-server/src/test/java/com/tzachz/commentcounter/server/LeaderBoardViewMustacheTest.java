@@ -1,7 +1,7 @@
 package com.tzachz.commentcounter.server;
 
 import com.google.common.collect.Lists;
-import com.tzachz.commentcounter.CommentBuilder;
+import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.yammer.dropwizard.views.mustache.MustacheViewRenderer;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
  */
 public class LeaderBoardViewMustacheTest {
 
-    private CommentBuilder commentBuilder = new CommentBuilder();
+    private GHCommentBuilder commentBuilder = new GHCommentBuilder();
     private GHRepo repo = new GHRepo("my-repo");
 
     @Test
