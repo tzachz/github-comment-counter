@@ -6,8 +6,6 @@ import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +17,11 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.transform;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -36,7 +35,7 @@ public class CommentFetcherTest {
 
     public static final String ORG_NAME = "org";
 
-    private final CommentBuilder commentBuilder = new CommentBuilder();
+    private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
     private LocalDate now = new LocalDate(2013, 8, 8);
 
     @Mock
@@ -62,9 +61,10 @@ public class CommentFetcherTest {
                 .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
         when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "")));
 
-        List<Commenter> board = counter.getCommentsByUser();
-        assertThat(board, hasSize(2));
-        assertThat(board, hasItems(new CommenterMatcher("user1", 4), new CommenterMatcher("user2", 2)));
+        List<Comment> comments = counter.getComments();
+        assertThat(comments, hasSize(6));
+        verify(facade).getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate());
+        verify(facade).getRepoComments(ORG_NAME, "repo2", now.minusDays(1).toDate());
     }
 
     @Test
@@ -73,8 +73,8 @@ public class CommentFetcherTest {
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
         when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
-        List<Commenter> board = counter.getCommentsByUser();
-        assertThat(board, hasSize(0));
+        List<Comment> comments = counter.getComments();
+        assertThat(comments, hasSize(0));
     }
 
     @Test
@@ -83,8 +83,8 @@ public class CommentFetcherTest {
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("bad url"));
-        List<Commenter> board = counter.getCommentsByUser();
-        assertThat(board, hasItem(new CommenterMatcher("user1", 1)));
+        List<Comment> comments = counter.getComments();
+        assertThat(comments, hasSize(1));
     }
 
     @Test
@@ -93,8 +93,8 @@ public class CommentFetcherTest {
         when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "")));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
-        List<Commenter> board = counter.getCommentsByUser();
-        assertThat(board, hasSize(0));
+        List<Comment> comments = counter.getComments();
+        assertThat(comments, hasSize(0));
     }
 
     private Set<GHRepo> getRepos(String... repoNames) {
@@ -106,29 +106,4 @@ public class CommentFetcherTest {
         }));
     }
 
-    private static class CommenterMatcher extends BaseMatcher<Commenter> {
-
-        private final String expectedUser;
-        private final int expectedCommentCount;
-
-        public CommenterMatcher(String expectedUser, int expectedCommentCount) {
-            this.expectedUser = expectedUser;
-            this.expectedCommentCount = expectedCommentCount;
-        }
-
-        @Override
-        public boolean matches(Object item) {
-            return item instanceof Commenter &&
-                    ((Commenter)item).getUsername().equals(expectedUser) &&
-                    ((Commenter)item).getComments().size() == expectedCommentCount;
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("Commenter with user = ")
-                    .appendValue(expectedUser)
-                    .appendText(" and comment count = ")
-                    .appendValue(expectedCommentCount);
-        }
-    }
 }

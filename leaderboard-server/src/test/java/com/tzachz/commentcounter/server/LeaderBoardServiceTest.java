@@ -60,7 +60,7 @@ public class LeaderBoardServiceTest {
         Integer refresh = 5;
         when(configuration.getRefreshRateMinutes()).thenReturn(refresh);
         service.run(configuration, environment);
-        verify(executorService, times(3)).scheduleAtFixedRate(any(Runnable.class), eq(0l), eq(Long.valueOf(refresh)), eq(TimeUnit.MINUTES));
+        verify(executorService).scheduleAtFixedRate(any(Runnable.class), eq(0l), eq(Long.valueOf(refresh)), eq(TimeUnit.MINUTES));
     }
 
     @Test

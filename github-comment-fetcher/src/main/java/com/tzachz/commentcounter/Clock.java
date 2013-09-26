@@ -6,7 +6,7 @@ public class Clock {
     public Clock() {
     }
 
-    LocalDate getLocalDateNow() {
+    public LocalDate getLocalDateNow() {
         return LocalDate.now();
     }
 }

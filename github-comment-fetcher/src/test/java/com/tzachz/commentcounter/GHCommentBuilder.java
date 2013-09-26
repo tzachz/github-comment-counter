@@ -6,9 +6,9 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
 import java.util.*;
 
-public class CommentBuilder {
+public class GHCommentBuilder {
 
-    Collection<GHComment> createEmptyComments(String... users) {
+    public Collection<GHComment> createEmptyComments(String... users) {
         List<GHComment> comments = new ArrayList<>();
         for (String user : users) {
             comments.addAll(Arrays.asList(createComment(user, "")));
