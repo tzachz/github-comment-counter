@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 * Time: 19:02
 */
 @SuppressWarnings("UnusedDeclaration")
-public class LeaderBoardRecord {
+public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
 
     private final String username;
     private final int score;
@@ -95,5 +95,10 @@ public class LeaderBoardRecord {
         result = 31 * result + (sampleCommentUrl != null ? sampleCommentUrl.hashCode() : 0);
         result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(LeaderBoardRecord o) {
+        return Integer.valueOf(o.getScore()).compareTo(getScore()); // descending by score
     }
 }

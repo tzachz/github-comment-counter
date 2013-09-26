@@ -1,6 +1,8 @@
 package com.tzachz.commentcounter;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -8,10 +10,7 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Collections2.filter;
 
@@ -42,19 +41,29 @@ public class CommentFetcher {
         this.clock = clock;
     }
 
-    public List<Commenter> getCommentsByUser() {
+    public List<Comment> getComments() {
         final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<GHRepo> repos = facade.getOrgRepos(this.organization);
-        CommentsByUser comments = new CommentsByUser();
+        List<Comment> comments = new ArrayList<>();
         for (GHRepo repo : repos) {
-            comments.addAll(getRepoComments(since, repo.getName()), repo);
+            comments.addAll(getRepoComments(since, repo));
         }
-        logger.info("Fetched comments by {} users from {} repositories", comments.getSize(), repos.size());
-        return comments.getCommentsByUser();
+        logger.info("Fetched {} comments from {} repositories", comments.size(), repos.size());
+        return comments;
     }
 
-    private Collection<GHComment> getRepoComments(final Date since, String repoName) {
-        Collection<GHComment> repoComments = facade.getRepoComments(this.organization, repoName, since);
+    private Collection<Comment> getRepoComments(final Date since, final GHRepo repo) {
+        Collection<GHComment> repoComments = facade.getRepoComments(this.organization, repo.getName(), since);
+        Collection<GHComment> filteredComments = filterComments(since, repoComments);
+        return Collections2.transform(filteredComments, new Function<GHComment, Comment>() {
+            @Override
+            public Comment apply(GHComment input) {
+                return new Comment(input, repo);
+            }
+        });
+    }
+
+    private Collection<GHComment> filterComments(final Date since, Collection<GHComment> repoComments) {
         Predicate<GHComment> selfCommentsFilter = new Predicate<GHComment>() {
             @Override
             public boolean apply(GHComment input) {
@@ -70,6 +79,5 @@ public class CommentFetcher {
         };
         return filter(filter(repoComments, oldCommentsFilter), selfCommentsFilter);
     }
-
 
 }

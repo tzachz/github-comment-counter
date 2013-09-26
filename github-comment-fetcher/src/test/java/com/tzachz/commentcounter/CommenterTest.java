@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
  */
 public class CommenterTest {
 
-    private final CommentBuilder builder = new CommentBuilder();
+    private final GHCommentBuilder builder = new GHCommentBuilder();
 
     @Test
     public void scoreEqualsZeroForNoComments() throws Exception {

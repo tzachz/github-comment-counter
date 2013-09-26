@@ -1,10 +1,10 @@
 package com.tzachz.commentcounter.apifacade;
 
-import com.tzachz.commentcounter.CommentsByUser;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.greaterThan;
@@ -21,11 +21,10 @@ public class RepoCommentsResourceTest {
     public VMOptsCredentials credentials = new VMOptsCredentials();
 
     @Test
-    public void atLeastOneCommentByAvihayOnFacterJ() throws Exception {
+    public void atLeastOneCommentFacterJ() throws Exception {
         RepoCommentsResource repoCommentsResource =
                 new RepoCommentsResource(credentials.getUsername(), credentials.getPassword());
-        CommentsByUser comments = new CommentsByUser();
-        comments.addAll(repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l)), new GHRepo("facterj"));
-        assertThat(comments.getCommentCount("AvihayTsayeg"), greaterThan(0));
+        Collection<GHComment> comments = repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l));
+        assertThat(comments.size(), greaterThan(0));
     }
 }
