@@ -35,20 +35,14 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
         GitHubCredentials gitHubCredentials = configuration.getGitHubCredentials();
         GitHubApiFacadeImpl gitHubApiFacade = new GitHubApiFacadeImpl(gitHubCredentials.getUsername(), gitHubCredentials.getPassword());
-        final LeaderBoardStore store = new LeaderBoardStore(new Clock());
-        final CommentFetcher fetcher = new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), Period.getLongest().getDaysBack());
+        LeaderBoardStore store = new LeaderBoardStore(new Clock());
 
         environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
         environment.addResource(new LeaderBoardResource(store, configuration.getOrganization()));
         ScheduledExecutorService executorService = environment.managedScheduledExecutorService("comment-fetcher", 1);
 
-        executorService.scheduleAtFixedRate(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        store.set(fetcher.getComments());
-                    }
-                }, 0, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES);
+        final CommentFetcher fetcher = new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), Period.getLongest().getDaysBack());
+        executorService.scheduleAtFixedRate(new FetcherRunnable(store, fetcher), 0, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES);
     }
 
 }
