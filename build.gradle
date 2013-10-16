@@ -1,9 +1,11 @@
+def BUILD_NUMBER = project.hasProperty('BUILD_NUMBER') ? "$BUILD_NUMBER" : 'undef'
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
     project.group = 'com.tzachz'
-    project.version = '0.0.1'
+    project.version = "0.1.$BUILD_NUMBER"
 
     test {
         beforeTest { descriptor ->
