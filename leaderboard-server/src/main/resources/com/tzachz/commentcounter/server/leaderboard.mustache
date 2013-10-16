@@ -7,6 +7,13 @@
         <a href="https://github.com/tzachz/github-comment-counter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
         <div class="container">
             <h1>GitHub Reviewers Leader Board: <a href="https://github.com/{{orgName}}" target="_blank">{{orgName}}</a></h1>
+            How actively are you helping your colleagues by reviewing their Pull Requests? <br><br>
+            <div class="well well-sm">
+                You get one point for every in-code comment on a pull request in a {{orgName}} repository.
+                You do not get points for comments on your own pull request.
+                You get 4 extra points for every additional repository you comment on.
+                In other words: <p class="text-success"><b>Score = #comments + (#repos-1)*4</b></p>
+            </div>
             <ul class="nav nav-pills">
                 <li id="btn-today"><a href="/service/leaderboard/today">Today</a></li>
                 <li id="btn-week"><a href="/service/leaderboard/week">Week</a></li>
