@@ -39,6 +39,9 @@ public class LeaderBoardView extends View {
 
     private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters) {
         return transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
+
+            private final static int MAX_COMMENT_LENGTH = 300;
+
             @Override
             public LeaderBoardRecord apply(Commenter commenter) {
                 List<GHComment> comments = commenter.getComments();
@@ -46,7 +49,14 @@ public class LeaderBoardView extends View {
                 String avatarUrl = randomComment.getUser().getAvatarUrl();
                 return new LeaderBoardRecord(commenter.getUsername(),
                         commenter.getScore(), comments.size(), commenter.getRepos().size(),
-                        randomComment.getBody(), randomComment.getHtmlUrl(), avatarUrl);
+                        fitCommentBody(randomComment.getBody()), randomComment.getHtmlUrl(), avatarUrl);
+            }
+
+            private String fitCommentBody(String body) {
+                if (body.length() > MAX_COMMENT_LENGTH) {
+                    body = body.substring(0, MAX_COMMENT_LENGTH -3) + "...";
+                }
+                return body;
             }
         });
     }

@@ -1,8 +1,8 @@
 http:
     rootPath: /service/*
 gitHubCredentials:
-    username: tzachz
-    password:
+    username: overrideMe
+    password: overrideMe
 
-organization: kenshoo
+organization: overrideMe
 refreshRateMinutes: 10

@@ -7,6 +7,7 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -58,5 +59,20 @@ public class LeaderBoardViewTest {
         }
         LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), "org1", true, "today");
         assertThat(view.getRecords().get(0).getUsername(), is("user1"));
+    }
+
+    @Test
+    public void longCommentsChoppedAfter300Chars() throws Exception {
+        Commenter commenter = new Commenter("user1");
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "Lorem ipsum dolor sit amet, " +
+                "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo " +
+                "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat " +
+                "nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt " +
+                "mollit anim id est laborum."), repo);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), "org1", true, "today");
+        String comment = view.getRecords().get(0).getSampleComment();
+        assertThat(comment, endsWith("..."));
+        assertThat(comment.length(), is(300));
     }
 }

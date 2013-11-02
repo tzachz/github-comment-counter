@@ -41,4 +41,4 @@ You're now ready to run the server:
 java -jar <path to fat jar> server <path to yml file>
 ```
 
-You should be able to see the results at http://localhost:8080/leaderboard
+You should be able to see the results at http://localhost:8080/
