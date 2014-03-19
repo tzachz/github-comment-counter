@@ -20,7 +20,7 @@ public abstract class GitHubResource {
     private final static Logger logger = LoggerFactory.getLogger(GitHubResource.class);
 
     private static final String GITHUB_URL = "https://api.github.com";
-    private static final int MAX_PAGES = 20;
+    private static final int MAX_PAGES = 50;
 
     private final Client client;
 
