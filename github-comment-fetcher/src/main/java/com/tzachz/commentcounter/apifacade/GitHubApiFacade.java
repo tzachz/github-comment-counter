@@ -23,4 +23,6 @@ public interface GitHubApiFacade {
     public Collection<GHComment> getRepoComments(String orgName, String repoName, Date since);
 
     public GHPullRequest getPullRequest(String url);
+
+    public EmojisMap getEmojiMap();
 }

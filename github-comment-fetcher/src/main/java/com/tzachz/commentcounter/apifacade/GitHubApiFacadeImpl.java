@@ -3,8 +3,6 @@ package com.tzachz.commentcounter.apifacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Date;
@@ -16,19 +14,28 @@ import java.util.Set;
  * Date: 10/08/13
  * Time: 14:44
  */
-public class GitHubApiFacadeImpl extends GitHubResource implements GitHubApiFacade {
-
-    private final static Logger logger = LoggerFactory.getLogger(GitHubApiFacadeImpl.class);
+public class GitHubApiFacadeImpl implements GitHubApiFacade {
 
     private final OrgResource orgResource;
     private final OrgRepositoriesResource orgRepositoriesResource;
     private final RepoCommentsResource repoCommentsResource;
+    private final PullRequestResource pullRequestResource;
+    private final EmojisResource emojisResource;
 
     public GitHubApiFacadeImpl(String username, String password) {
-        super(username, password);
-        this.orgResource = new OrgResource(username, password);
-        this.orgRepositoriesResource = new OrgRepositoriesResource(username, password);
-        this.repoCommentsResource = new RepoCommentsResource(username, password);
+        this(new OrgResource(username, password),
+                new OrgRepositoriesResource(username, password),
+                new RepoCommentsResource(username, password),
+                new PullRequestResource(username, password),
+                new EmojisResource(username, password));
+    }
+
+    GitHubApiFacadeImpl(OrgResource orgResource, OrgRepositoriesResource orgRepositoriesResource, RepoCommentsResource repoCommentsResource, PullRequestResource pullRequestResource, EmojisResource emojisResource) {
+        this.orgResource = orgResource;
+        this.orgRepositoriesResource = orgRepositoriesResource;
+        this.repoCommentsResource = repoCommentsResource;
+        this.pullRequestResource = pullRequestResource;
+        this.emojisResource = emojisResource;
     }
 
     @Override
@@ -48,7 +55,12 @@ public class GitHubApiFacadeImpl extends GitHubResource implements GitHubApiFaca
 
     @Override
     public GHPullRequest getPullRequest(String url) {
-        return get(url, GHPullRequest.class);
+        return pullRequestResource.getPullRequest(url);
+    }
+
+    @Override
+    public EmojisMap getEmojiMap() {
+        return emojisResource.getEmojisMap();
     }
 
 }

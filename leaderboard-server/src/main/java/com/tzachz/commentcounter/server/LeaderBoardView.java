@@ -1,13 +1,11 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.base.Function;
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.yammer.dropwizard.views.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static com.google.common.collect.Lists.transform;
 import static java.util.Collections.sort;
@@ -21,44 +19,22 @@ import static java.util.Collections.sort;
 @SuppressWarnings("UnusedDeclaration")
 public class LeaderBoardView extends View {
 
-    private final static Random random = new Random();
-
     private final List<LeaderBoardRecord> records;
     private final String orgName;
     private final boolean loaded;
     private final String period;
 
-    protected LeaderBoardView(List<Commenter> commenters, String orgName, boolean loaded, String period) {
+    protected LeaderBoardView(List<Commenter> commenters, EmojisMap emojisMap, String orgName, boolean loaded, String period) {
         super("leaderboard.mustache");
         this.orgName = orgName;
         this.loaded = loaded;
         this.period = period;
-        this.records = new ArrayList<>(transformToRecords(commenters));
+        this.records = new ArrayList<>(transformToRecords(commenters, emojisMap));
         sort(records);
     }
 
-    private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters) {
-        return transform(commenters, new Function<Commenter, LeaderBoardRecord>() {
-
-            private final static int MAX_COMMENT_LENGTH = 300;
-
-            @Override
-            public LeaderBoardRecord apply(Commenter commenter) {
-                List<GHComment> comments = commenter.getComments();
-                GHComment randomComment = comments.get(random.nextInt(comments.size()));
-                String avatarUrl = randomComment.getUser().getAvatarUrl();
-                return new LeaderBoardRecord(commenter.getUsername(),
-                        commenter.getScore(), comments.size(), commenter.getRepos().size(),
-                        fitCommentBody(randomComment.getBody()), randomComment.getHtmlUrl(), avatarUrl);
-            }
-
-            private String fitCommentBody(String body) {
-                if (body.length() > MAX_COMMENT_LENGTH) {
-                    body = body.substring(0, MAX_COMMENT_LENGTH -3) + "...";
-                }
-                return body;
-            }
-        });
+    private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters, EmojisMap emojisMap) {
+        return transform(commenters, new CommenterToRecordTransformer(emojisMap));
     }
 
     public List<LeaderBoardRecord> getRecords() {
@@ -76,4 +52,5 @@ public class LeaderBoardView extends View {
     public String getPeriod() {
         return period;
     }
+
 }

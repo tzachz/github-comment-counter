@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.Clock;
 import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.Commenter;
+import com.tzachz.commentcounter.apifacade.EmojisMap;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,12 +24,15 @@ public class LeaderBoardStore {
     private final Clock clock;
 
     private final Map<Period, List<Commenter>> store = new ConcurrentHashMap<>();
+    private final EmojiStore emojiStore;
 
-    public LeaderBoardStore(Clock clock) {
+    public LeaderBoardStore(Clock clock, EmojiStore emojiStore) {
         this.clock = clock;
+        this.emojiStore = emojiStore;
     }
 
     public void set(List<Comment> comments) {
+        emojiStore.load();
         for (Period period : Period.values()) {
             store.put(period, aggregate(filterByRecency(comments, period.getDaysBack())));
         }
@@ -36,6 +40,10 @@ public class LeaderBoardStore {
 
     public List<Commenter> get(String name) {
         return isLoaded(name)? store.get(Period.valueOf(name)) : Collections.<Commenter>emptyList();
+    }
+
+    public EmojisMap getEmojiMap() {
+        return emojiStore.getMap();
     }
 
     public boolean isLoaded(String name) {

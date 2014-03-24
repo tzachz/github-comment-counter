@@ -33,15 +33,28 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
 
     @Override
     public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
-        GitHubCredentials gitHubCredentials = configuration.getGitHubCredentials();
-        GitHubApiFacadeImpl gitHubApiFacade = new GitHubApiFacadeImpl(gitHubCredentials.getUsername(), gitHubCredentials.getPassword());
-        LeaderBoardStore store = new LeaderBoardStore(new Clock());
+        GitHubApiFacadeImpl apiFacade = getApiFacade(configuration);
+        LeaderBoardStore store = getStore(apiFacade);
 
-        environment.addHealthCheck(new GitHubCredentialsHealthCheck(gitHubApiFacade, configuration.getOrganization()));
+        environment.addHealthCheck(new GitHubCredentialsHealthCheck(apiFacade, configuration.getOrganization()));
         environment.addResource(new LeaderBoardResource(store, configuration.getOrganization()));
-        ScheduledExecutorService executorService = environment.managedScheduledExecutorService("comment-fetcher", 1);
 
-        final CommentFetcher fetcher = new CommentFetcher(gitHubApiFacade, configuration.getOrganization(), Period.getLongest().getDaysBack());
+        createScheduledFetcher(configuration, environment, apiFacade, store);
+    }
+
+    private GitHubApiFacadeImpl getApiFacade(LeaderBoardServerConfiguration configuration) {
+        GitHubCredentials credentials = configuration.getGitHubCredentials();
+        return new GitHubApiFacadeImpl(credentials.getUsername(), credentials.getPassword());
+    }
+
+    private LeaderBoardStore getStore(GitHubApiFacadeImpl apiFacade) {
+        EmojiStore emojiStore = new EmojiStore(apiFacade);
+        return new LeaderBoardStore(new Clock(), emojiStore);
+    }
+
+    private void createScheduledFetcher(LeaderBoardServerConfiguration configuration, Environment environment, GitHubApiFacadeImpl apiFacade, LeaderBoardStore store) {
+        ScheduledExecutorService executorService = environment.managedScheduledExecutorService("comment-fetcher", 1);
+        final CommentFetcher fetcher = new CommentFetcher(apiFacade, configuration.getOrganization(), Period.getLongest().getDaysBack());
         executorService.scheduleAtFixedRate(new FetcherRunnable(store, fetcher), 0, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES);
     }
 

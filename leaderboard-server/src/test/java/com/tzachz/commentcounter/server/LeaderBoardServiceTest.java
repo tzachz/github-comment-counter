@@ -45,7 +45,6 @@ public class LeaderBoardServiceTest {
         when(credentials.getUsername()).thenReturn("user1");
         when(credentials.getPassword()).thenReturn("pass1");
         when(configuration.getGitHubCredentials()).thenReturn(credentials);
-
         when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
     }
 

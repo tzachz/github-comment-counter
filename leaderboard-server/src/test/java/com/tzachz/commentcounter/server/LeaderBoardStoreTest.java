@@ -19,6 +19,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -35,6 +36,9 @@ public class LeaderBoardStoreTest {
 
     @Mock
     private Clock clock;
+
+    @Mock
+    private EmojiStore emojiStore;
 
     @InjectMocks
     private LeaderBoardStore store;
@@ -58,6 +62,12 @@ public class LeaderBoardStoreTest {
         assertThat(store.isLoaded("today"), is(true));
         assertThat(store.isLoaded("week"), is(true));
         assertThat(store.isLoaded("month"), is(true));
+    }
+
+    @Test
+    public void setCallsEmojiStoreLoad() throws Exception {
+        store.set(Lists.<Comment>newArrayList());
+        verify(emojiStore).load();
     }
 
     @Test

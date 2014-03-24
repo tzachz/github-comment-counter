@@ -26,14 +26,14 @@ public class LeaderBoardResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public LeaderBoardView getLeaderBoard(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period), store.getEmojiMap(), orgName, store.isLoaded(period), period);
     }
 
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
     public LeaderBoardView getJson(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period), store.getEmojiMap(), orgName, store.isLoaded(period), period);
     }
 
 }
