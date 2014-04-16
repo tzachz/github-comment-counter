@@ -29,6 +29,7 @@ class CommenterToRecordTransformer implements Function<Commenter, LeaderBoardRec
                 commenter.getRepos().size(),
                 renderCommentBody(randomComment.getBody()),
                 randomComment.getHtmlUrl(),
+                commenter.getRepoFor(randomComment).getName(),
                 randomComment.getUser().getAvatarUrl());
     }
 

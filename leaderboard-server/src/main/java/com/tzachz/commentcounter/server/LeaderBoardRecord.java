@@ -18,6 +18,7 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
     private final int repoCount;
     private final String sampleComment;
     private final String sampleCommentUrl;
+    private final String sampleCommentRepo;
     private final String avatarUrl;
 
     @JsonCreator
@@ -27,6 +28,7 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
                              @JsonProperty("repoCount") int repoCount,
                              @JsonProperty("sampleComment") String sampleComment,
                              @JsonProperty("sampleCommentUrl") String sampleCommentUrl,
+                             @JsonProperty("sampleCommentRepo") String sampleCommentRepo,
                              @JsonProperty("avatarUrl") String avatarUrl) {
         this.username = username;
         this.score = score;
@@ -34,6 +36,7 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
         this.repoCount = repoCount;
         this.sampleComment = sampleComment;
         this.sampleCommentUrl = sampleCommentUrl;
+        this.sampleCommentRepo = sampleCommentRepo;
         this.avatarUrl = avatarUrl;
     }
 
@@ -65,6 +68,10 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
         return repoCount;
     }
 
+    public String getSampleCommentRepo() {
+        return sampleCommentRepo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,6 +84,8 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
         if (score != that.score) return false;
         if (avatarUrl != null ? !avatarUrl.equals(that.avatarUrl) : that.avatarUrl != null) return false;
         if (sampleComment != null ? !sampleComment.equals(that.sampleComment) : that.sampleComment != null)
+            return false;
+        if (sampleCommentRepo != null ? !sampleCommentRepo.equals(that.sampleCommentRepo) : that.sampleCommentRepo != null)
             return false;
         if (sampleCommentUrl != null ? !sampleCommentUrl.equals(that.sampleCommentUrl) : that.sampleCommentUrl != null)
             return false;
@@ -93,6 +102,7 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
         result = 31 * result + repoCount;
         result = 31 * result + (sampleComment != null ? sampleComment.hashCode() : 0);
         result = 31 * result + (sampleCommentUrl != null ? sampleCommentUrl.hashCode() : 0);
+        result = 31 * result + (sampleCommentRepo != null ? sampleCommentRepo.hashCode() : 0);
         result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
         return result;
     }

@@ -70,6 +70,15 @@ public class LeaderBoardViewMustacheTest {
     }
 
     @Test
+    public void sampleCommentRepoNameInDiscussion() throws Exception {
+        Commenter commenter = new Commenter("user1");
+        commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        String result = render(view);
+        assertThat(result, containsString("[view discussion in my-repo]"));
+    }
+
+    @Test
     public void avatarImageDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"), repo);

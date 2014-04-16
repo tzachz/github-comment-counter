@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -43,9 +44,11 @@ public class CommenterToRecordTransformerTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        GHRepo onlyRepo = new GHRepo("repo1");
         when(commenter.getUsername()).thenReturn(USER_NAME);
         when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME)));
-        when(commenter.getRepos()).thenReturn(ImmutableSet.of(new GHRepo("repo1")));
+        when(commenter.getRepos()).thenReturn(ImmutableSet.of(onlyRepo));
+        when(commenter.getRepoFor(any(GHComment.class))).thenReturn(onlyRepo);
         when(commenter.getScore()).thenReturn(SCORE);
     }
 
@@ -117,5 +120,13 @@ public class CommenterToRecordTransformerTest {
         when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME, "Great! :smile: !")));
         String comment = transformer.apply(commenter).getSampleComment();
         assertThat(comment, is("Great! <img alt=\":smile:\" src=\"http://smile\" height=\"20\" width=\"20\" align=\"absmiddle\"> !"));
+    }
+
+    @Test
+    public void randomCommentRepoNamePassedToRecord() throws Exception {
+        GHComment comment = createCommentBy(USER_NAME);
+        when(commenter.getComments()).thenReturn(Lists.newArrayList(comment));
+        when(commenter.getRepoFor(comment)).thenReturn(new GHRepo("repo2"));
+        assertThat(transformer.apply(commenter).getSampleCommentRepo(), is("repo2"));
     }
 }
