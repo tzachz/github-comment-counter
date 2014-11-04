@@ -1,10 +1,8 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.GHCommentBuilder;
-import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import org.junit.Test;
 
@@ -32,12 +30,12 @@ public class LeaderBoardViewTest {
         for (int i = 0; i < 5; i++) {
             commenterScore5.addComment(commentBuilder.createComment("user2", "url"), repo);
         }
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), getTransformer(), "org1", true, "today");
         assertThat(view.getRecords().get(0).getUsername(), is("user1"));
     }
 
-    private EmojisMap emojisMap() {
-        return new EmojisMap(ImmutableMap.<String, String>of());
+    private CommenterToRecordTransformer getTransformer() {
+        return new CommenterToRecordTransformer(Lists.<CommentRenderer>newArrayList());
     }
 
 }

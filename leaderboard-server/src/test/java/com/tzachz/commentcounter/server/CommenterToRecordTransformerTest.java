@@ -1,28 +1,26 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -34,12 +32,16 @@ public class CommenterToRecordTransformerTest {
     public static final String COMMENT_URL = "http://comment";
     public static final int SCORE = 32;
 
-    private EmojisMap emojisMap = new EmojisMap(ImmutableMap.of("smile", "http://smile"));
+    @Mock
+    private CommentRenderer renderer1;
 
-    private CommenterToRecordTransformer transformer = new CommenterToRecordTransformer(emojisMap);
+    @Mock
+    private CommentRenderer renderer2;
 
     @Mock
     private Commenter commenter;
+
+    private CommenterToRecordTransformer transformer;
 
     @Before
     public void setUp() throws Exception {
@@ -50,6 +52,18 @@ public class CommenterToRecordTransformerTest {
         when(commenter.getRepos()).thenReturn(ImmutableSet.of(onlyRepo));
         when(commenter.getRepoFor(any(GHComment.class))).thenReturn(onlyRepo);
         when(commenter.getScore()).thenReturn(SCORE);
+        when(renderer1.render(anyString())).thenAnswer(answerFirstArgument());
+        when(renderer2.render(anyString())).thenAnswer(answerFirstArgument());
+        transformer = new CommenterToRecordTransformer(ImmutableList.of(renderer1, renderer2));
+    }
+
+    private Answer<String> answerFirstArgument() {
+        return new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                return (String) invocation.getArguments()[0];
+            }
+        };
     }
 
     private GHComment createCommentBy(String user) {
@@ -103,30 +117,17 @@ public class CommenterToRecordTransformerTest {
     }
 
     @Test
-    public void longCommentsChoppedAfter300Chars() throws Exception {
-        when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME, "Lorem ipsum dolor sit amet, " +
-                "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo " +
-                "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat " +
-                "nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt " +
-                "mollit anim id est laborum.")));
-        String comment = transformer.apply(commenter).getSampleComment();
-        assertThat(comment, endsWith("..."));
-        assertThat(comment.length(), CoreMatchers.is(300));
-    }
-
-    @Test
-    public void emojisReplacedWithHtmlImages() throws Exception {
-        when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME, "Great! :smile: !")));
-        String comment = transformer.apply(commenter).getSampleComment();
-        assertThat(comment, is("Great! <img alt=\":smile:\" src=\"http://smile\" height=\"20\" width=\"20\" align=\"absmiddle\"> !"));
-    }
-
-    @Test
     public void randomCommentRepoNamePassedToRecord() throws Exception {
         GHComment comment = createCommentBy(USER_NAME);
         when(commenter.getComments()).thenReturn(Lists.newArrayList(comment));
         when(commenter.getRepoFor(comment)).thenReturn(new GHRepo("repo2"));
         assertThat(transformer.apply(commenter).getSampleCommentRepo(), is("repo2"));
+    }
+
+    @Test
+    public void renderersCalledInOrder() throws Exception {
+        when(renderer1.render(anyString())).thenReturn("first result");
+        when(renderer2.render("first result")).thenReturn("end result");
+        assertThat(transformer.apply(commenter).getSampleComment(), is("end result"));
     }
 }

@@ -2,7 +2,6 @@ package com.tzachz.commentcounter.server;
 
 import com.google.common.base.Function;
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 
 import java.util.List;
@@ -10,13 +9,12 @@ import java.util.Random;
 
 class CommenterToRecordTransformer implements Function<Commenter, LeaderBoardRecord> {
 
-    private final static int MAX_COMMENT_LENGTH = 300;
     private final static Random random = new Random();
 
-    private final EmojisMap emojisMap;
+    private final List<CommentRenderer> renderers;
 
-    CommenterToRecordTransformer(EmojisMap emojisMap) {
-        this.emojisMap = emojisMap;
+    CommenterToRecordTransformer(List<CommentRenderer> renderers) {
+        this.renderers = renderers;
     }
 
     @Override
@@ -39,31 +37,10 @@ class CommenterToRecordTransformer implements Function<Commenter, LeaderBoardRec
     }
 
     private String renderCommentBody(String body) {
-        body = capSize(body);
-        body = renderEmojis(body);
-        return body;
-    }
-
-    private String capSize(String body) {
-        if (body.length() > MAX_COMMENT_LENGTH) {
-            body = body.substring(0, MAX_COMMENT_LENGTH -3) + "...";
+        for (CommentRenderer renderer : renderers) {
+            body = renderer.render(body);
         }
         return body;
     }
 
-    private String renderEmojis(String body) {
-        for (String emojiCode : emojisMap.getEmojiCodes()) {
-            String emojiMarkdown = toEmojiMarkdown(emojiCode);
-            body = body.replace(emojiMarkdown, createImage(emojiMarkdown, emojisMap.getLink(emojiCode)));
-        }
-        return body;
-    }
-
-    private String toEmojiMarkdown(String emojiCode) {
-        return ":" + emojiCode + ":";
-    }
-
-    private String createImage(String emojiCode, String link) {
-        return String.format("<img alt=\"%s\" src=\"%s\" height=\"20\" width=\"20\" align=\"absmiddle\">", emojiCode, link);
-    }
 }

@@ -1,10 +1,8 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.EmojisMap;
+import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 import com.yammer.dropwizard.views.mustache.MustacheViewRenderer;
 import org.junit.Test;
@@ -30,14 +28,14 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"https://github.com/org1"));
     }
 
     @Test
     public void stillLoadingSaysStillLoading() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), emojisMap(), "org1", false, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", false, "today");
         String result = render(view);
         assertThat(result, containsString("Still Loading! Please wait while we fetch your organization's data from GitHub..."));
         assertThat(result, not(containsString("No comments! Start reviewing...")));
@@ -45,7 +43,7 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void loadedEmptyRecordsListSaysNoComments() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("No comments! Start reviewing..."));
     }
@@ -54,7 +52,7 @@ public class LeaderBoardViewMustacheTest {
     public void existingLoadedRecordsRenderedWithLink() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("1 comments in 1 repos by "));
         assertThat(result, containsString("https://github.com/user1"));
@@ -64,7 +62,7 @@ public class LeaderBoardViewMustacheTest {
     public void sampleCommentDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("a very intelligent comment indeed"));
     }
@@ -73,7 +71,7 @@ public class LeaderBoardViewMustacheTest {
     public void sampleCommentRepoNameInDiscussion() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("[view discussion in my-repo]"));
     }
@@ -82,7 +80,7 @@ public class LeaderBoardViewMustacheTest {
     public void avatarImageDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<img src=\"avatar-url\" alt=\"user1\""));
     }
@@ -91,7 +89,7 @@ public class LeaderBoardViewMustacheTest {
     public void commentHtmlNotEscaped() throws Exception {
         Commenter commenter = new Commenter("user1");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "contains <img>!", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), emojisMap(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("contains <img>!"));
     }
@@ -103,7 +101,7 @@ public class LeaderBoardViewMustacheTest {
         return outputStream.toString();
     }
 
-    private EmojisMap emojisMap() {
-        return new EmojisMap(ImmutableMap.<String, String>of());
+    private CommenterToRecordTransformer transformer() {
+        return new CommenterToRecordTransformer(Lists.<CommentRenderer>newArrayList());
     }
 }

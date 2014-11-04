@@ -1,5 +1,7 @@
 package com.tzachz.commentcounter.server;
 
+import com.google.common.collect.ImmutableList;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,17 +25,26 @@ public class LeaderBoardResource {
         this.orgName = orgName;
     }
 
+    private CommenterToRecordTransformer createTransformer() {
+        return new CommenterToRecordTransformer(ImmutableList.of(
+                new CapSizeCommentRenderer(),
+                new CodeSnippetCommentRenderer(),
+                new BoldCommentRenderer(),
+                new EmojisCommentRenderer(store.getEmojiMap())
+        ));
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     public LeaderBoardView getLeaderBoard(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period), store.getEmojiMap(), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period), createTransformer(), orgName, store.isLoaded(period), period);
     }
 
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
     public LeaderBoardView getJson(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period), store.getEmojiMap(), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period),createTransformer(), orgName, store.isLoaded(period), period);
     }
 
 }

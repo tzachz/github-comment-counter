@@ -1,7 +1,6 @@
 package com.tzachz.commentcounter.server;
 
 import com.tzachz.commentcounter.Commenter;
-import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.yammer.dropwizard.views.View;
 
 import java.util.ArrayList;
@@ -24,17 +23,17 @@ public class LeaderBoardView extends View {
     private final boolean loaded;
     private final String period;
 
-    protected LeaderBoardView(List<Commenter> commenters, EmojisMap emojisMap, String orgName, boolean loaded, String period) {
+    protected LeaderBoardView(List<Commenter> commenters, CommenterToRecordTransformer transformer, String orgName, boolean loaded, String period) {
         super("leaderboard.mustache");
         this.orgName = orgName;
         this.loaded = loaded;
         this.period = period;
-        this.records = new ArrayList<>(transformToRecords(commenters, emojisMap));
+        this.records = new ArrayList<>(transformToRecords(commenters, transformer));
         sort(records);
     }
 
-    private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters, EmojisMap emojisMap) {
-        return transform(commenters, new CommenterToRecordTransformer(emojisMap));
+    private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters, CommenterToRecordTransformer transformer) {
+        return transform(commenters, transformer);
     }
 
     public List<LeaderBoardRecord> getRecords() {
