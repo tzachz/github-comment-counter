@@ -7,6 +7,11 @@ allprojects {
     project.group = 'com.tzachz'
     project.version = "0.1.$BUILD_NUMBER"
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
     test {
         beforeTest { descriptor ->
             logger.lifecycle("Running " + descriptor)
