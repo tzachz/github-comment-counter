@@ -15,6 +15,7 @@ Some of the tests require a github user to activate the API, so you'll need to s
 ```
 ./gradlew clean build -Dusername=<a github user> -Dpassword=<her password>
 ```
+NOTE: for obvious reasons, you can't use a user with [Two-Factor Authentication](https://help.github.com/articles/about-two-factor-authentication/) enabled
 
 Alternatively, you can build without tests:
 ```
@@ -35,6 +36,7 @@ gitHubCredentials:
 organization: my-org    # organization to show stats for
 refreshRateMinutes: 10  # interval between API activations
 ```
+NOTE: once again, you can't use a user with Two-Factor Authentication enabled
 
 You're now ready to run the server:
 ```
