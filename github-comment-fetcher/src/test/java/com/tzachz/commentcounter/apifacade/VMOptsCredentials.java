@@ -16,14 +16,16 @@ public class VMOptsCredentials extends ExternalResource {
 
     private String password;
     private String username;
+    private String token;
 
     @Override
     protected void before() throws Throwable {
         // expecting credentials to be passed as property to tests:
         username = System.getProperty("username");
         password = System.getProperty("password");
-        Preconditions.checkArgument(username != null && !username.isEmpty(),
-                "You must provide username and password as VM options for these tests, e.g. 'gradle test -Dusername=u -Dpassword=p'");
+        token = System.getProperty("token");
+        Preconditions.checkArgument(isTokenBased() || (username != null && !username.isEmpty()),
+                "You must provide either a token or a username and password as VM options for these tests, e.g. 'gradle test -Dusername=u -Dpassword=p'");
         super.before();
     }
 
@@ -35,4 +37,11 @@ public class VMOptsCredentials extends ExternalResource {
         return username;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public boolean isTokenBased() {
+        return token != null && token != "";
+    }
 }

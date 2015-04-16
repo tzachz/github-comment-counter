@@ -17,11 +17,22 @@ public class GitHubCredentials extends Configuration {
     @JsonProperty
     private String password;
 
+    @JsonProperty
+    private String token;
+
     public String getUsername() {
         return username;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public boolean isTokenBased() {
+        return token != null && token != "";
     }
 }

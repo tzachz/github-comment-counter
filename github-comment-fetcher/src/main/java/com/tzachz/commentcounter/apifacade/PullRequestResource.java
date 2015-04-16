@@ -8,6 +8,10 @@ public class PullRequestResource extends GitHubResource {
         super(username, password);
     }
 
+    protected PullRequestResource(String token) {
+        super(token);
+    }
+
     public GHPullRequest getPullRequest(String url) {
         return get(url, GHPullRequest.class);
     }

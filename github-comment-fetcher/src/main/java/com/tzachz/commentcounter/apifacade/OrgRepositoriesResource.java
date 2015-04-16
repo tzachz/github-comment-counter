@@ -20,6 +20,10 @@ public class OrgRepositoriesResource extends GitHubResource {
         super(username, password);
     }
 
+    public OrgRepositoriesResource(String token) {
+        super(token);
+    }
+
     public Set<GHRepo> getRepos(String organization) {
         final Set<GHRepo> ghRepos = Sets.newHashSet();
         WebResource resource = getResource()

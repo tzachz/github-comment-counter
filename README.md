@@ -11,11 +11,15 @@ Queries [GitHub API](http://developer.github.com/v3/) every X minutes and displa
 
 Build
 =====
-Some of the tests require a github user to activate the API, so you'll need to supply credentials:
+Some of the tests require a github user to activate the API, so you'll need to supply credentials.
+Here and elsewhere, you can either pass your GitHub username and password as credentials
+or pass a single [OAuth token](https://github.com/settings/applications) associated with your account.
+
 ```
-./gradlew clean build -Dusername=<a github user> -Dpassword=<her password>
+./gradlew clean build -Dusername=<a github user> -Dpassword=<her password> -Dtoken=<an OAuth token>
 ```
-NOTE: for obvious reasons, you can't use a user with [Two-Factor Authentication](https://help.github.com/articles/about-two-factor-authentication/) enabled
+
+(If your user account has [two-factor authentication](https://help.github.com/articles/about-two-factor-authentication/) enabled, only token-based access will work.)
 
 Alternatively, you can build without tests:
 ```
@@ -30,13 +34,16 @@ Usage
 Create a yml file with the following configuration:
 ```yml
 gitHubCredentials:
-    username: my-user   # change these to any valid github credentials
+    # change these to any valid github credentials; requires
+    # either a username/password combination or a token
+    username: my-user
     password: my-pass
+    token: my-oauth-token
 
 organization: my-org    # organization to show stats for
 refreshRateMinutes: 10  # interval between API activations
 ```
-NOTE: once again, you can't use a user with Two-Factor Authentication enabled
+As above, specify either a token or a username and password.
 
 You're now ready to run the server:
 ```
