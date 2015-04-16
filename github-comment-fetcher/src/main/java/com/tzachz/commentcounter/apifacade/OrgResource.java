@@ -12,6 +12,10 @@ public class OrgResource extends GitHubResource {
         super(username, password);
     }
 
+    public OrgResource(String token) {
+        super(token);
+    }
+
     public Object getOrg(String organization) {
         return getResource()
                 .path("orgs")

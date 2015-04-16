@@ -30,6 +30,14 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
                 new EmojisResource(username, password));
     }
 
+    public GitHubApiFacadeImpl(String token) {
+        this(new OrgResource(token),
+                new OrgRepositoriesResource(token),
+                new RepoCommentsResource(token),
+                new PullRequestResource(token),
+                new EmojisResource(token));
+    }
+
     GitHubApiFacadeImpl(OrgResource orgResource, OrgRepositoriesResource orgRepositoriesResource, RepoCommentsResource repoCommentsResource, PullRequestResource pullRequestResource, EmojisResource emojisResource) {
         this.orgResource = orgResource;
         this.orgRepositoriesResource = orgRepositoriesResource;

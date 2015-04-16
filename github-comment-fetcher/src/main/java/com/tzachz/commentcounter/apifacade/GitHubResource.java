@@ -29,6 +29,10 @@ public abstract class GitHubResource {
         this.client.addFilter(new HTTPBasicAuthFilter(username, password));
     }
 
+    protected GitHubResource(String token) {
+        this(token, "x-oauth-basic");
+    }
+
     protected WebResource getResource() {
         return client.resource(GITHUB_URL);
     }

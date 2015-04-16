@@ -24,6 +24,10 @@ public class RepoCommentsResource extends GitHubResource {
         super(username, password);
     }
 
+    public RepoCommentsResource(String token) {
+        super(token);
+    }
+
     public Collection<GHComment> getUserComments(String organization, String repoName, Date since) {
         final Collection<GHComment> userComments = new ArrayList<>();
         WebResource resource = getResource()
@@ -43,4 +47,3 @@ public class RepoCommentsResource extends GitHubResource {
     }
 
 }
-
