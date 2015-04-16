@@ -2,6 +2,8 @@ package com.tzachz.commentcounter.server;
 
 import com.tzachz.commentcounter.Clock;
 import com.tzachz.commentcounter.CommentFetcher;
+import com.tzachz.commentcounter.apifacade.Credentials;
+import com.tzachz.commentcounter.apifacade.CredentialsFactory;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacadeImpl;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
@@ -43,13 +45,12 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     }
 
     private GitHubApiFacadeImpl getApiFacade(LeaderBoardServerConfiguration configuration) {
-        GitHubCredentials credentials = configuration.getGitHubCredentials();
-        if (credentials.isTokenBased()) {
-            return new GitHubApiFacadeImpl(credentials.getToken());
-        }
-        else {
-            return new GitHubApiFacadeImpl(credentials.getUsername(), credentials.getPassword());
-        }
+        GitHubCredentials credsConfig = configuration.getGitHubCredentials();
+        final Credentials credentials = new CredentialsFactory().build(
+                credsConfig.getUsername(),
+                credsConfig.getPassword(),
+                credsConfig.getToken());
+        return new GitHubApiFacadeImpl(credentials);
     }
 
     private LeaderBoardStore getStore(GitHubApiFacadeImpl apiFacade) {

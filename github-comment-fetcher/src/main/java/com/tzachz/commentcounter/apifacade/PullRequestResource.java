@@ -4,12 +4,8 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 
 public class PullRequestResource extends GitHubResource {
 
-    protected PullRequestResource(String username, String password) {
-        super(username, password);
-    }
-
-    protected PullRequestResource(String token) {
-        super(token);
+    public PullRequestResource(Credentials credentials) {
+        super(credentials);
     }
 
     public GHPullRequest getPullRequest(String url) {

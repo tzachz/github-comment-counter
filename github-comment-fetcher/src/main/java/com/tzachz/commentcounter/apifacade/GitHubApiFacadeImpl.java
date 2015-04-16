@@ -22,20 +22,12 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
     private final PullRequestResource pullRequestResource;
     private final EmojisResource emojisResource;
 
-    public GitHubApiFacadeImpl(String username, String password) {
-        this(new OrgResource(username, password),
-                new OrgRepositoriesResource(username, password),
-                new RepoCommentsResource(username, password),
-                new PullRequestResource(username, password),
-                new EmojisResource(username, password));
-    }
-
-    public GitHubApiFacadeImpl(String token) {
-        this(new OrgResource(token),
-                new OrgRepositoriesResource(token),
-                new RepoCommentsResource(token),
-                new PullRequestResource(token),
-                new EmojisResource(token));
+    public GitHubApiFacadeImpl(Credentials credentials) {
+        this(new OrgResource(credentials),
+                new OrgRepositoriesResource(credentials),
+                new RepoCommentsResource(credentials),
+                new PullRequestResource(credentials),
+                new EmojisResource(credentials));
     }
 
     GitHubApiFacadeImpl(OrgResource orgResource, OrgRepositoriesResource orgRepositoriesResource, RepoCommentsResource repoCommentsResource, PullRequestResource pullRequestResource, EmojisResource emojisResource) {

@@ -15,12 +15,7 @@ public class PullRequestResourceTest {
 
     @Test
     public void pullRequestFetched() throws Exception {
-        PullRequestResource resource = null;
-        if (credentials.isTokenBased()) {
-            resource = new PullRequestResource(credentials.getToken());
-        } else {
-            resource = new PullRequestResource(credentials.getUsername(), credentials.getPassword());
-        }
+        PullRequestResource resource = new PullRequestResource(credentials);
         GHPullRequest result = resource.getPullRequest("https://api.github.com/repos/kenshoo/facterj/pulls/1");
         assertThat(result.getUser(), equalTo(new GHUser("AvihayTsayeg", "")));
     }

@@ -24,13 +24,9 @@ public abstract class GitHubResource {
 
     private final Client client;
 
-    protected GitHubResource(String username, String password) {
+    protected GitHubResource(Credentials credentials) {
         this.client = Client.create();
-        this.client.addFilter(new HTTPBasicAuthFilter(username, password));
-    }
-
-    protected GitHubResource(String token) {
-        this(token, "x-oauth-basic");
+        this.client.addFilter(new HTTPBasicAuthFilter(credentials.getUsername(), credentials.getPassword()));
     }
 
     protected WebResource getResource() {

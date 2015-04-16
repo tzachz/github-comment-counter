@@ -22,12 +22,7 @@ public class OrgRepositoriesResourceTest {
 
     @Test
     public void facterjRepoIsInKenshooReposList() throws Exception {
-        OrgRepositoriesResource reposResource = null;
-        if (credentials.isTokenBased()) {
-            reposResource = new OrgRepositoriesResource(credentials.getToken());
-        } else {
-            reposResource = new OrgRepositoriesResource(credentials.getUsername(), credentials.getPassword());
-        }
+        OrgRepositoriesResource reposResource = new OrgRepositoriesResource(credentials);
         Set<GHRepo> repos = reposResource.getRepos("kenshoo");
         assertThat(repos, hasItem(new GHRepo("facterj")));
     }
