@@ -22,12 +22,7 @@ public class RepoCommentsResourceTest {
 
     @Test
     public void atLeastOneCommentFacterJ() throws Exception {
-        RepoCommentsResource repoCommentsResource = null;
-        if (credentials.isTokenBased()) {
-            repoCommentsResource = new RepoCommentsResource(credentials.getToken());
-        } else {
-            repoCommentsResource = new RepoCommentsResource(credentials.getUsername(), credentials.getPassword());
-        }
+        RepoCommentsResource repoCommentsResource = new RepoCommentsResource(credentials);
         Collection<GHComment> comments = repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l));
         assertThat(comments.size(), greaterThan(0));
     }

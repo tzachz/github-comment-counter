@@ -20,12 +20,8 @@ public class RepoCommentsResource extends GitHubResource {
 
     private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-    public RepoCommentsResource(String username, String password) {
-        super(username, password);
-    }
-
-    public RepoCommentsResource(String token) {
-        super(token);
+    public RepoCommentsResource(Credentials credentials) {
+        super(credentials);
     }
 
     public Collection<GHComment> getUserComments(String organization, String repoName, Date since) {

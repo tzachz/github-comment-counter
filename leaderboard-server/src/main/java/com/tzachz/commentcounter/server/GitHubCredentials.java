@@ -32,7 +32,4 @@ public class GitHubCredentials extends Configuration {
         return token;
     }
 
-    public boolean isTokenBased() {
-        return token != null && token != "";
-    }
 }

@@ -8,12 +8,8 @@ package com.tzachz.commentcounter.apifacade;
  */
 public class OrgResource extends GitHubResource {
 
-    public OrgResource(String username, String password) {
-        super(username, password);
-    }
-
-    public OrgResource(String token) {
-        super(token);
+    public OrgResource(Credentials credentials) {
+        super(credentials);
     }
 
     public Object getOrg(String organization) {

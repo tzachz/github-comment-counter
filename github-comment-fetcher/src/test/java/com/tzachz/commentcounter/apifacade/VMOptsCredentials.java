@@ -3,6 +3,8 @@ package com.tzachz.commentcounter.apifacade;
 import com.google.common.base.Preconditions;
 import org.junit.rules.ExternalResource;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -12,36 +14,29 @@ import org.junit.rules.ExternalResource;
  * This rule reads username and password passed as JVM options to the tests -
  * useful to avoid committing credentials required for integration tests
  */
-public class VMOptsCredentials extends ExternalResource {
+public class VMOptsCredentials extends ExternalResource implements Credentials {
 
-    private String password;
-    private String username;
-    private String token;
+    private Credentials credentials;
 
     @Override
     protected void before() throws Throwable {
         // expecting credentials to be passed as property to tests:
-        username = System.getProperty("username");
-        password = System.getProperty("password");
-        token = System.getProperty("token");
-        Preconditions.checkArgument(isTokenBased() || (username != null && !username.isEmpty()),
+        String username = System.getProperty("username");
+        String password = System.getProperty("password");
+        String token = System.getProperty("token");
+        Preconditions.checkArgument(!isNullOrEmpty(token) || !isNullOrEmpty(username),
                 "You must provide either a token or a username and password as VM options for these tests, e.g. 'gradle test -Dusername=u -Dpassword=p'");
-        super.before();
+        credentials = new CredentialsFactory().build(username, password, token);
     }
 
+    @Override
     public String getPassword() {
-        return password;
+        return credentials.getPassword();
     }
 
+    @Override
     public String getUsername() {
-        return username;
+        return credentials.getUsername();
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public boolean isTokenBased() {
-        return token != null && token != "";
-    }
 }
