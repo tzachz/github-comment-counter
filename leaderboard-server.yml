@@ -1,0 +1,37 @@
+http:
+    rootPath: /service/*
+
+gitHubCredentials:
+    username: # set username, AND:
+    password: # set password, OR:
+    token:    # set application token
+
+organization: github  # default, override with your GitHub org name
+
+refreshRateMinutes: 15
+
+logging:
+
+  # ...
+  # Settings for logging to a file.
+  file:
+
+    # If true, write log statements to a file.
+    enabled: true
+
+    # Do not write log statements below this threshold to the file.
+    threshold: ALL
+
+    # The file to which current statements will be logged.
+    currentLogFilename: /var/logs/leaderboard-server/leaderboard-server.log
+
+    # When the log file rotates, the archived log will be renamed to this and gzipped. The
+    # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
+    # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
+    archivedLogFilenamePattern: /var/logs/leaderboard-server/leaderboard-server-%d.log.gz
+
+    # The number of archived files to keep.
+    archivedFileCount: 2
+
+    # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
+    timeZone: UTC

@@ -31,7 +31,7 @@ Both options will create a fat jar ready to run under ``` leaderboard-server/bui
 
 Usage
 =====
-Create a yml file with the following configuration:
+Edit the leaderboard-server.yml file with the following configuration:
 ```yml
 gitHubCredentials:
     # change these to any valid github credentials; requires
@@ -51,3 +51,23 @@ java -jar <path to fat jar> server <path to yml file>
 ```
 
 You should be able to see the results at http://localhost:8080/
+
+
+Heroku Deployment
+=================
+This project uses the [heroku-buildpack-gradle](https://github.com/heroku/heroku-buildpack-gradle) for easy Heroku integration. 
+If you wish to use Heroku, you do not need to build the project or edit the yml.
+
+To create, deploy, and run the application, run this from the project root:
+```bash
+heroku login  # type user and password when prompted...
+heroku create 
+heroku config:set ORG_NAME=<your org name>
+heroku config:set GH_USER=<username>  # skip if using token
+heroku config:set GH_PASS=<password>  # skip if using token
+heroku config:set GH_TOKEN=<token>    # skip if using user+password
+git push heroku master  # this will take a while...
+heroku open
+
+```
+The last command should open the app page in your default browser.
