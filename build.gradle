@@ -33,6 +33,10 @@ subprojects { project ->
     }
 }
 
+dependencies {
+    compile project(':leaderboard-server')
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
