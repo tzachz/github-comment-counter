@@ -1,12 +1,12 @@
 github-comment-counter
 ======================
 
-A [dropwizard](https://github.com/codahale/dropwizard)-based server displaying number of Pull Request Comments performed by an organization's GitHub users.
-Can be used to identify and celebrate top reviewers:
-![alt tag](https://raw.githubusercontent.com/tzachz/github-comment-counter/master/leaderboard-sample-blurred.png)
-
-Counts all recent in-code comments on organization's opened and closed Pull Requests, excluding comments on one's own Pull Requests.
+A [dropwizard](https://github.com/codahale/dropwizard)-based server displaying number of Pull Request Comments performed by an organization's GitHub users, to help organizations identify and celebrate top reviewers. Counts all recent in-code comments on organization's opened and closed Pull Requests, excluding comments on one's own Pull Requests.
 Queries [GitHub API](http://developer.github.com/v3/) every X minutes and displays the result.
+
+Live Demo: [GitHub Organization's Top Reviewers](https://github-comment-counter.herokuapp.com/service/leaderboard/month)
+
+![alt tag](https://raw.githubusercontent.com/tzachz/github-comment-counter/master/leaderboard-sample.png)
 
 
 Build
