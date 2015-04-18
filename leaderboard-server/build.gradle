@@ -27,4 +27,7 @@ fatJar {
         attributes 'Implementation-Version': "$version" }
 }
 
-build.dependsOn fatJar
+fatJar.dependsOn jar
+
+task stage(dependsOn: fatJar) {}
+

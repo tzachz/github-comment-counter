@@ -1,1 +1,2 @@
+rootProject.name = 'github-comment-counter'
 include 'github-comment-fetcher','leaderboard-server'
