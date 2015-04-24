@@ -1,3 +1,4 @@
 language: java
 jdk:
   - openjdk7
+script: "./gradlew clean test -Dtoken=$CI_USER_TOKEN"
