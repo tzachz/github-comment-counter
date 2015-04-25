@@ -62,7 +62,9 @@ Both options will create a fat jar ready to run under ```leaderboard-server/buil
 
 Heroku Deployment
 =================
-To build, deploy, and run the application, run this from the project root:
+**NOTE**: Heroku-deployed web servers are public by default, so use wisely, or choose another deployment method if you wish to keep your commenters/comments private.
+
+Assuming you have a Heroku account, and Heroku toolbelt installed, run this from the project root to build, deploy, and run the application:
 ```bash
 heroku login  # type user and password when prompted...
 heroku create 
