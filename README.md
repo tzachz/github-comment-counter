@@ -9,6 +9,37 @@ Live Demo: [GitHub Organization's Top Reviewers](https://github-comment-counter.
 ![alt tag](https://raw.githubusercontent.com/tzachz/github-comment-counter/master/leaderboard-sample.png)
 
 
+Deployment
+==========
+There are three deployment options:
+ 1. Using Heroku: if you have a [Heroku](https://www.heroku.com/) account, that's the easiest way, skip to [Heroku Deployment](#heroku-deployment)
+ 2. Downlowding latest release: download latest **jar** and **yml** file from [releases](https://github.com/tzachz/github-comment-counter/releases) page, and continue to [Usage](#usage) section
+ 3. [Build](#build) from source code, then continue to [Usage](#usage) section
+
+
+Usage
+=====
+Edit the leaderboard-server.yml file with the following configuration:
+```yml
+gitHubCredentials:
+    # change these to any valid github credentials; requires
+    # either a username/password combination or a token
+    username: my-user
+    password: my-pass
+    token: my-oauth-token
+
+organization: my-org    # organization to show stats for
+refreshRateMinutes: 10  # interval between API activations
+```
+Specify either a token or a username and password.
+
+You're now ready to run the server:
+```
+java -jar <path to jar> server <path to yml file>
+```
+
+You should be able to see the results at `http://<host>:8080/`
+
 Build
 =====
 Some of the tests require a github user to activate the API, so you'll need to supply credentials.
@@ -26,39 +57,12 @@ Alternatively, you can build without tests:
 ./gradlew clean build -x test
 ```
 
-Both options will create a fat jar ready to run under ``` leaderboard-server/build/libs/ ```
-
-
-Usage
-=====
-Edit the leaderboard-server.yml file with the following configuration:
-```yml
-gitHubCredentials:
-    # change these to any valid github credentials; requires
-    # either a username/password combination or a token
-    username: my-user
-    password: my-pass
-    token: my-oauth-token
-
-organization: my-org    # organization to show stats for
-refreshRateMinutes: 10  # interval between API activations
-```
-As above, specify either a token or a username and password.
-
-You're now ready to run the server:
-```
-java -jar <path to fat jar> server <path to yml file>
-```
-
-You should be able to see the results at http://localhost:8080/
+Both options will create a fat jar ready to run under ```leaderboard-server/build/libs/```
 
 
 Heroku Deployment
 =================
-This project uses the [heroku-buildpack-gradle](https://github.com/heroku/heroku-buildpack-gradle) for easy Heroku integration. 
-If you wish to use Heroku, you do not need to build the project or edit the yml.
-
-To create, deploy, and run the application, run this from the project root:
+To build, deploy, and run the application, run this from the project root:
 ```bash
 heroku login  # type user and password when prompted...
 heroku create 
