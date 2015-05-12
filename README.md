@@ -42,22 +42,19 @@ You should be able to see the results at `http://<host>:8080/`
 
 Build
 =====
-Some of the tests require a github user to activate the API, so you'll need to supply credentials.
-Here and elsewhere, you can either pass your GitHub username and password as credentials
-or pass a single [OAuth token](https://github.com/settings/applications) associated with your account.
+To build the artifact (without running tests), run:
+```
+./gradlew fatJar
+```
+The jar to use is located in `leaderboard-server/build/libs/`.
 
+To run the tests, you'll need to supply credentials, since some of the tests require a github user to activate the API. Here and elsewhere, you can either pass your GitHub username and password as credentials
+or pass a single [OAuth token](https://github.com/settings/applications) associated with your account.
 ```
 ./gradlew clean build -Dusername=<a github user> -Dpassword=<her password> -Dtoken=<an OAuth token>
 ```
 
 (If your user account has [two-factor authentication](https://help.github.com/articles/about-two-factor-authentication/) enabled, only token-based access will work.)
-
-Alternatively, you can build without tests:
-```
-./gradlew clean build -x test
-```
-
-Both options will create a fat jar ready to run under ```leaderboard-server/build/libs/```
 
 
 Heroku Deployment
