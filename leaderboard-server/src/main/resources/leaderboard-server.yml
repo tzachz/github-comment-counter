@@ -1,8 +1,12 @@
 http:
     rootPath: /service/*
+
 gitHubCredentials:
     username: overrideMe
     password: overrideMe
 
-organization: overrideMe
+gitHubTarget:
+    organization: overrideMe
+    includeRepoPattern: .*
+
 refreshRateMinutes: 10

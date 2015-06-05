@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tzachz.commentcounter.apifacade.GitHubTargetConfiguration;
 import com.yammer.dropwizard.config.Configuration;
 
 /**
@@ -14,7 +15,7 @@ public class LeaderBoardServerConfiguration extends Configuration {
     @JsonProperty
     private GitHubCredentials gitHubCredentials;
     @JsonProperty
-    private String organization;
+    private GitHubTargetConfiguration gitHubTarget;
 
     @JsonProperty
     private int refreshRateMinutes;
@@ -23,8 +24,8 @@ public class LeaderBoardServerConfiguration extends Configuration {
         return gitHubCredentials;
     }
 
-    public String getOrganization() {
-        return organization;
+    public GitHubTargetConfiguration getGitHubTarget() {
+        return gitHubTarget;
     }
 
     public int getRefreshRateMinutes() {

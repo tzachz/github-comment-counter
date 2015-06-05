@@ -1,7 +1,6 @@
 package com.tzachz.commentcounter.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yammer.dropwizard.config.Configuration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +8,7 @@ import com.yammer.dropwizard.config.Configuration;
  * Date: 10/08/13
  * Time: 14:05
  */
-public class GitHubCredentials extends Configuration {
+public class GitHubCredentials {
 
     @JsonProperty
     private String username;

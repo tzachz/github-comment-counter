@@ -2,6 +2,7 @@ package com.tzachz.commentcounter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;
+import com.tzachz.commentcounter.apifacade.GitHubTargetConfiguration;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -21,6 +22,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -49,7 +52,7 @@ public class CommentFetcherTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        counter = new CommentFetcher(facade, ORG_NAME, 1);
+        counter = new CommentFetcher(facade, new GitHubTargetConfiguration(ORG_NAME, "repo.*"), 1);
         counter.setClock(clock);
         when(clock.getLocalDateNow()).thenReturn(now);
     }
@@ -95,6 +98,17 @@ public class CommentFetcherTest {
                 .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(0));
+    }
+
+    @Test
+    public void reposNotMatchingPatternFilteredOut() throws Exception {
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1", "not-matching-repo"));
+        when(facade.getRepoComments(anyString(), anyString(), any(Date.class)))
+                .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
+        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "")));
+
+        assertThat(counter.getComments(), hasSize(3));
+        verify(facade, never()).getRepoComments(anyString(), eq("not-matching-repo"), any(Date.class));
     }
 
     private Set<GHRepo> getRepos(String... repoNames) {

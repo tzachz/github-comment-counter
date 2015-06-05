@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter.server;
 
+import com.tzachz.commentcounter.apifacade.GitHubTargetConfiguration;
 import com.yammer.dropwizard.config.Environment;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,9 @@ public class LeaderBoardServiceTest {
     private GitHubCredentials credentials;
 
     @Mock
+    private GitHubTargetConfiguration target;
+
+    @Mock
     private LeaderBoardServerConfiguration configuration;
 
     @Mock
@@ -45,6 +49,7 @@ public class LeaderBoardServiceTest {
         when(credentials.getUsername()).thenReturn("user1");
         when(credentials.getPassword()).thenReturn("pass1");
         when(configuration.getGitHubCredentials()).thenReturn(credentials);
+        when(configuration.getGitHubTarget()).thenReturn(target);
         when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
     }
 

@@ -6,7 +6,9 @@ gitHubCredentials:
     password: # set password, OR:
     token:    # set application token
 
-organization: github  # default, override with your GitHub org name
+gitHubTarget:
+    organization: github    # default, override with your GitHub org name
+    includeRepoPattern: .*  #default, override with regex to include only repos matching pattern
 
 refreshRateMinutes: 15
 
