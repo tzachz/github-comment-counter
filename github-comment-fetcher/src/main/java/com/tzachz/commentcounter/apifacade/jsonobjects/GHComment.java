@@ -15,42 +15,59 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class GHComment {
 
-    private final GHUser user;
-    private final String pullRequestUrl;
-    private final String body;
-    private final String htmlUrl;
-    private final Date createDate;
-
-    @JsonCreator
-    public GHComment(@JsonProperty("user") GHUser user,
-                     @JsonProperty("pull_request_url") String pullRequestUrl,
-                     @JsonProperty("body") String body,
-                     @JsonProperty("html_url") String htmlUrl,
-                     @JsonProperty("created_at") Date createDate) {
-        this.body = body;
-        this.user = user;
-        this.pullRequestUrl = pullRequestUrl;
-        this.htmlUrl = htmlUrl;
-        this.createDate = createDate;
-    }
+    private GHUser user;
+    private String pullRequestUrl;
+    private String body;
+    private String htmlUrl;
+    private Date createDate;
 
     public GHUser getUser() {
         return user;
+    }
+
+    @JsonProperty("user")
+    public GHComment setUser(GHUser user) {
+        this.user = user;
+        return this;
     }
 
     public String getPullRequestUrl() {
         return pullRequestUrl;
     }
 
+    @JsonProperty("pull_request_url")
+    public GHComment setPullRequestUrl(String pullRequestUrl) {
+        this.pullRequestUrl = pullRequestUrl;
+        return this;
+    }
+
     public String getBody() {
         return body;
+    }
+
+    @JsonProperty("body")
+    public GHComment setBody(String body) {
+        this.body = body;
+        return this;
     }
 
     public String getHtmlUrl() {
         return htmlUrl;
     }
 
+    @JsonProperty("html_url")
+    public GHComment setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+        return this;
+    }
+
     public Date getCreateDate() {
         return createDate;
+    }
+
+    @JsonProperty("created_at")
+    public GHComment setCreateDate(Date createDate) {
+        this.createDate = createDate;
+        return this;
     }
 }
