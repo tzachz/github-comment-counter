@@ -41,6 +41,18 @@ public class GHComment {
         return this;
     }
 
+    /**
+     * Sets the pull request URL to the given issue URL (for compatibility
+     * reasons for issue comments on pull requests).
+     *
+     * @param issueUrl API URL for issue the comment belongs to
+     * @return this
+     */
+    @JsonProperty("issue_url")
+    public GHComment setIssueUrl(String issueUrl) {
+        return setPullRequestUrl(issueUrl);
+    }
+
     public String getBody() {
         return body;
     }
