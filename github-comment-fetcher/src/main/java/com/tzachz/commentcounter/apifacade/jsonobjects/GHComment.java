@@ -42,15 +42,19 @@ public class GHComment {
     }
 
     /**
-     * Sets the pull request URL to the given issue URL (for compatibility
-     * reasons for issue comments on pull requests).
+     * Sets the pull request URL based on the given issue URL (for
+     * compatibility reasons for issue comments on pull requests).
      *
      * @param issueUrl API URL for issue the comment belongs to
      * @return this
      */
     @JsonProperty("issue_url")
     public GHComment setIssueUrl(String issueUrl) {
-        return setPullRequestUrl(issueUrl);
+        // This is hacky, but GitHub's Issue Comments API doesn't provide
+        // something to link back to the pull request.
+        String[] components = issueUrl.split("/");
+        components[6] = "pulls";
+        return setPullRequestUrl(String.join("/", components));
     }
 
     public String getBody() {

@@ -16,7 +16,7 @@ public class GHCommentTest {
         GHComment comment = mapper.readValue(json, GHComment.class);
         assertThat(
             comment.getPullRequestUrl(),
-            equalTo("https://api.github.com/repos/rails/rails/issues/24774")
+            equalTo("https://api.github.com/repos/rails/rails/pulls/24774")
         );
     }
 }
