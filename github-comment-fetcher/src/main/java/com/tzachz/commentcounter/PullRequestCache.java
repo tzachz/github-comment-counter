@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 public class PullRequestCache {
 
     public static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", ""));
+    public static final GHPullRequest NOT_FOUND = new GHPullRequest(null);
 
     private static final Logger logger = LoggerFactory.getLogger(PullRequestCache.class);
 
@@ -28,14 +29,16 @@ public class PullRequestCache {
                 .build(new CacheLoader<String, GHPullRequest>() {
                     @Override
                     public GHPullRequest load(String key) throws Exception {
-                        return facade.getPullRequest(key);
+                        GHPullRequest pullRequest = facade.getPullRequest(key);
+                        return pullRequest == null ? NOT_FOUND : pullRequest;
                     }
                 });
     }
 
     public GHPullRequest get(String url) {
         try {
-            return cache.get(url);
+            GHPullRequest pullRequest = cache.get(url);
+            return pullRequest.equals(NOT_FOUND) ? null : pullRequest;
         } catch (Exception e) {
             logger.error("exception while getting pull request from cache, for URL: " + url, e);
             return UNKNOWN;
