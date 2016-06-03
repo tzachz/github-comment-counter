@@ -5,8 +5,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +67,11 @@ public class CommentFetcher {
         Predicate<GHComment> selfCommentsFilter = new Predicate<GHComment>() {
             @Override
             public boolean apply(GHComment input) {
-                GHUser pullRequestUser = pullRequestCache.get(input.getPullRequestUrl()).getUser();
-                return !pullRequestUser.equals(input.getUser());
+                GHPullRequest pullRequest = pullRequestCache.get(input.getPullRequestUrl());
+                if (pullRequest == null) {
+                    return false;
+                }
+                return !pullRequest.getUser().equals(input.getUser());
             }
         };
         Predicate<GHComment> oldCommentsFilter = new Predicate<GHComment>() {

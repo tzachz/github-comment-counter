@@ -68,6 +68,16 @@ public class CommentFetcherTest {
     }
 
     @Test
+    public void nonPRCommentsFilteredOut() {
+        when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
+        when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
+            .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
+        when(facade.getPullRequest("url")).thenReturn(null);
+        List<Comment> comments = counter.getComments();
+        assertThat(comments, hasSize(0));
+    }
+
+    @Test
     public void commentOnSelfPullRequestIgnored() throws Exception {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
