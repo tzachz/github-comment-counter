@@ -3,6 +3,7 @@ package com.tzachz.commentcounter.apifacade.jsonobjects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Joiner;
 
 import java.util.Date;
 
@@ -54,7 +55,7 @@ public class GHComment {
         // something to link back to the pull request.
         String[] components = issueUrl.split("/");
         components[6] = "pulls";
-        return setPullRequestUrl(String.join("/", components));
+        return setPullRequestUrl(Joiner.on('/').join(components));
     }
 
     public String getBody() {
