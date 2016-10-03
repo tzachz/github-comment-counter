@@ -5,6 +5,7 @@ import com.google.common.collect.*;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +47,14 @@ public class Commenter {
 
     public GHRepo getRepoFor(GHComment comment) {
         return comments.get(comment);
+    }
+
+    public Set<String> getPullRequests() {
+        Set<String> pulls = new HashSet<>();
+        for (GHComment ghComment : comments.keySet()) {
+            pulls.add(ghComment.getPullRequestUrl());
+        }
+        return pulls;
     }
 
     public int getScore() {

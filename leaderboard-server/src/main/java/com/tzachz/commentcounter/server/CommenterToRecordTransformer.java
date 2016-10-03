@@ -25,6 +25,7 @@ class CommenterToRecordTransformer implements Function<Commenter, LeaderBoardRec
                 commenter.getScore(),
                 commenter.getComments().size(),
                 commenter.getRepos().size(),
+                commenter.getPullRequests().size(),
                 renderCommentBody(randomComment.getBody()),
                 randomComment.getHtmlUrl(),
                 commenter.getRepoFor(randomComment).getName(),
