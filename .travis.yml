@@ -13,3 +13,4 @@ deploy:
     - "leaderboard-server.yml"
   on:
     tags: true
+
