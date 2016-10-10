@@ -71,7 +71,12 @@ public class CommenterToRecordTransformerTest {
     }
 
     private GHComment createCommentBy(String user, String body) {
-        return new GHComment(new GHUser(user, AVATAR_URL), "http://pr", body, COMMENT_URL, new Date());
+        return new GHComment()
+            .setUser(new GHUser(user, AVATAR_URL))
+            .setPullRequestUrl("http://pr")
+            .setBody(body)
+            .setHtmlUrl(COMMENT_URL)
+            .setCreateDate(new Date());
     }
 
     @Test

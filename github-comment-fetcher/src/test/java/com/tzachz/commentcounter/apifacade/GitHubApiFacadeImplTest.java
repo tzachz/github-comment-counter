@@ -91,6 +91,11 @@ public class GitHubApiFacadeImplTest {
     }
 
     private GHComment createCommentBy(String user) {
-        return new GHComment(new GHUser(user, "http://avatar"), "http://pull", "comment", "http://link", new Date());
+        return new GHComment()
+            .setUser(new GHUser(user, "http://avatar"))
+            .setPullRequestUrl("http://pull")
+            .setBody("comment")
+            .setHtmlUrl("http://link")
+            .setCreateDate(new Date());
     }
 }

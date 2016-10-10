@@ -20,25 +20,29 @@ public class RepoCommentsResource extends GitHubResource {
 
     private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
+    private static final String[] COMMENT_TYPES = {"issues", "pulls"};
+
     public RepoCommentsResource(Credentials credentials) {
         super(credentials);
     }
 
     public Collection<GHComment> getUserComments(String organization, String repoName, Date since) {
         final Collection<GHComment> userComments = new ArrayList<>();
-        WebResource resource = getResource()
-                .path("repos")
-                .path(organization)
-                .path(repoName)
-                .path("pulls")
-                .path("comments")
-                .queryParam("since", SINCE_FORMAT.format(since));
-        scanPages(resource, new GenericType<List<GHComment>>() {}, new PageProcessor<GHComment>() {
-            @Override
-            public void process(List<GHComment> page) {
-                userComments.addAll(page);
-            }
-        });
+        for (String commentType : COMMENT_TYPES) {
+            WebResource resource = getResource()
+                    .path("repos")
+                    .path(organization)
+                    .path(repoName)
+                    .path(commentType)
+                    .path("comments")
+                    .queryParam("since", SINCE_FORMAT.format(since));
+            scanPages(resource, new GenericType<List<GHComment>>() {}, new PageProcessor<GHComment>() {
+                @Override
+                public void process(List<GHComment> page) {
+                    userComments.addAll(page);
+                }
+            });
+        }
         return userComments;
     }
 

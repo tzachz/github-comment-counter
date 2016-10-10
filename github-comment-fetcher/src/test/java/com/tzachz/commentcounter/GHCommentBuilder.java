@@ -29,10 +29,20 @@ public class GHCommentBuilder {
     }
 
     public GHComment createComment(String username, String pullRequestURL, Date createDate) {
-        return new GHComment(new GHUser(username, ""), pullRequestURL, "", "", createDate);
+        return new GHComment()
+            .setUser(new GHUser(username, ""))
+            .setPullRequestUrl(pullRequestURL)
+            .setBody("")
+            .setHtmlUrl("")
+            .setCreateDate(createDate);
     }
 
     public GHComment createComment(String username, String pullRequestURL, String body, String avatarURL) {
-        return new GHComment(new GHUser(username, avatarURL), pullRequestURL, body, "", new Date());
+        return new GHComment()
+            .setUser(new GHUser(username, avatarURL))
+            .setPullRequestUrl(pullRequestURL)
+            .setBody(body)
+            .setHtmlUrl("")
+            .setCreateDate(new Date());
     }
 }
