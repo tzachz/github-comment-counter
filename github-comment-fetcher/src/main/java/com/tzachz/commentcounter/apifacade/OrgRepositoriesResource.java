@@ -16,8 +16,8 @@ import java.util.Set;
  */
 public class OrgRepositoriesResource extends GitHubResource {
 
-    protected OrgRepositoriesResource(Credentials credentials) {
-        super(credentials);
+    public OrgRepositoriesResource(Credentials credentials, String url) {
+        super(credentials, url);
     }
 
     public Set<GHRepo> getRepos(String organization) {

@@ -19,6 +19,9 @@ public class LeaderBoardServerConfiguration extends Configuration {
     @JsonProperty
     private int refreshRateMinutes;
 
+    @JsonProperty
+    private String gitHubApiUrl = "https://api.github.com";
+
     public GitHubCredentials getGitHubCredentials() {
         return gitHubCredentials;
     }
@@ -29,5 +32,9 @@ public class LeaderBoardServerConfiguration extends Configuration {
 
     public int getRefreshRateMinutes() {
         return refreshRateMinutes;
+    }
+
+    public String getGitHubApiUrl() {
+        return gitHubApiUrl;
     }
 }

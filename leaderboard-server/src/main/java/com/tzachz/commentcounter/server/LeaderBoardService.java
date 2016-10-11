@@ -50,7 +50,7 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
                 credsConfig.getUsername(),
                 credsConfig.getPassword(),
                 credsConfig.getToken());
-        return new GitHubApiFacadeImpl(credentials);
+        return new GitHubApiFacadeImpl(credentials, configuration.getGitHubApiUrl());
     }
 
     private LeaderBoardStore getStore(GitHubApiFacadeImpl apiFacade) {

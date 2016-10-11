@@ -40,6 +40,11 @@ java -jar <path to jar> server <path to yml file>
 
 You should be able to see the results at `http://<host>:8080/`
 
+If you're using a locally-hosted GitHub instance, you can override the default API endpoint URL by adding something like this to your yml file:
+```yml
+gitHubApiUrl: https://github.corp.xyzcompany.com/api/v3/
+```
+
 Build
 =====
 To build the artifact (without running tests), run:
