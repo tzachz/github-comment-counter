@@ -19,18 +19,19 @@ public abstract class GitHubResource {
 
     private final static Logger logger = LoggerFactory.getLogger(GitHubResource.class);
 
-    private static final String GITHUB_URL = "https://api.github.com";
     private static final int MAX_PAGES = 500;
 
     private final Client client;
+    private final String url;
 
-    protected GitHubResource(Credentials credentials) {
+    protected GitHubResource(Credentials credentials, String url) {
+        this.url = url;
         this.client = Client.create();
         this.client.addFilter(new HTTPBasicAuthFilter(credentials.getUsername(), credentials.getPassword()));
     }
 
     protected WebResource getResource() {
-        return client.resource(GITHUB_URL);
+        return client.resource(url);
     }
 
     protected <T> T get(String url, final Class<T> type) {

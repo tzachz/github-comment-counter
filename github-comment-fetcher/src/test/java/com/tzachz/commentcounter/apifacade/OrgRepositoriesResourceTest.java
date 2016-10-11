@@ -22,7 +22,7 @@ public class OrgRepositoriesResourceTest {
 
     @Test
     public void facterjRepoIsInKenshooReposList() throws Exception {
-        OrgRepositoriesResource reposResource = new OrgRepositoriesResource(credentials);
+        OrgRepositoriesResource reposResource = new OrgRepositoriesResource(credentials, credentials.getURL());
         Set<GHRepo> repos = reposResource.getRepos("kenshoo");
         assertThat(repos, hasItem(new GHRepo("facterj")));
     }

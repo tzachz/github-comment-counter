@@ -33,7 +33,7 @@ public class EmojisResourceTest {
 
     @Test
     public void emojisFetched() throws Exception {
-        EmojisResource resource = new EmojisResource(credentials);
+        EmojisResource resource = new EmojisResource(credentials, credentials.getURL());
         EmojisMap emojisMap = resource.getEmojisMap();
         assertThat(emojisMap.getEmojiCodes(), hasSize(greaterThan(100)));
     }

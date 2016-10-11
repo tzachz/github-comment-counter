@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class EmojisResource extends GitHubResource {
 
-    protected EmojisResource(Credentials credentials) {
-        super(credentials);
+    public EmojisResource(Credentials credentials, String url) {
+        super(credentials, url);
     }
 
     public EmojisMap getEmojisMap() {

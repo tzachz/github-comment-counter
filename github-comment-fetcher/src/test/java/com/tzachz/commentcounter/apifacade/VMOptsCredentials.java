@@ -16,6 +16,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  */
 public class VMOptsCredentials extends ExternalResource implements Credentials {
 
+    public final static String GH_URL = "https://api.github.com";
+
     private Credentials credentials;
 
     @Override
@@ -37,6 +39,10 @@ public class VMOptsCredentials extends ExternalResource implements Credentials {
     @Override
     public String getUsername() {
         return credentials.getUsername();
+    }
+
+    public String getURL() {
+        return GH_URL;
     }
 
 }

@@ -22,8 +22,8 @@ public class RepoCommentsResourceTest {
 
     @Test
     public void atLeastOneCommentFacterJ() throws Exception {
-        RepoCommentsResource repoCommentsResource = new RepoCommentsResource(credentials);
-        Collection<GHComment> comments = repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0l));
+        RepoCommentsResource repoCommentsResource = new RepoCommentsResource(credentials, credentials.getURL());
+        Collection<GHComment> comments = repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0L));
         assertThat(comments.size(), greaterThan(0));
     }
 }

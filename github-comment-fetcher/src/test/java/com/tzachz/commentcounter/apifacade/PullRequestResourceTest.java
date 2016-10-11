@@ -15,7 +15,7 @@ public class PullRequestResourceTest {
 
     @Test
     public void pullRequestFetched() throws Exception {
-        PullRequestResource resource = new PullRequestResource(credentials);
+        PullRequestResource resource = new PullRequestResource(credentials, credentials.getURL());
         GHPullRequest result = resource.getPullRequest("https://api.github.com/repos/kenshoo/facterj/pulls/1");
         assertThat(result.getUser(), equalTo(new GHUser("AvihayTsayeg", "")));
     }
