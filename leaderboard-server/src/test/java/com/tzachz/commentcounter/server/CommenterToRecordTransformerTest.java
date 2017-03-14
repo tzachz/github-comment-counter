@@ -31,6 +31,8 @@ public class CommenterToRecordTransformerTest {
     public static final String AVATAR_URL = "http://avatar";
     public static final String COMMENT_URL = "http://comment";
     public static final int SCORE = 32;
+    private final GHUser owner = new GHUser(7, "ml", "https://github.mycompany.io/avatars/u/207?");
+
 
     @Mock
     private CommentRenderer renderer1;
@@ -46,7 +48,7 @@ public class CommenterToRecordTransformerTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        GHRepo onlyRepo = new GHRepo("repo1");
+        GHRepo onlyRepo = new GHRepo("repo1", new GHUser(7, "ml", "https://github.mycompany.io/avatars/u/207?"));
         when(commenter.getUsername()).thenReturn(USER_NAME);
         when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME)));
         when(commenter.getRepos()).thenReturn(ImmutableSet.of(onlyRepo));
@@ -71,7 +73,7 @@ public class CommenterToRecordTransformerTest {
     }
 
     private GHComment createCommentBy(String user, String body) {
-        return new GHComment(new GHUser(user, AVATAR_URL), "http://pr", body, COMMENT_URL, new Date());
+        return new GHComment(new GHUser(7, user, AVATAR_URL), "http://pr", body, COMMENT_URL, new Date());
     }
 
     @Test
@@ -91,7 +93,7 @@ public class CommenterToRecordTransformerTest {
 
     @Test
     public void reposCounted() throws Exception {
-        ImmutableSet<GHRepo> twoRepos = ImmutableSet.of(new GHRepo("repo1"), new GHRepo("repo2"));
+        ImmutableSet<GHRepo> twoRepos = ImmutableSet.of(new GHRepo("repo1", owner), new GHRepo("repo2", owner));
         when(commenter.getRepos()).thenReturn(twoRepos);
         assertThat(transformer.apply(commenter).getRepoCount(), is(2));
     }
@@ -120,7 +122,7 @@ public class CommenterToRecordTransformerTest {
     public void randomCommentRepoNamePassedToRecord() throws Exception {
         GHComment comment = createCommentBy(USER_NAME);
         when(commenter.getComments()).thenReturn(Lists.newArrayList(comment));
-        when(commenter.getRepoFor(comment)).thenReturn(new GHRepo("repo2"));
+        when(commenter.getRepoFor(comment)).thenReturn(new GHRepo("repo2", owner));
         assertThat(transformer.apply(commenter).getSampleCommentRepo(), is("repo2"));
     }
 

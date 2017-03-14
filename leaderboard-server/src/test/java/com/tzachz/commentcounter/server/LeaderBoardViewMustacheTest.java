@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import com.yammer.dropwizard.views.mustache.MustacheViewRenderer;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertThat;
 public class LeaderBoardViewMustacheTest {
 
     private GHCommentBuilder commentBuilder = new GHCommentBuilder();
-    private GHRepo repo = new GHRepo("my-repo");
+    private GHRepo repo = new GHRepo("my-repo", new GHUser(7, "ml", "https://github.mycompany.io/avatars/u/207?"));
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {

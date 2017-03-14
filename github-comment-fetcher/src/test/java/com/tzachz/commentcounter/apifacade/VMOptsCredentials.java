@@ -1,5 +1,6 @@
 package com.tzachz.commentcounter.apifacade;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import org.junit.rules.ExternalResource;
 
@@ -42,7 +43,7 @@ public class VMOptsCredentials extends ExternalResource implements Credentials {
     }
 
     public String getURL() {
-        return GH_URL;
+        return Optional.fromNullable(System.getProperty("github.url")).or(GH_URL);
     }
 
 }

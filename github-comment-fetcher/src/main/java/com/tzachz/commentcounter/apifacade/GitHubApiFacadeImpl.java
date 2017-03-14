@@ -3,6 +3,7 @@ package com.tzachz.commentcounter.apifacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
 import java.util.Collection;
 import java.util.Date;
@@ -49,8 +50,8 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
     }
 
     @Override
-    public Collection<GHComment> getRepoComments(String orgName, String repoName, Date since) {
-        return repoCommentsResource.getUserComments(orgName, repoName, since);
+    public Collection<GHComment> getRepoComments(GHRepo repo, Date since) {
+        return repoCommentsResource.getUserComments(repo.getOwner().getLogin(), repo.getName(), since);
     }
 
     @Override
@@ -61,6 +62,11 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
     @Override
     public EmojisMap getEmojiMap() {
         return emojisResource.getEmojisMap();
+    }
+
+    @Override
+    public Set<GHUser> getLogins() {
+        return orgResource.getLogins();
     }
 
 }

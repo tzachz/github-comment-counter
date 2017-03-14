@@ -34,7 +34,7 @@ public class PullRequestCacheTest {
 
     @Test
     public void getReturnsFacadeResult() throws Exception {
-        GHPullRequest expected = new GHPullRequest(new GHUser("user1", ""));
+        GHPullRequest expected = new GHPullRequest(new GHUser(1, "user1", ""));
         when(facade.getPullRequest("url")).thenReturn(expected);
         GHPullRequest result = cache.get("url");
         assertThat(result, equalTo(expected));
@@ -42,7 +42,7 @@ public class PullRequestCacheTest {
 
     @Test
     public void successfulFetchOccursOnce() throws Exception {
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser(1, "user1", "")));
         cache.get("url");
         cache.get("url");
         verify(facade, times(1)).getPullRequest("url");
