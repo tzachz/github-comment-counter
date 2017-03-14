@@ -6,9 +6,11 @@ gitHubCredentials:
     password: # set password, OR:
     token:    # set application token
 
-organization: github  # default, override with your GitHub org name
+organization: #override with your GitHub org name or leave blank if using Github Enterprise
 
 refreshRateMinutes: 15
+
+gitHubApiUrl: https://api.github.com # default, override with your Github enterprise URL e.g. http(s)://hostname/api/v3/
 
 logging:
 

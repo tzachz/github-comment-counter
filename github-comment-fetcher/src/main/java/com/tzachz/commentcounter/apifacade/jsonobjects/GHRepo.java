@@ -15,13 +15,20 @@ public class GHRepo {
 
     private final String name;
 
+    private final GHUser owner;
+
     @JsonCreator
-    public GHRepo(@JsonProperty("name") String name) {
+    public GHRepo(@JsonProperty("name") String name, @JsonProperty("owner") GHUser owner) {
         this.name = name;
+        this.owner = owner;
     }
 
     public String getName() {
         return name;
+    }
+
+    public GHUser getOwner() {
+        return owner;
     }
 
     @Override
@@ -32,12 +39,13 @@ public class GHRepo {
         GHRepo ghRepo = (GHRepo) o;
 
         if (name != null ? !name.equals(ghRepo.name) : ghRepo.name != null) return false;
-
-        return true;
+        return owner != null ? owner.equals(ghRepo.owner) : ghRepo.owner == null;
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        return result;
     }
 }

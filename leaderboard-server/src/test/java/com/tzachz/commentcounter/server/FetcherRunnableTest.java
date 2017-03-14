@@ -5,6 +5,7 @@ import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.CommentFetcher;
 import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -40,7 +41,8 @@ public class FetcherRunnableTest {
 
     @Test
     public void fetchesAndStores() throws Exception {
-        ArrayList<Comment> comments = Lists.newArrayList(new Comment(commentBuilder.createComment("u1", "url"), new GHRepo("r")));
+        ArrayList<Comment> comments = Lists.newArrayList(new Comment(commentBuilder.createComment("u1", "url"),
+                new GHRepo("r", new GHUser(7, "ml", "https://github.mycompany.io/avatars/u/207?"))));
         when(fetcher.getComments()).thenReturn(comments);
         runnable.run();
         verify(store).set(comments);

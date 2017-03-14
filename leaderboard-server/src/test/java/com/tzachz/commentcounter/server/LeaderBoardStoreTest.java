@@ -6,6 +6,7 @@ import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,6 +92,6 @@ public class LeaderBoardStoreTest {
     }
 
     private Comment createComment(String user, Date date, String repoName) {
-        return new Comment(commentBuilder.createComment(user, "url", date), new GHRepo(repoName));
+        return new Comment(commentBuilder.createComment(user, "url", date), new GHRepo(repoName, new GHUser(7, "ml", "https://github.mycompany.io/avatars/u/207?")));
     }
 }
