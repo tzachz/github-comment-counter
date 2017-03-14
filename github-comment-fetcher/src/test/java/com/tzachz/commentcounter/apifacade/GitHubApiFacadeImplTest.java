@@ -98,7 +98,7 @@ public class GitHubApiFacadeImplTest {
 
     @Test
     public void getLogins() throws Exception {
-        HashSet<GHUser> expected = Sets.newHashSet(new GHUser(1, "devops", "http://avatar1"),
+        Set<GHUser> expected = ImmutableSet.of(new GHUser(1, "devops", "http://avatar1"),
                 new GHUser(1, "data", "http://avatar2"));
         when(orgResource.getLogins()).thenReturn(expected);
         Set<GHUser> result = apiFacade.getLogins();
