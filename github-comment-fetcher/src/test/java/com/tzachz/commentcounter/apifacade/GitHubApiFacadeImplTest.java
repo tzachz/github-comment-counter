@@ -78,8 +78,8 @@ public class GitHubApiFacadeImplTest {
     public void getCommentsCallsCommentResource() throws Exception {
         Date since = new Date();
         ArrayList<GHComment> comments = Lists.newArrayList(createCommentBy("user1"), createCommentBy("user2"));
-        when(commentsResource.getUserComments(ORG_NAME, "repo1", since)).thenReturn(comments);
-        assertThat(apiFacade.getRepoComments(eq(new GHRepo("repo1", owner)), since), containsInAnyOrder(comments.toArray()));
+        when(commentsResource.getUserComments(owner.getLogin(), "repo1", since)).thenReturn(comments);
+        assertThat(apiFacade.getRepoComments(new GHRepo("repo1", owner), since), containsInAnyOrder(comments.toArray()));
     }
 
     @Test

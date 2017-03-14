@@ -42,7 +42,7 @@ abstract class BaseCommentFetcherTest {
 
     protected abstract String getLogin();
 
-    Set<GHRepo> getRepos(GHUser owner, String... repoNames) {
+    Set<GHRepo> getRepos(final GHUser owner, String... repoNames) {
         return Sets.newHashSet(transform(Arrays.asList(repoNames), new Function<String, GHRepo>() {
             @Override
             public GHRepo apply(String name) {
