@@ -23,14 +23,14 @@ public class LeaderBoardViewTest {
 
     @Test
     public void commentersSortedByScore() throws Exception {
-        Commenter commenterScore6 = new Commenter("user1");
+        Commenter commenterScore6 = new Commenter("user1", "");
         commenterScore6.addComment(commentBuilder.createComment("user1", "url"), repo);
         commenterScore6.addComment(commentBuilder.createComment("user1", "url"), new GHRepo("anotherRepo"));
-        Commenter commenterScore5 = new Commenter("user2");
+        Commenter commenterScore5 = new Commenter("user2", "");
         for (int i = 0; i < 5; i++) {
             commenterScore5.addComment(commentBuilder.createComment("user2", "url"), repo);
         }
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), getTransformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenterScore6, commenterScore5), getTransformer(), "org1", "", true, "today");
         assertThat(view.getRecords().get(0).getUsername(), is("user1"));
     }
 

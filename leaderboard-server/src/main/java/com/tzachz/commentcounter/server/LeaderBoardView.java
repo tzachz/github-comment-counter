@@ -22,10 +22,12 @@ public class LeaderBoardView extends View {
     private final String orgName;
     private final boolean loaded;
     private final String period;
+    private final String orgURL;
 
-    protected LeaderBoardView(List<Commenter> commenters, CommenterToRecordTransformer transformer, String orgName, boolean loaded, String period) {
+    protected LeaderBoardView(List<Commenter> commenters, CommenterToRecordTransformer transformer, String orgName, String orgURL, boolean loaded, String period) {
         super("leaderboard.mustache");
         this.orgName = orgName;
+        this.orgURL = orgURL;
         this.loaded = loaded;
         this.period = period;
         this.records = new ArrayList<>(transformToRecords(commenters, transformer));
@@ -42,6 +44,10 @@ public class LeaderBoardView extends View {
 
     public String getOrgName() {
         return orgName;
+    }
+
+    public String getOrgURL() {
+        return orgURL;
     }
 
     public boolean isLoaded() {

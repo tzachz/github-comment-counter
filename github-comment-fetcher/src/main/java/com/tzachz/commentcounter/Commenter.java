@@ -1,14 +1,12 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.primitives.Ints.max;
 
@@ -22,10 +20,12 @@ import static com.google.common.primitives.Ints.max;
 public class Commenter {
 
     private final String username;
+    private final String userURL;
     private final Map<GHComment, GHRepo> comments;
 
-    public Commenter(String username) {
+    public Commenter(String username, String userURL) {
         this.username = username;
+        this.userURL = userURL;
         this.comments = Maps.newHashMap();
     }
 
@@ -35,6 +35,10 @@ public class Commenter {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getUserURL() {
+        return userURL;
     }
 
     public List<GHComment> getComments() {
@@ -65,27 +69,23 @@ public class Commenter {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Commenter commenter = (Commenter) o;
-
-        if (!comments.equals(commenter.comments)) return false;
-        if (!username.equals(commenter.username)) return false;
-
-        return true;
+        return Objects.equals(username, commenter.username) &&
+                Objects.equals(userURL, commenter.userURL) &&
+                Objects.equals(comments, commenter.comments);
     }
 
     @Override
     public int hashCode() {
-        int result = username.hashCode();
-        result = 31 * result + comments.hashCode();
-        return result;
+        return Objects.hash(username, userURL, comments);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("username", username)
-                .add("comments", comments)
-                .toString();
+        return "Commenter{" +
+                "username='" + username + '\'' +
+                ", userURL='" + userURL + '\'' +
+                ", comments=" + comments +
+                '}';
     }
 }

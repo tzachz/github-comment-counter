@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PullRequestCache {
 
-    public static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", ""));
+    public static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", "", ""));
 
     private static final Logger logger = LoggerFactory.getLogger(PullRequestCache.class);
 

@@ -28,14 +28,14 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "http://my-git/org1", true, "today");
         String result = render(view);
-        assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"https://github.com/org1"));
+        assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"http://my-git/org1"));
     }
 
     @Test
     public void stillLoadingSaysStillLoading() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", false, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "", false, "today");
         String result = render(view);
         assertThat(result, containsString("Still Loading! Please wait while we fetch your organization's data from GitHub..."));
         assertThat(result, not(containsString("No comments! Start reviewing...")));
@@ -43,53 +43,53 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void loadedEmptyRecordsListSaysNoComments() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("No comments! Start reviewing..."));
     }
 
     @Test
     public void existingLoadedRecordsRenderedWithLink() throws Exception {
-        Commenter commenter = new Commenter("user1");
+        Commenter commenter = new Commenter("user1", "http://my-git/user");
         commenter.addComment(commentBuilder.createComment("user1", "some-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("1 comments in 1 repos "));
-        assertThat(result, containsString("https://github.com/user1"));
+        assertThat(result, containsString("http://my-git/user"));
     }
 
     @Test
     public void sampleCommentDisplayed() throws Exception {
-        Commenter commenter = new Commenter("user1");
+        Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("a very intelligent comment indeed"));
     }
 
     @Test
     public void sampleCommentRepoNameInDiscussion() throws Exception {
-        Commenter commenter = new Commenter("user1");
+        Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("[view discussion in my-repo]"));
     }
 
     @Test
     public void avatarImageDisplayed() throws Exception {
-        Commenter commenter = new Commenter("user1");
+        Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("<img src=\"avatar-url\" alt=\"user1\""));
     }
 
     @Test
     public void commentHtmlNotEscaped() throws Exception {
-        Commenter commenter = new Commenter("user1");
+        Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "contains <img>!", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("contains <img>!"));
     }

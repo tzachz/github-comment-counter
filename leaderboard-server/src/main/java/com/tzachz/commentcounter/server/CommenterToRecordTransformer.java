@@ -22,6 +22,7 @@ class CommenterToRecordTransformer implements Function<Commenter, LeaderBoardRec
         GHComment randomComment = getRandomComment(commenter);
         return new LeaderBoardRecord(
                 commenter.getUsername(),
+                commenter.getUserURL(),
                 commenter.getScore(),
                 commenter.getComments().size(),
                 commenter.getRepos().size(),

@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.apifacade;
 
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
@@ -39,7 +40,7 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
     }
 
     @Override
-    public Object getOrg(String orgName) {
+    public GHOrg getOrg(String orgName) {
         return orgResource.getOrg(orgName);
     }
 

@@ -59,7 +59,7 @@ public class CommentFetcherTest {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1", "repo2"));
         when(facade.getRepoComments(anyString(), anyString(), any(Date.class)))
                 .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
-        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "")));
+        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "", "")));
 
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(6));
@@ -72,7 +72,7 @@ public class CommentFetcherTest {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "")));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "", "")));
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(0));
     }
@@ -90,7 +90,7 @@ public class CommentFetcherTest {
     @Test
     public void oldCommentFilteredOut() throws Exception {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "")));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "", "")));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
         List<Comment> comments = counter.getComments();

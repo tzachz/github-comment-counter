@@ -9,6 +9,7 @@ import com.tzachz.commentcounter.Clock;
 import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.apifacade.EmojisMap;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,11 +64,12 @@ public class LeaderBoardStore {
     private List<Commenter> aggregate(final Collection<Comment> comments) {
         Map<String, Commenter> userComments = Maps.newHashMap();
         for (Comment comment : comments) {
-            String user = comment.getComment().getUser().getLogin();
-            if (!userComments.containsKey(user)) {
-                userComments.put(user, new Commenter(user));
+            final GHUser user = comment.getComment().getUser();
+            String userLogin = user.getLogin();
+            if (!userComments.containsKey(userLogin)) {
+                userComments.put(userLogin, new Commenter(userLogin, user.getHtmlUrl()));
             }
-            userComments.get(user).addComment(comment.getComment(), comment.getRepo());
+            userComments.get(userLogin).addComment(comment.getComment(), comment.getRepo());
         }
         return Lists.newArrayList(userComments.values());
     }
