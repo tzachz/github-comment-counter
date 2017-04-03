@@ -6,7 +6,7 @@
     <body style="margin: 10px;">
         <a href="https://github.com/tzachz/github-comment-counter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
         <div class="container">
-            <h1>GitHub Reviewers Leader Board: <a href="https://github.com/{{orgName}}" target="_blank">{{orgName}}</a></h1>
+            <h1>GitHub Reviewers Leader Board: <a href="{{orgURL}}" target="_blank">{{orgName}}</a></h1>
             How actively are you helping your colleagues by reviewing their Pull Requests? <br><br>
             <div class="well well-sm">
                 You get one point for every in-code comment on a pull request in a {{orgName}} repository.
@@ -31,7 +31,7 @@
                     <tr>
                         <td><p class="text-success">Score<br><b>{{score}}</b></p>
                         <td><img src="{{avatarUrl}}" alt="{{username}}" width="50" height="50"></td>
-                        <td><b> {{commentCount}} comments in {{repoCount}} repos and {{pullCount}} pulls by <a href="https://github.com/{{username}}" target="_blank">{{username}}</a></b>, who recently wrote:
+                        <td><b> {{commentCount}} comments in {{repoCount}} repos and {{pullCount}} pulls by <a href="{{userURL}}" target="_blank">{{username}}</a></b>, who recently wrote:
                             <br>
                             {{{sampleComment}}}&nbsp;<a href="{{sampleCommentUrl}}" target="_blank">[view discussion in {{sampleCommentRepo}}]</a>
                         </td>

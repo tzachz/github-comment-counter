@@ -1,19 +1,17 @@
 package com.tzachz.commentcounter.server;
 
+import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.yammer.dropwizard.config.Environment;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -34,9 +32,11 @@ public class LeaderBoardServiceTest {
     private LeaderBoardServerConfiguration configuration;
 
     @Mock
+    private GitHubApiFacade apiFacade;
+
+    @Mock
     private ScheduledExecutorService executorService;
 
-    @InjectMocks
     private LeaderBoardService service;
 
     @Before
@@ -46,6 +46,12 @@ public class LeaderBoardServiceTest {
         when(credentials.getPassword()).thenReturn("pass1");
         when(configuration.getGitHubCredentials()).thenReturn(credentials);
         when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
+        this.service = new LeaderBoardService() {
+            @Override
+            protected GitHubApiFacade getApiFacade(LeaderBoardServerConfiguration configuration) {
+                return apiFacade;
+            }
+        };
     }
 
     @Test
@@ -59,7 +65,7 @@ public class LeaderBoardServiceTest {
         Integer refresh = 5;
         when(configuration.getRefreshRateMinutes()).thenReturn(refresh);
         service.run(configuration, environment);
-        verify(executorService).scheduleAtFixedRate(any(Runnable.class), eq(0l), eq(Long.valueOf(refresh)), eq(TimeUnit.MINUTES));
+        verify(executorService).scheduleAtFixedRate(any(Runnable.class), eq(0L), eq(Long.valueOf(refresh)), eq(TimeUnit.MINUTES));
     }
 
     @Test

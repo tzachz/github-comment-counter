@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.server;
 
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
 import com.yammer.metrics.core.HealthCheck;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -34,7 +35,7 @@ public class GitHubCredentialsHealthCheckTest {
 
     @Test
     public void successfulCallReturnsHealthy() throws Exception {
-        when(facade.getOrg("orgName")).thenReturn("some valid object");
+        when(facade.getOrg("orgName")).thenReturn(new GHOrg("orgName", "http://a.b"));
         assertThat(healthCheck.check(), equalTo(HealthCheck.Result.healthy()));
     }
 

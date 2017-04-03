@@ -15,16 +15,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GHUser {
 
     private final String login;
+    private final String htmlUrl;
     private final String avatarUrl;
 
     @JsonCreator
-    public GHUser(@JsonProperty("login") String login, @JsonProperty("avatar_url") String avatarUrl) {
+    public GHUser(@JsonProperty("login") String login,
+                  @JsonProperty("html_url") String htmlUrl,
+                  @JsonProperty("avatar_url") String avatarUrl) {
         this.login = login;
+        this.htmlUrl = htmlUrl;
         this.avatarUrl = avatarUrl;
     }
 
     public String getLogin() {
         return login;
+    }
+
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
     public String getAvatarUrl() {

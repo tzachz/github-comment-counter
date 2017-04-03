@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.apifacade;
 
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public interface GitHubApiFacade {
 
-    public Object getOrg(String orgName);
+    public GHOrg getOrg(String orgName);
 
     public Set<GHRepo> getOrgRepos(String orgName);
 

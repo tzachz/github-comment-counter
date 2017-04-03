@@ -29,6 +29,7 @@ public class CommenterToRecordTransformerTest {
 
     public static final String USER_NAME = "user1";
     public static final String AVATAR_URL = "http://avatar";
+    public static final String USER_URL = "http://user";
     public static final String COMMENT_URL = "http://comment";
     public static final int SCORE = 32;
 
@@ -71,7 +72,7 @@ public class CommenterToRecordTransformerTest {
     }
 
     private GHComment createCommentBy(String user, String body) {
-        return new GHComment(new GHUser(user, AVATAR_URL), "http://pr", body, COMMENT_URL, new Date());
+        return new GHComment(new GHUser(user, USER_URL, AVATAR_URL), "http://pr", body, COMMENT_URL, new Date());
     }
 
     @Test

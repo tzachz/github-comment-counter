@@ -3,10 +3,7 @@ package com.tzachz.commentcounter.apifacade;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
-import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
+import com.tzachz.commentcounter.apifacade.jsonobjects.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -30,7 +27,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class GitHubApiFacadeImplTest {
 
-    public static final String ORG_NAME = "org-name";
+    private static final String ORG_NAME = "org-name";
+
     @Mock
     private OrgResource orgResource;
 
@@ -56,8 +54,9 @@ public class GitHubApiFacadeImplTest {
 
     @Test
     public void getOrgsCallsOrgResource() throws Exception {
-        when(orgResource.getOrg(ORG_NAME)).thenReturn("1");
-        assertThat(apiFacade.getOrg(ORG_NAME), is((Object) "1"));
+        final GHOrg org = new GHOrg(ORG_NAME, "http://a.b");
+        when(orgResource.getOrg(ORG_NAME)).thenReturn(org);
+        assertThat(apiFacade.getOrg(ORG_NAME), is(org));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class GitHubApiFacadeImplTest {
 
     @Test
     public void getPullRequestCallsPRResource() throws Exception {
-        GHPullRequest pullRequest = new GHPullRequest(new GHUser("user1", "http://avatar"));
+        GHPullRequest pullRequest = new GHPullRequest(new GHUser("user1", "http://user", "http://avatar"));
         when(pullRequestResource.getPullRequest("http://pr")).thenReturn(pullRequest);
         assertThat(apiFacade.getPullRequest("http://pr"), is(pullRequest));
     }
@@ -91,6 +90,6 @@ public class GitHubApiFacadeImplTest {
     }
 
     private GHComment createCommentBy(String user) {
-        return new GHComment(new GHUser(user, "http://avatar"), "http://pull", "comment", "http://link", new Date());
+        return new GHComment(new GHUser(user, "http://user", "http://avatar"), "http://pull", "comment", "http://link", new Date());
     }
 }

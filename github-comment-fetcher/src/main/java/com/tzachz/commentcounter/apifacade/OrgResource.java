@@ -1,5 +1,7 @@
 package com.tzachz.commentcounter.apifacade;
 
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -12,10 +14,10 @@ public class OrgResource extends GitHubResource {
         super(credentials, url);
     }
 
-    public Object getOrg(String organization) {
+    public GHOrg getOrg(String organization) {
         return getResource()
                 .path("orgs")
                 .path(organization)
-                .get(Object.class);
+                .get(GHOrg.class);
     }
 }

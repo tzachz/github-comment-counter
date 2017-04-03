@@ -18,20 +18,20 @@ public class CommenterTest {
 
     @Test
     public void scoreEqualsZeroForNoComments() throws Exception {
-        Commenter user = new Commenter("user");
+        Commenter user = new Commenter("user", "");
         assertThat(user.getScore(), is(0));
     }
 
     @Test
     public void scoreEqualsOneForSingleComment() throws Exception {
-        Commenter user = new Commenter("user");
+        Commenter user = new Commenter("user", "");
         user.addComment(builder.createComment("user", ""), new GHRepo("repo"));
         assertThat(user.getScore(), is(1));
     }
 
     @Test
     public void scoreEqualsTwoForTwoCommentsOnOneRepo() throws Exception {
-        Commenter user = new Commenter("user");
+        Commenter user = new Commenter("user", "");
         user.addComment(builder.createComment("user", "u1"), new GHRepo("repo"));
         user.addComment(builder.createComment("user", "u2"), new GHRepo("repo"));
         assertThat(user.getScore(), is(2));
@@ -39,7 +39,7 @@ public class CommenterTest {
 
     @Test
     public void scoreEqualsSixForTwoCommentsOnTwoRepos() throws Exception {
-        Commenter user = new Commenter("user");
+        Commenter user = new Commenter("user", "");
         user.addComment(builder.createComment("user", "u1"), new GHRepo("repo1"));
         user.addComment(builder.createComment("user", "u2"), new GHRepo("repo2"));
         assertThat(user.getScore(), is(6));

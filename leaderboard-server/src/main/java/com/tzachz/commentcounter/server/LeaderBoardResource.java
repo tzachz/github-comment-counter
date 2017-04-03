@@ -1,6 +1,7 @@
 package com.tzachz.commentcounter.server;
 
 import com.google.common.collect.ImmutableList;
+import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,11 +19,11 @@ import javax.ws.rs.core.MediaType;
 public class LeaderBoardResource {
 
     private final LeaderBoardStore store;
-    private final String orgName;
+    private final GHOrg org;
 
-    public LeaderBoardResource(LeaderBoardStore store, String orgName) {
+    public LeaderBoardResource(LeaderBoardStore store, GHOrg org) {
         this.store = store;
-        this.orgName = orgName;
+        this.org = org;
     }
 
     private CommenterToRecordTransformer createTransformer() {
@@ -37,14 +38,14 @@ public class LeaderBoardResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public LeaderBoardView getLeaderBoard(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period), createTransformer(), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period), createTransformer(), org.getName(), org.getHtmlUrl(), store.isLoaded(period), period);
     }
 
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
     public LeaderBoardView getJson(@PathParam("period") String period) {
-        return new LeaderBoardView(store.get(period),createTransformer(), orgName, store.isLoaded(period), period);
+        return new LeaderBoardView(store.get(period),createTransformer(), org.getName(), org.getHtmlUrl(), store.isLoaded(period), period);
     }
 
 }
