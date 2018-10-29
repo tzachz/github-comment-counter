@@ -17,13 +17,15 @@ import java.util.Set;
  */
 public interface GitHubApiFacade {
 
-    public GHOrg getOrg(String orgName);
+    GHOrg getOrg(String orgName);
 
-    public Set<GHRepo> getOrgRepos(String orgName);
+    Set<GHRepo> getOrgRepos(String orgName);
 
-    public Collection<GHComment> getRepoComments(String orgName, String repoName, Date since);
+    Collection<GHComment> getRepoComments(String orgName, String repoName, Date since);
 
-    public GHPullRequest getPullRequest(String url);
+    Collection<GHPullRequest> getPullRequests(String orgName, String repoName, Date since);
 
-    public EmojisMap getEmojiMap();
+    GHPullRequest getPullRequest(String url);
+
+    EmojisMap getEmojiMap();
 }

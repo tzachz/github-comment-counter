@@ -1,7 +1,5 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Sets;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHPullRequest;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -11,12 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.transform;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -33,7 +28,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class CommentFetcherTest {
 
-    public static final String ORG_NAME = "org";
+    private static final String ORG_NAME = "org";
 
     private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
     private LocalDate now = new LocalDate(2013, 8, 8);
@@ -47,7 +42,7 @@ public class CommentFetcherTest {
     private CommentFetcher counter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
         counter = new CommentFetcher(facade, ORG_NAME, 1);
         counter.setClock(clock);
@@ -55,11 +50,11 @@ public class CommentFetcherTest {
     }
 
     @Test
-    public void aggregatesRepos() throws Exception {
+    public void aggregatesRepos() {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1", "repo2"));
         when(facade.getRepoComments(anyString(), anyString(), any(Date.class)))
                 .thenReturn(commentBuilder.createEmptyComments("user1", "user2", "user1"));
-        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "", "")));
+        when(facade.getPullRequest("")).thenReturn(new GHPullRequest(new GHUser("user3", "", ""), ""));
 
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(6));
@@ -68,17 +63,17 @@ public class CommentFetcherTest {
     }
 
     @Test
-    public void commentOnSelfPullRequestIgnored() throws Exception {
+    public void commentOnSelfPullRequestIgnored() {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "", "")));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "", ""), ""));
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(0));
     }
 
     @Test
-    public void pullRequestNotFoundMeansCommentCounted() throws Exception {
+    public void pullRequestNotFoundMeansCommentCounted() {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
                 .thenReturn(commentBuilder.createCommentCollection("user1", "url"));
@@ -88,22 +83,17 @@ public class CommentFetcherTest {
     }
 
     @Test
-    public void oldCommentFilteredOut() throws Exception {
+    public void oldCommentFilteredOut() {
         when(facade.getOrgRepos(ORG_NAME)).thenReturn(getRepos("repo1"));
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "", "")));
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user2", "", ""), ""));
         when(facade.getRepoComments(ORG_NAME, "repo1", now.minusDays(1).toDate()))
-                .thenReturn(Arrays.asList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
+                .thenReturn(Collections.singletonList(commentBuilder.createComment("user1", "url", now.minusDays(2).toDate())));
         List<Comment> comments = counter.getComments();
         assertThat(comments, hasSize(0));
     }
 
     private Set<GHRepo> getRepos(String... repoNames) {
-        return Sets.newHashSet(transform(Arrays.asList(repoNames), new Function<String, GHRepo>() {
-            @Override
-            public GHRepo apply(String name) {
-                return new GHRepo(name);
-            }
-        }));
+        return Arrays.stream(repoNames).map(GHRepo::new).collect(Collectors.toSet());
     }
 
 }

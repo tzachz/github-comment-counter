@@ -9,6 +9,10 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -17,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PullRequestCache {
 
-    public static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", "", ""));
+    static final GHPullRequest UNKNOWN = new GHPullRequest(new GHUser("UNKNOWN", "", ""), "");
 
     private static final Logger logger = LoggerFactory.getLogger(PullRequestCache.class);
 
@@ -27,7 +31,7 @@ public class PullRequestCache {
         this.cache = CacheBuilder.newBuilder()
                 .build(new CacheLoader<String, GHPullRequest>() {
                     @Override
-                    public GHPullRequest load(String key) throws Exception {
+                    public GHPullRequest load(String key) {
                         return facade.getPullRequest(key);
                     }
                 });
@@ -40,5 +44,9 @@ public class PullRequestCache {
             logger.error("exception while getting pull request from cache, for URL: " + url, e);
             return UNKNOWN;
         }
+    }
+
+    public void putAll(Collection<GHPullRequest> prs) {
+        cache.putAll(prs.stream().collect(Collectors.toMap(GHPullRequest::getUrl, Function.identity())));
     }
 }

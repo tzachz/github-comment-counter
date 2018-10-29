@@ -4,14 +4,14 @@ import com.sun.jersey.api.client.GenericType;
 
 import java.util.Map;
 
-public class EmojisResource extends GitHubResource {
+class EmojisResource extends GitHubResource {
 
-    public EmojisResource(Credentials credentials, String url) {
+    EmojisResource(Credentials credentials, String url) {
         super(credentials, url);
     }
 
-    public EmojisMap getEmojisMap() {
-        Map<String, String> emojis = getResource().path("emojis").get(new GenericType<Map<String, String>>() {});
+    EmojisMap getEmojisMap() {
+        final Map<String, String> emojis = getResource().path("emojis").get(new GenericType<Map<String, String>>() {});
         return new EmojisMap(emojis);
     }
 

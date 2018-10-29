@@ -35,7 +35,7 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
     }
 
     @Override
-    public void run(LeaderBoardServerConfiguration configuration, Environment environment) throws Exception {
+    public void run(LeaderBoardServerConfiguration configuration, Environment environment) {
         GitHubApiFacade apiFacade = getApiFacade(configuration);
         LeaderBoardStore store = getStore(apiFacade);
 

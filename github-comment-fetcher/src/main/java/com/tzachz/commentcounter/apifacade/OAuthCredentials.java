@@ -9,7 +9,7 @@ public class OAuthCredentials implements Credentials {
 
     private final String token;
 
-    public OAuthCredentials(String token) {
+    OAuthCredentials(String token) {
         this.token = token;
     }
 

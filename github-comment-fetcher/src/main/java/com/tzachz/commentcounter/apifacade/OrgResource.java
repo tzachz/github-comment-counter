@@ -8,13 +8,13 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
  * Date: 10/08/13
  * Time: 14:10
  */
-public class OrgResource extends GitHubResource {
+class OrgResource extends GitHubResource {
 
-    public OrgResource(Credentials credentials, String url) {
+    OrgResource(Credentials credentials, String url) {
         super(credentials, url);
     }
 
-    public GHOrg getOrg(String organization) {
+    GHOrg getOrg(String organization) {
         return getResource()
                 .path("orgs")
                 .path(organization)

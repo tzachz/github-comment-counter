@@ -11,7 +11,7 @@ public class GHCommentBuilder {
     public Collection<GHComment> createEmptyComments(String... users) {
         List<GHComment> comments = new ArrayList<>();
         for (String user : users) {
-            comments.addAll(Arrays.asList(createComment(user, "")));
+            comments.addAll(Collections.singletonList(createComment(user, "")));
         }
         return comments;
     }

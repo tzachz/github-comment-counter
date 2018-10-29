@@ -1,8 +1,6 @@
 package com.tzachz.commentcounter.server;
 
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.Clock;
@@ -13,6 +11,7 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,12 +52,7 @@ public class LeaderBoardStore {
 
     private Collection<Comment> filterByRecency(List<Comment> comments, int daysBack) {
         final Date since = clock.getLocalDateNow().minusDays(daysBack).toDate();
-        return Collections2.filter(comments, new Predicate<Comment>() {
-            @Override
-            public boolean apply(Comment input) {
-                return !input.getComment().getCreateDate().before(since);
-            }
-        });
+        return comments.stream().filter(input -> !input.getComment().getCreateDate().before(since)).collect(Collectors.toList());
     }
 
     private List<Commenter> aggregate(final Collection<Comment> comments) {

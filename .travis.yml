@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - openjdk7
+  - openjdk8
 
 script: "./gradlew clean test fatjar -Dtoken=$CI_USER_TOKEN -PBUILD_NUMBER=$TRAVIS_BUILD_NUMBER"
 

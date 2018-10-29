@@ -31,7 +31,7 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
                 new EmojisResource(credentials, url));
     }
 
-    GitHubApiFacadeImpl(OrgResource orgResource, OrgRepositoriesResource orgRepositoriesResource, RepoCommentsResource repoCommentsResource, PullRequestResource pullRequestResource, EmojisResource emojisResource) {
+    private GitHubApiFacadeImpl(OrgResource orgResource, OrgRepositoriesResource orgRepositoriesResource, RepoCommentsResource repoCommentsResource, PullRequestResource pullRequestResource, EmojisResource emojisResource) {
         this.orgResource = orgResource;
         this.orgRepositoriesResource = orgRepositoriesResource;
         this.repoCommentsResource = repoCommentsResource;
@@ -52,6 +52,11 @@ public class GitHubApiFacadeImpl implements GitHubApiFacade {
     @Override
     public Collection<GHComment> getRepoComments(String orgName, String repoName, Date since) {
         return repoCommentsResource.getUserComments(orgName, repoName, since);
+    }
+
+    @Override
+    public Collection<GHPullRequest> getPullRequests(String orgName, String repoName, Date since) {
+        return pullRequestResource.getPullRequests(orgName, repoName, since);
     }
 
     @Override

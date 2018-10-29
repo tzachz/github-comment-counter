@@ -14,7 +14,7 @@ public class EmojisResourceTest {
     @Rule
     public VMOptsCredentials credentials = new VMOptsCredentials();
 
-    public static final String JSON = "{\n" +
+    private static final String JSON = "{\n" +
             "  \"+1\": \"https://github.global.ssl.fastly.net/images/icons/emoji/+1.png?v5\",\n" +
             "  \"-1\": \"https://github.global.ssl.fastly.net/images/icons/emoji/-1.png?v5\",\n" +
             "  \"100\": \"https://github.global.ssl.fastly.net/images/icons/emoji/100.png?v5\",\n" +
@@ -32,7 +32,7 @@ public class EmojisResourceTest {
     }
 
     @Test
-    public void emojisFetched() throws Exception {
+    public void emojisFetched() {
         EmojisResource resource = new EmojisResource(credentials, credentials.getURL());
         EmojisMap emojisMap = resource.getEmojisMap();
         assertThat(emojisMap.getEmojiCodes(), hasSize(greaterThan(100)));

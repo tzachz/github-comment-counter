@@ -24,13 +24,13 @@ public abstract class GitHubResource {
     private final Client client;
     private final String url;
 
-    protected GitHubResource(Credentials credentials, String url) {
+    GitHubResource(Credentials credentials, String url) {
         this.url = url;
         this.client = Client.create();
         this.client.addFilter(new HTTPBasicAuthFilter(credentials.getUsername(), credentials.getPassword()));
     }
 
-    protected WebResource getResource() {
+    WebResource getResource() {
         return client.resource(url);
     }
 
@@ -39,24 +39,21 @@ public abstract class GitHubResource {
         return client.resource(url).get(type);
     }
 
-    protected <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
+    <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
         int totalItems = 0;
-        int pageSize = -1;
         for (int page = 1; page <= MAX_PAGES; page++) {
             logger.debug("Reading page {} from {}", page, resource.toString());
             List<T> events = resource.queryParam("page", Integer.toString(page)).get(type);
             totalItems += events.size();
             processor.process(events);
-            if (events.isEmpty() || events.size() < pageSize) {
+            if (events.isEmpty()) {
                 break;
-            } else {
-                pageSize = events.size();
             }
         }
         logger.info("{} items read from {}", totalItems, resource.toString());
     }
 
     protected interface PageProcessor<T> {
-        public void process(List<T> page);
+        void process(List<T> page);
     }
 }

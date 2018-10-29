@@ -8,7 +8,7 @@ public class UserPasswordCredentials implements Credentials {
     private final String user;
     private final String password;
 
-    public UserPasswordCredentials(String user, String password) {
+    UserPasswordCredentials(String user, String password) {
         this.user = user;
         this.password = password;
     }
