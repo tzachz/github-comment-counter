@@ -1,8 +1,5 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -11,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-
-import static com.google.common.collect.Collections2.filter;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,19 +19,25 @@ import static com.google.common.collect.Collections2.filter;
  */
 public class CommentFetcher {
 
-    public static final Logger logger = LoggerFactory.getLogger(CommentFetcher.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommentFetcher.class);
+
     private final GitHubApiFacade facade;
     private final String organization;
     private final int daysBack;
     private final PullRequestCache pullRequestCache;
 
     private Clock clock = new Clock();
+    private final Predicate<GHComment> selfCommentsFilter;
 
     public CommentFetcher(GitHubApiFacade facade, String organization, int daysBack) {
         this.facade = facade;
         this.organization = organization;
         this.daysBack = daysBack;
         this.pullRequestCache = new PullRequestCache(facade);
+        this.selfCommentsFilter = comment -> {
+            GHUser pullRequestUser = pullRequestCache.get(comment.getPullRequestUrl()).getUser();
+            return !pullRequestUser.equals(comment.getUser());
+        };
     }
 
     public void setClock(Clock clock) {
@@ -54,30 +57,18 @@ public class CommentFetcher {
 
     private Collection<Comment> getRepoComments(final Date since, final GHRepo repo) {
         Collection<GHComment> repoComments = facade.getRepoComments(this.organization, repo.getName(), since);
-        Collection<GHComment> filteredComments = filterComments(since, repoComments);
-        return Collections2.transform(filteredComments, new Function<GHComment, Comment>() {
-            @Override
-            public Comment apply(GHComment input) {
-                return new Comment(input, repo);
-            }
-        });
-    }
 
-    private Collection<GHComment> filterComments(final Date since, Collection<GHComment> repoComments) {
-        Predicate<GHComment> selfCommentsFilter = new Predicate<GHComment>() {
-            @Override
-            public boolean apply(GHComment input) {
-                GHUser pullRequestUser = pullRequestCache.get(input.getPullRequestUrl()).getUser();
-                return !pullRequestUser.equals(input.getUser());
-            }
-        };
-        Predicate<GHComment> oldCommentsFilter = new Predicate<GHComment>() {
-            @Override
-            public boolean apply(GHComment input) {
-                return input.getCreateDate().after(since);
-            }
-        };
-        return filter(filter(repoComments, oldCommentsFilter), selfCommentsFilter);
+        // increase cache hit rate by preemptively fetching last month's PRs,
+        // which probably account for most of last month's comments
+        if (repoComments.size() > 20) {
+            pullRequestCache.putAll(facade.getPullRequests(this.organization, repo.getName(), since));
+        }
+
+        return repoComments.stream()
+                .filter(input1 -> input1.getCreateDate().after(since))
+                .filter(selfCommentsFilter)
+                .map(input -> new Comment(input, repo))
+                .collect(Collectors.toList());
     }
 
 }

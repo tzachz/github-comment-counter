@@ -28,21 +28,21 @@ public class PullRequestCacheTest {
     private PullRequestCache cache;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
     }
 
     @Test
-    public void getReturnsFacadeResult() throws Exception {
-        GHPullRequest expected = new GHPullRequest(new GHUser("user1", "", ""));
+    public void getReturnsFacadeResult() {
+        GHPullRequest expected = new GHPullRequest(new GHUser("user1", "", ""), "");
         when(facade.getPullRequest("url")).thenReturn(expected);
         GHPullRequest result = cache.get("url");
         assertThat(result, equalTo(expected));
     }
 
     @Test
-    public void successfulFetchOccursOnce() throws Exception {
-        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "", "")));
+    public void successfulFetchOccursOnce() {
+        when(facade.getPullRequest("url")).thenReturn(new GHPullRequest(new GHUser("user1", "", ""), ""));
         cache.get("url");
         cache.get("url");
         verify(facade, times(1)).getPullRequest("url");
@@ -50,7 +50,7 @@ public class PullRequestCacheTest {
     }
 
     @Test
-    public void failedFetchRetriesEveryTime() throws Exception {
+    public void failedFetchRetriesEveryTime() {
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("can't access url"));
         cache.get("url");
         cache.get("url");
@@ -58,7 +58,7 @@ public class PullRequestCacheTest {
     }
 
     @Test
-    public void failedFetchReturnsUnknownUserPullRequest() throws Exception {
+    public void failedFetchReturnsUnknownUserPullRequest() {
         when(facade.getPullRequest("url")).thenThrow(new RuntimeException("can't access url"));
         GHPullRequest result = cache.get("url");
         assertThat(result, equalTo(PullRequestCache.UNKNOWN));

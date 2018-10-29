@@ -110,6 +110,6 @@ public class LeaderBoardRecord implements Comparable<LeaderBoardRecord> {
 
     @Override
     public int compareTo(LeaderBoardRecord o) {
-        return Integer.valueOf(o.getScore()).compareTo(getScore()); // descending by score
+        return Integer.compare(o.getScore(), getScore()); // descending by score
     }
 }

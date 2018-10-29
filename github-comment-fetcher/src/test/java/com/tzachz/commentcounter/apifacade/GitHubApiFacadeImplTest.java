@@ -48,19 +48,19 @@ public class GitHubApiFacadeImplTest {
     private GitHubApiFacadeImpl apiFacade;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
     }
 
     @Test
-    public void getOrgsCallsOrgResource() throws Exception {
+    public void getOrgsCallsOrgResource() {
         final GHOrg org = new GHOrg(ORG_NAME, "http://a.b");
         when(orgResource.getOrg(ORG_NAME)).thenReturn(org);
         assertThat(apiFacade.getOrg(ORG_NAME), is(org));
     }
 
     @Test
-    public void getOrgReposCallsOrgReposResource() throws Exception {
+    public void getOrgReposCallsOrgReposResource() {
         ImmutableSet<GHRepo> repos = ImmutableSet.of(new GHRepo("repo1"), new GHRepo("repo2"));
         when(orgReposResource.getRepos(ORG_NAME)).thenReturn(repos);
         Set<GHRepo> result = apiFacade.getOrgRepos(ORG_NAME);
@@ -68,7 +68,7 @@ public class GitHubApiFacadeImplTest {
     }
 
     @Test
-    public void getCommentsCallsCommentResource() throws Exception {
+    public void getCommentsCallsCommentResource() {
         Date since = new Date();
         ArrayList<GHComment> comments = Lists.newArrayList(createCommentBy("user1"), createCommentBy("user2"));
         when(commentsResource.getUserComments(ORG_NAME, "repo1", since)).thenReturn(comments);
@@ -76,14 +76,14 @@ public class GitHubApiFacadeImplTest {
     }
 
     @Test
-    public void getPullRequestCallsPRResource() throws Exception {
-        GHPullRequest pullRequest = new GHPullRequest(new GHUser("user1", "http://user", "http://avatar"));
+    public void getPullRequestCallsPRResource() {
+        GHPullRequest pullRequest = new GHPullRequest(new GHUser("user1", "http://user", "http://avatar"), "");
         when(pullRequestResource.getPullRequest("http://pr")).thenReturn(pullRequest);
         assertThat(apiFacade.getPullRequest("http://pr"), is(pullRequest));
     }
 
     @Test
-    public void getEmojiMapCallsEmojisResource() throws Exception {
+    public void getEmojiMapCallsEmojisResource() {
         EmojisMap emojisMap = new EmojisMap(ImmutableMap.of(":smile:", "http://smile"));
         when(emojisResource.getEmojisMap()).thenReturn(emojisMap);
         assertThat(emojisResource.getEmojisMap(), is(emojisMap));

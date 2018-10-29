@@ -12,7 +12,7 @@ public enum Period {
 
     private final int daysBack;
 
-    private Period(int daysBack) {
+    Period(int daysBack) {
         this.daysBack = daysBack;
     }
 

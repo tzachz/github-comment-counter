@@ -14,25 +14,19 @@ import java.util.Set;
  * Date: 08/08/13
  * Time: 23:58
  */
-public class OrgRepositoriesResource extends GitHubResource {
+class OrgRepositoriesResource extends GitHubResource {
 
-    public OrgRepositoriesResource(Credentials credentials, String url) {
+    OrgRepositoriesResource(Credentials credentials, String url) {
         super(credentials, url);
     }
 
-    public Set<GHRepo> getRepos(String organization) {
+    Set<GHRepo> getRepos(String organization) {
         final Set<GHRepo> ghRepos = Sets.newHashSet();
-        WebResource resource = getResource()
+        final WebResource resource = getResource()
                 .path("orgs")
                 .path(organization)
                 .path("repos");
-        scanPages(resource, new GenericType<List<GHRepo>>() {}, new PageProcessor<GHRepo>() {
-                    @Override
-                    public void process(List<GHRepo> page) {
-                        ghRepos.addAll(page);
-                    }
-                }
-        );
+        scanPages(resource, new GenericType<List<GHRepo>>() {}, ghRepos::addAll);
         return ghRepos;
     }
 }

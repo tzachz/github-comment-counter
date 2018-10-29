@@ -16,29 +16,24 @@ import java.util.List;
  * User: tzachz
  * Date: 8/8/13
  */
-public class RepoCommentsResource extends GitHubResource {
+class RepoCommentsResource extends GitHubResource {
 
     private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-    public RepoCommentsResource(Credentials credentials, String url) {
+    RepoCommentsResource(Credentials credentials, String url) {
         super(credentials, url);
     }
 
-    public Collection<GHComment> getUserComments(String organization, String repoName, Date since) {
+    Collection<GHComment> getUserComments(String organization, String repoName, Date since) {
         final Collection<GHComment> userComments = new ArrayList<>();
-        WebResource resource = getResource()
+        final WebResource resource = getResource()
                 .path("repos")
                 .path(organization)
                 .path(repoName)
                 .path("pulls")
                 .path("comments")
                 .queryParam("since", SINCE_FORMAT.format(since));
-        scanPages(resource, new GenericType<List<GHComment>>() {}, new PageProcessor<GHComment>() {
-            @Override
-            public void process(List<GHComment> page) {
-                userComments.addAll(page);
-            }
-        });
+        scanPages(resource, new GenericType<List<GHComment>>() {}, userComments::addAll);
         return userComments;
     }
 
