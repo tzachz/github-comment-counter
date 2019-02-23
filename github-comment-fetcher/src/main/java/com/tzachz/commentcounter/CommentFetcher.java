@@ -23,15 +23,17 @@ public class CommentFetcher {
 
     private final GitHubApiFacade facade;
     private final String organization;
+    private final Set<String> repositories;
     private final int daysBack;
     private final PullRequestCache pullRequestCache;
 
     private Clock clock = new Clock();
     private final Predicate<GHComment> selfCommentsFilter;
 
-    public CommentFetcher(GitHubApiFacade facade, String organization, int daysBack) {
+    public CommentFetcher(GitHubApiFacade facade, String organization, Set<String> repositories, int daysBack) {
         this.facade = facade;
         this.organization = organization;
+        this.repositories = Collections.unmodifiableSet(repositories);
         this.daysBack = daysBack;
         this.pullRequestCache = new PullRequestCache(facade);
         this.selfCommentsFilter = comment -> {
@@ -48,10 +50,11 @@ public class CommentFetcher {
         final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<GHRepo> repos = facade.getOrgRepos(this.organization);
         List<Comment> comments = new ArrayList<>();
-        for (GHRepo repo : repos) {
+        List<GHRepo> interestingRepos = getInterestingRepos(repos);
+        for (GHRepo repo : interestingRepos) {
             comments.addAll(getRepoComments(since, repo));
         }
-        logger.info("Fetched {} comments from {} repositories", comments.size(), repos.size());
+        logger.info("Fetched {} comments from {} repositories", comments.size(), interestingRepos.size());
         return comments;
     }
 
@@ -71,4 +74,19 @@ public class CommentFetcher {
                 .collect(Collectors.toList());
     }
 
+    private List<GHRepo> getInterestingRepos(Set<GHRepo> repos) {
+        final Set<String> repoFilter;
+        if (this.repositories.isEmpty()) {
+            repoFilter = repos.stream()
+                    .map(GHRepo::getName)
+                    .collect(Collectors.toSet());
+        } else {
+            repoFilter = this.repositories;
+        }
+
+        return repos.stream()
+                .peek(repo -> logger.info("repo={}", repo.getName()))
+                .filter(repo -> repoFilter.contains(repo.getName()))
+                .collect(Collectors.toList());
+    }
 }

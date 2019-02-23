@@ -30,6 +30,8 @@ public class CommentFetcherTest {
 
     private static final String ORG_NAME = "org";
 
+    private static final Set<String> REPOSITORIES = Collections.emptySet();
+
     private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
     private LocalDate now = new LocalDate(2013, 8, 8);
 
@@ -44,7 +46,7 @@ public class CommentFetcherTest {
     @Before
     public void setUp() {
         initMocks(this);
-        counter = new CommentFetcher(facade, ORG_NAME, 1);
+        counter = new CommentFetcher(facade, ORG_NAME, REPOSITORIES, 1);
         counter.setClock(clock);
         when(clock.getLocalDateNow()).thenReturn(now);
     }

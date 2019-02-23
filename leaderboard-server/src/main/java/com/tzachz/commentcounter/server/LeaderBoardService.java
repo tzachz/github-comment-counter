@@ -61,7 +61,7 @@ public class LeaderBoardService extends Service<LeaderBoardServerConfiguration> 
 
     private void createScheduledFetcher(LeaderBoardServerConfiguration configuration, Environment environment, GitHubApiFacade apiFacade, LeaderBoardStore store) {
         ScheduledExecutorService executorService = environment.managedScheduledExecutorService("comment-fetcher", 1);
-        final CommentFetcher fetcher = new CommentFetcher(apiFacade, configuration.getOrganization(), Period.getLongest().getDaysBack());
+        final CommentFetcher fetcher = new CommentFetcher(apiFacade, configuration.getOrganization(), configuration.getRepositories(), Period.getLongest().getDaysBack());
         executorService.scheduleAtFixedRate(new FetcherRunnable(store, fetcher), 0, configuration.getRefreshRateMinutes(), TimeUnit.MINUTES);
     }
 

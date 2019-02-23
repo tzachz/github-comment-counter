@@ -29,6 +29,11 @@ gitHubCredentials:
     token: my-oauth-token
 
 organization: my-org    # organization to show stats for
+
+repositories:           # subset of repositories to consider.  If
+- repo1                 # empty will read all repositories in the org.
+- repo2
+
 refreshRateMinutes: 10  # interval between API activations
 ```
 Specify either a token or a username and password.
