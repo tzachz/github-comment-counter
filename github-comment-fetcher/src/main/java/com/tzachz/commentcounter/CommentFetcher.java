@@ -49,8 +49,10 @@ public class CommentFetcher {
     public List<Comment> getComments() {
         final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<GHRepo> repos = facade.getOrgRepos(this.organization);
+        List<GHRepo> interestingRepos = repos.stream()
+                .filter(this::isInterestingRepo)
+                .collect(Collectors.toList());
         List<Comment> comments = new ArrayList<>();
-        List<GHRepo> interestingRepos = getInterestingRepos(repos);
         for (GHRepo repo : interestingRepos) {
             comments.addAll(getRepoComments(since, repo));
         }
@@ -74,19 +76,14 @@ public class CommentFetcher {
                 .collect(Collectors.toList());
     }
 
-    private List<GHRepo> getInterestingRepos(Set<GHRepo> repos) {
-        final Set<String> repoFilter;
-        if (this.repositories.isEmpty()) {
-            repoFilter = repos.stream()
-                    .map(GHRepo::getName)
-                    .collect(Collectors.toSet());
-        } else {
-            repoFilter = this.repositories;
+    private boolean isInterestingRepo(GHRepo repo) {
+        if (repositories.isEmpty()) {
+            /*
+             * If no repositories are specified, all repositories are
+             * interesting.
+             */
+            return true;
         }
-
-        return repos.stream()
-                .peek(repo -> logger.info("repo={}", repo.getName()))
-                .filter(repo -> repoFilter.contains(repo.getName()))
-                .collect(Collectors.toList());
+        return repositories.contains(repo.getName());
     }
 }
