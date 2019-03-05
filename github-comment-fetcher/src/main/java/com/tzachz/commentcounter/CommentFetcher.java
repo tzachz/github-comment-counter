@@ -23,15 +23,17 @@ public class CommentFetcher {
 
     private final GitHubApiFacade facade;
     private final String organization;
+    private final Set<String> repositories;
     private final int daysBack;
     private final PullRequestCache pullRequestCache;
 
     private Clock clock = new Clock();
     private final Predicate<GHComment> selfCommentsFilter;
 
-    public CommentFetcher(GitHubApiFacade facade, String organization, int daysBack) {
+    public CommentFetcher(GitHubApiFacade facade, String organization, Set<String> repositories, int daysBack) {
         this.facade = facade;
         this.organization = organization;
+        this.repositories = Collections.unmodifiableSet(repositories);
         this.daysBack = daysBack;
         this.pullRequestCache = new PullRequestCache(facade);
         this.selfCommentsFilter = comment -> {
@@ -47,11 +49,14 @@ public class CommentFetcher {
     public List<Comment> getComments() {
         final Date since = clock.getLocalDateNow().minusDays(this.daysBack).toDate();
         Set<GHRepo> repos = facade.getOrgRepos(this.organization);
+        List<GHRepo> interestingRepos = repos.stream()
+                .filter(this::isInterestingRepo)
+                .collect(Collectors.toList());
         List<Comment> comments = new ArrayList<>();
-        for (GHRepo repo : repos) {
+        for (GHRepo repo : interestingRepos) {
             comments.addAll(getRepoComments(since, repo));
         }
-        logger.info("Fetched {} comments from {} repositories", comments.size(), repos.size());
+        logger.info("Fetched {} comments from {} repositories", comments.size(), interestingRepos.size());
         return comments;
     }
 
@@ -71,4 +76,14 @@ public class CommentFetcher {
                 .collect(Collectors.toList());
     }
 
+    private boolean isInterestingRepo(GHRepo repo) {
+        if (repositories.isEmpty()) {
+            /*
+             * If no repositories are specified, all repositories are
+             * interesting.
+             */
+            return true;
+        }
+        return repositories.contains(repo.getName());
+    }
 }

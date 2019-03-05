@@ -1,5 +1,10 @@
 package com.tzachz.commentcounter.server;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yammer.dropwizard.config.Configuration;
 
@@ -17,6 +22,9 @@ public class LeaderBoardServerConfiguration extends Configuration {
     private String organization;
 
     @JsonProperty
+    private List<String> repositories = new ArrayList<>();
+
+    @JsonProperty
     private int refreshRateMinutes;
 
     @JsonProperty
@@ -28,6 +36,10 @@ public class LeaderBoardServerConfiguration extends Configuration {
 
     public String getOrganization() {
         return organization;
+    }
+
+    public Set<String> getRepositories() {
+        return new HashSet<>(repositories);
     }
 
     public int getRefreshRateMinutes() {
