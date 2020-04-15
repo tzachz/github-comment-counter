@@ -2,14 +2,14 @@ language: java
 jdk:
   - openjdk8
 
-script: "./gradlew clean test fatjar -Dtoken=$CI_USER_TOKEN -PBUILD_NUMBER=$TRAVIS_BUILD_NUMBER"
+script: "./gradlew clean test stage -Dtoken=$CI_USER_TOKEN -PBUILD_NUMBER=$TRAVIS_BUILD_NUMBER"
 
 deploy:
   skip_cleanup: true
   provider: releases
   api_key: $CI_USER_TOKEN
   file:
-    - "leaderboard-server/build/libs/leaderboard-server-0.1.$TRAVIS_BUILD_NUMBER.jar"
+    - "leaderboard-server/build/distributions/leaderboard-server-0.1.$TRAVIS_BUILD_NUMBER.zip"
     - "leaderboard-server.yml"
   on:
     tags: true
