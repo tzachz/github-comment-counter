@@ -13,11 +13,16 @@ Deployment
 ==========
 There are three deployment options:
  1. Using Heroku: if you have a [Heroku](https://www.heroku.com/) account, that's the easiest way, skip to [Heroku Deployment](#heroku-deployment)
- 2. Downlowding latest release: download latest **jar** and **yml** file from [releases](https://github.com/tzachz/github-comment-counter/releases) page, and continue to [Usage](#usage) section
- 3. [Build](#build) from source code, then continue to [Usage](#usage) section
+ 2. [Build](#build) from source code, after adjusting [Configuration](#configuration)
+ 3. Using latest release: 
+    - Download latest **zip** and **yml** file from [releases](https://github.com/tzachz/github-comment-counter/releases) page
+    - Unzip the zip file, e.g.: `unzip ~/Downloads/leaderboard-server-0.1.57.zip`
+    - Copy yml file into unzipped folder, e.g.: `cd leaderboard-server-0.1.57 && cp ~/Downloads/leaderboard-server.yml .`
+    - Edit the yml file per insructions in [Configuration](#configuration) section
+    - Run the server: `./bin/leaderboard-server server leaderboard-server.yml`
 
 
-Usage
+Configuration
 =====
 Edit the leaderboard-server.yml file with the following configuration:
 ```yml
@@ -38,13 +43,6 @@ refreshRateMinutes: 10  # interval between API activations
 ```
 Specify either a token or a username and password.
 
-You're now ready to run the server:
-```
-java -jar <path to jar> server <path to yml file>
-```
-
-You should be able to see the results at `http://<host>:8080/`
-
 If you're using a locally-hosted GitHub instance, you can override the default API endpoint URL by adding something like this to your yml file:
 ```yml
 gitHubApiUrl: https://github.corp.xyzcompany.com/api/v3/
@@ -52,11 +50,6 @@ gitHubApiUrl: https://github.corp.xyzcompany.com/api/v3/
 
 Build
 =====
-To build the artifact (without running tests), run:
-```
-./gradlew fatJar
-```
-The jar to use is located in `leaderboard-server/build/libs/`.
 
 To run the tests, you'll need to supply credentials, since some of the tests require a github user to activate the API. Here and elsewhere, you can either pass your GitHub username and password as credentials
 or pass a single [OAuth token](https://github.com/settings/applications) associated with your account.
@@ -66,6 +59,19 @@ or pass a single [OAuth token](https://github.com/settings/applications) associa
 
 (If your user account has [two-factor authentication](https://help.github.com/articles/about-two-factor-authentication/) enabled, only token-based access will work.)
 
+To run the server locally (without running tests, and after properly setting [Configuration](#configuration)), run:
+```
+./gradlew run
+```
+
+To build an artifact you can deploy elsewhere, run:
+```
+./gradlew distZip
+```
+The zipfile will be created by Gradle's application plugin with a `./bin/leaderboard-server` file that can be used to start the server as follows:
+```
+./bin/leaderboard-server server leaderboard-server.yml
+```
 
 Heroku Deployment
 =================
