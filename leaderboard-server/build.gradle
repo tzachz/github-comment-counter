@@ -1,3 +1,7 @@
+plugins {
+    id 'application'
+}
+
 dependencies {
     compile project(':github-comment-fetcher')
     compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
@@ -6,28 +10,8 @@ dependencies {
     testCompile project (path: ":github-comment-fetcher", configuration: 'testArtifacts')
 }
 
-// package server module into fatJar, as recommended for dropwizard services:
-buildscript {
-    repositories {
-        mavenCentral()
-    }
+mainClassName = "com.tzachz.commentcounter.server.LeaderBoardService"
 
-    dependencies {
-        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2'
-    }
-}
+run.args = ["server", "../leaderboard-server.yml"]
 
-apply plugin: 'fatjar'
-
-fatJar {
-    exclude "META-INF/*.SF"
-    exclude "META-INF/*.DSA"
-    exclude "META-INF/*.RSA"
-    manifest { attributes 'Main-Class': 'com.tzachz.commentcounter.server.LeaderBoardService'
-        attributes 'Implementation-Version': "$version" }
-}
-
-fatJar.dependsOn jar
-
-task stage(dependsOn: fatJar) {}
-
+task stage(dependsOn: [installDist, distZip]) {}
