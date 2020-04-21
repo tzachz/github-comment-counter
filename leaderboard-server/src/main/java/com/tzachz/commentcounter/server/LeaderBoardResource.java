@@ -36,7 +36,7 @@ public class LeaderBoardResource {
     }
 
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces("text/html; charset=utf-8")
     public LeaderBoardView getLeaderBoard(@PathParam("period") String period) {
         return new LeaderBoardView(store.get(period), createTransformer(), org.getName(), org.getHtmlUrl(), store.isLoaded(period), period);
     }
