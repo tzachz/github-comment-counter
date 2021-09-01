@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class EmojiStore {
 
-    public static final EmojisMap EMPTY_MAP = new EmojisMap(Maps.<String, String>newHashMap());
+    public static final EmojisMap EMPTY_MAP = new EmojisMap(Maps.newHashMap());
 
     private final GitHubApiFacade apiFacade;
 

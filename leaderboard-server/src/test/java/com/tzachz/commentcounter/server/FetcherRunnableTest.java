@@ -31,15 +31,15 @@ public class FetcherRunnableTest {
     @InjectMocks
     private FetcherRunnable runnable;
 
-    private GHCommentBuilder commentBuilder = new GHCommentBuilder();
+    private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
     }
 
     @Test
-    public void fetchesAndStores() throws Exception {
+    public void fetchesAndStores() {
         ArrayList<Comment> comments = Lists.newArrayList(new Comment(commentBuilder.createComment("u1", "url"), new GHRepo("r")));
         when(fetcher.getComments()).thenReturn(comments);
         runnable.run();
@@ -47,14 +47,14 @@ public class FetcherRunnableTest {
     }
 
     @Test
-    public void exceptionInFetcherIsSwallowed() throws Exception {
+    public void exceptionInFetcherIsSwallowed() {
         when(fetcher.getComments()).thenThrow(new RuntimeException());
         runnable.run();
         verifyNoMoreInteractions(store);
     }
 
     @Test
-    public void exceptionInStoreIsSwallowed() throws Exception {
+    public void exceptionInStoreIsSwallowed() {
         ArrayList<Comment> comments = Lists.newArrayList();
         when(fetcher.getComments()).thenReturn(comments);
         doThrow(new RuntimeException()).when(store).set(comments);
