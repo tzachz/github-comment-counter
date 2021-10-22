@@ -1,4 +1,4 @@
-github-comment-counter [![Build Status](https://travis-ci.org/tzachz/github-comment-counter.svg?branch=master)](https://travis-ci.org/tzachz/github-comment-counter)
+github-comment-counter [![Build Status](https://travis-ci.org/tzachz/github-comment-counter.svg?branch=master)](https://travis-ci.org/tzachz/github-comment-counter) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=tzachz_github-comment-counter&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=tzachz_github-comment-counter) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tzachz_github-comment-counter&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tzachz_github-comment-counter)
 ======================
 
 A [dropwizard](https://github.com/codahale/dropwizard)-based server displaying number of Pull Request Comments performed by an organization's GitHub users, to help organizations identify and celebrate top reviewers. Counts all recent in-code comments on organization's opened and closed Pull Requests, excluding comments on one's own Pull Requests.
