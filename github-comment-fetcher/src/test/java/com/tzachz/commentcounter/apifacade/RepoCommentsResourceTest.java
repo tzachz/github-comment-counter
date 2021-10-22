@@ -21,7 +21,7 @@ public class RepoCommentsResourceTest {
     public VMOptsCredentials credentials = new VMOptsCredentials();
 
     @Test
-    public void atLeastOneCommentFacterJ() throws Exception {
+    public void atLeastOneCommentFacterJ() {
         RepoCommentsResource repoCommentsResource = new RepoCommentsResource(credentials, credentials.getURL());
         Collection<GHComment> comments = repoCommentsResource.getUserComments("kenshoo", "facterj", new Date(0L));
         assertThat(comments.size(), greaterThan(0));

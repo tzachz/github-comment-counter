@@ -34,7 +34,7 @@ public class CommentFetcherTest {
     private static final Set<String> REPOSITORIES = Collections.emptySet();
 
     private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
-    private LocalDate now = new LocalDate(2013, 8, 8);
+    private final LocalDate now = new LocalDate(2013, 8, 8);
 
     @Mock
     private GitHubApiFacade facade;

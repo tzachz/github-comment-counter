@@ -1,9 +1,8 @@
 package com.tzachz.commentcounter.apifacade;
 
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class EmojisMap {
@@ -19,7 +18,7 @@ public class EmojisMap {
     }
 
     public Set<String> getEmojiCodes() {
-        return ImmutableSet.copyOf(this.nameToLink.keySet());
+        return Set.copyOf(this.nameToLink.keySet());
     }
 
     @Override
@@ -29,9 +28,7 @@ public class EmojisMap {
 
         EmojisMap emojisMap = (EmojisMap) o;
 
-        if (nameToLink != null ? !nameToLink.equals(emojisMap.nameToLink) : emojisMap.nameToLink != null) return false;
-
-        return true;
+        return Objects.equals(nameToLink, emojisMap.nameToLink);
     }
 
     @Override

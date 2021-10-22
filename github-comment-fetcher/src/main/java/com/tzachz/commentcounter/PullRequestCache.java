@@ -29,7 +29,7 @@ public class PullRequestCache {
 
     public PullRequestCache(final GitHubApiFacade facade) {
         this.cache = CacheBuilder.newBuilder()
-                .build(new CacheLoader<String, GHPullRequest>() {
+                .build(new CacheLoader<>() {
                     @Override
                     public GHPullRequest load(String key) {
                         return facade.getPullRequest(key);

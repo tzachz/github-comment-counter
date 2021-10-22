@@ -11,7 +11,7 @@ class EmojisResource extends GitHubResource {
     }
 
     EmojisMap getEmojisMap() {
-        final Map<String, String> emojis = getResource().path("emojis").get(new GenericType<Map<String, String>>() {});
+        final Map<String, String> emojis = getResource().path("emojis").get(new GenericType<>() {});
         return new EmojisMap(emojis);
     }
 

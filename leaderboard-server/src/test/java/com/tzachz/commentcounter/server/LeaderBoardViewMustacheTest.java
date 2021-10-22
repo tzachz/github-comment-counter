@@ -1,6 +1,5 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.GHCommentBuilder;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -9,6 +8,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -23,19 +23,19 @@ import static org.junit.Assert.assertThat;
  */
 public class LeaderBoardViewMustacheTest {
 
-    private GHCommentBuilder commentBuilder = new GHCommentBuilder();
-    private GHRepo repo = new GHRepo("my-repo");
+    private final GHCommentBuilder commentBuilder = new GHCommentBuilder();
+    private final GHRepo repo = new GHRepo("my-repo");
 
     @Test
     public void mustacheRendersOrgNameIntoHeadline() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "http://my-git/org1", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(), transformer(), "org1", "http://my-git/org1", true, "today");
         String result = render(view);
         assertThat(result, containsString("<h1>GitHub Reviewers Leader Board: <a href=\"http://my-git/org1"));
     }
 
     @Test
     public void stillLoadingSaysStillLoading() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "", false, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(), transformer(), "org1", "", false, "today");
         String result = render(view);
         assertThat(result, containsString("Still Loading! Please wait while we fetch your organization's data from GitHub..."));
         assertThat(result, not(containsString("No comments! Start reviewing...")));
@@ -43,7 +43,7 @@ public class LeaderBoardViewMustacheTest {
 
     @Test
     public void loadedEmptyRecordsListSaysNoComments() throws Exception {
-        LeaderBoardView view = new LeaderBoardView(Lists.<Commenter>newArrayList(), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("No comments! Start reviewing..."));
     }
@@ -52,7 +52,7 @@ public class LeaderBoardViewMustacheTest {
     public void existingLoadedRecordsRenderedWithLink() throws Exception {
         Commenter commenter = new Commenter("user1", "http://my-git/user");
         commenter.addComment(commentBuilder.createComment("user1", "some-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("1 comments in 1 repos "));
         assertThat(result, containsString("http://my-git/user"));
@@ -62,7 +62,7 @@ public class LeaderBoardViewMustacheTest {
     public void sampleCommentDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("a very intelligent comment indeed"));
     }
@@ -71,7 +71,7 @@ public class LeaderBoardViewMustacheTest {
     public void sampleCommentRepoNameInDiscussion() throws Exception {
         Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("[view discussion in my-repo]"));
     }
@@ -80,7 +80,7 @@ public class LeaderBoardViewMustacheTest {
     public void avatarImageDisplayed() throws Exception {
         Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "a very intelligent comment indeed", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("<img src=\"avatar-url\" alt=\"user1\""));
     }
@@ -89,7 +89,7 @@ public class LeaderBoardViewMustacheTest {
     public void commentHtmlNotEscaped() throws Exception {
         Commenter commenter = new Commenter("user1", "");
         commenter.addComment(commentBuilder.createComment("user1", "some-url", "contains <img>!", "avatar-url"), repo);
-        LeaderBoardView view = new LeaderBoardView(Lists.newArrayList(commenter), transformer(), "org1", "", true, "today");
+        LeaderBoardView view = new LeaderBoardView(List.of(commenter), transformer(), "org1", "", true, "today");
         String result = render(view);
         assertThat(result, containsString("contains <img>!"));
     }
@@ -102,6 +102,6 @@ public class LeaderBoardViewMustacheTest {
     }
 
     private CommenterToRecordTransformer transformer() {
-        return new CommenterToRecordTransformer(Lists.<CommentRenderer>newArrayList());
+        return new CommenterToRecordTransformer(List.of());
     }
 }

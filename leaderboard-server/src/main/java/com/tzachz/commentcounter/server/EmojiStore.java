@@ -1,14 +1,14 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.apifacade.EmojisMap;
 import com.tzachz.commentcounter.apifacade.GitHubApiFacade;
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class EmojiStore {
 
-    public static final EmojisMap EMPTY_MAP = new EmojisMap(Maps.newHashMap());
+    public static final EmojisMap EMPTY_MAP = new EmojisMap(new HashMap<>());
 
     private final GitHubApiFacade apiFacade;
 

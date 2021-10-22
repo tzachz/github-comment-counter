@@ -5,8 +5,8 @@ import com.yammer.dropwizard.views.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.transform;
 import static java.util.Collections.sort;
 
 /**
@@ -35,7 +35,7 @@ public class LeaderBoardView extends View {
     }
 
     private List<LeaderBoardRecord> transformToRecords(List<Commenter> commenters, CommenterToRecordTransformer transformer) {
-        return transform(commenters, transformer);
+        return commenters.stream().map(transformer::apply).collect(Collectors.toList());
     }
 
     public List<LeaderBoardRecord> getRecords() {

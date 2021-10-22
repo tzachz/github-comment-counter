@@ -9,11 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 class PullRequestResource extends GitHubResource {
 
-    private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     PullRequestResource(Credentials credentials, String url) {
         super(credentials, url);
@@ -31,7 +30,7 @@ class PullRequestResource extends GitHubResource {
                 .path(repoName)
                 .path("pulls")
                 .queryParam("since", SINCE_FORMAT.format(since));
-        scanPages(resource, new GenericType<List<GHPullRequest>>() {}, prs::addAll);
+        scanPages(resource, new GenericType<>() {}, prs::addAll);
         return prs;
     }
 }

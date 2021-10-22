@@ -21,7 +21,7 @@ public class OrgRepositoriesResourceTest {
     public VMOptsCredentials credentials = new VMOptsCredentials();
 
     @Test
-    public void facterjRepoIsInKenshooReposList() throws Exception {
+    public void facterjRepoIsInKenshooReposList() {
         OrgRepositoriesResource reposResource = new OrgRepositoriesResource(credentials, credentials.getURL());
         Set<GHRepo> repos = reposResource.getRepos("kenshoo");
         assertThat(repos, hasItem(new GHRepo("facterj")));

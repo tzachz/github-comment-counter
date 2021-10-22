@@ -1,8 +1,5 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Commenter;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
@@ -10,12 +7,13 @@ import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -24,7 +22,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@SuppressWarnings("ConstantConditions")
 public class CommenterToRecordTransformerTest {
 
     public static final String USER_NAME = "user1";
@@ -45,26 +42,21 @@ public class CommenterToRecordTransformerTest {
     private CommenterToRecordTransformer transformer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
         GHRepo onlyRepo = new GHRepo("repo1");
         when(commenter.getUsername()).thenReturn(USER_NAME);
-        when(commenter.getComments()).thenReturn(Lists.newArrayList(createCommentBy(USER_NAME)));
-        when(commenter.getRepos()).thenReturn(ImmutableSet.of(onlyRepo));
+        when(commenter.getComments()).thenReturn(singletonList(createCommentBy(USER_NAME)));
+        when(commenter.getRepos()).thenReturn(Set.of(onlyRepo));
         when(commenter.getRepoFor(any(GHComment.class))).thenReturn(onlyRepo);
         when(commenter.getScore()).thenReturn(SCORE);
         when(renderer1.render(anyString())).thenAnswer(answerFirstArgument());
         when(renderer2.render(anyString())).thenAnswer(answerFirstArgument());
-        transformer = new CommenterToRecordTransformer(ImmutableList.of(renderer1, renderer2));
+        transformer = new CommenterToRecordTransformer(List.of(renderer1, renderer2));
     }
 
     private Answer<String> answerFirstArgument() {
-        return new Answer<String>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                return (String) invocation.getArguments()[0];
-            }
-        };
+        return invocation -> (String) invocation.getArguments()[0];
     }
 
     private GHComment createCommentBy(String user) {
@@ -76,7 +68,7 @@ public class CommenterToRecordTransformerTest {
     }
 
     @Test
-    public void commenterAttributesCopied() throws Exception {
+    public void commenterAttributesCopied() {
         LeaderBoardRecord record = transformer.apply(commenter);
         assertThat(record.getUsername(), is(USER_NAME));
         assertThat(record.getAvatarUrl(), is(AVATAR_URL));
@@ -84,28 +76,28 @@ public class CommenterToRecordTransformerTest {
     }
 
     @Test
-    public void commentsCounted() throws Exception {
-        ArrayList<GHComment> twoComments = Lists.newArrayList(createCommentBy(USER_NAME), createCommentBy(USER_NAME));
+    public void commentsCounted() {
+        List<GHComment> twoComments = List.of(createCommentBy(USER_NAME), createCommentBy(USER_NAME));
         when(commenter.getComments()).thenReturn(twoComments);
         assertThat(transformer.apply(commenter).getCommentCount(), is(2));
     }
 
     @Test
-    public void reposCounted() throws Exception {
-        ImmutableSet<GHRepo> twoRepos = ImmutableSet.of(new GHRepo("repo1"), new GHRepo("repo2"));
+    public void reposCounted() {
+        Set<GHRepo> twoRepos = Set.of(new GHRepo("repo1"), new GHRepo("repo2"));
         when(commenter.getRepos()).thenReturn(twoRepos);
         assertThat(transformer.apply(commenter).getRepoCount(), is(2));
     }
 
     @Test
-    public void singleCommentAttributesChosen() throws Exception {
+    public void singleCommentAttributesChosen() {
         LeaderBoardRecord record = transformer.apply(commenter);
         assertThat(record.getSampleCommentUrl(), is(COMMENT_URL));
     }
 
     @Test
-    public void fewCommentsRandomChosen() throws Exception {
-        when(commenter.getComments()).thenReturn(Lists.newArrayList(
+    public void fewCommentsRandomChosen() {
+        when(commenter.getComments()).thenReturn(List.of(
                 createCommentBy(USER_NAME, "body1"),
                 createCommentBy(USER_NAME, "body2"),
                 createCommentBy(USER_NAME, "body3")));
@@ -118,15 +110,15 @@ public class CommenterToRecordTransformerTest {
     }
 
     @Test
-    public void randomCommentRepoNamePassedToRecord() throws Exception {
+    public void randomCommentRepoNamePassedToRecord() {
         GHComment comment = createCommentBy(USER_NAME);
-        when(commenter.getComments()).thenReturn(Lists.newArrayList(comment));
+        when(commenter.getComments()).thenReturn(List.of(comment));
         when(commenter.getRepoFor(comment)).thenReturn(new GHRepo("repo2"));
         assertThat(transformer.apply(commenter).getSampleCommentRepo(), is("repo2"));
     }
 
     @Test
-    public void renderersCalledInOrder() throws Exception {
+    public void renderersCalledInOrder() {
         when(renderer1.render(anyString())).thenReturn("first result");
         when(renderer2.render("first result")).thenReturn("end result");
         assertThat(transformer.apply(commenter).getSampleComment(), is("end result"));

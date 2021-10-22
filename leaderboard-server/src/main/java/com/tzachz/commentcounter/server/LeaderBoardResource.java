@@ -1,6 +1,5 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.ImmutableList;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHOrg;
 
 import javax.ws.rs.GET;
@@ -8,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +27,7 @@ public class LeaderBoardResource {
     }
 
     private CommenterToRecordTransformer createTransformer() {
-        return new CommenterToRecordTransformer(ImmutableList.of(
+        return new CommenterToRecordTransformer(List.of(
                 new CapSizeCommentRenderer(),
                 new CodeSnippetCommentRenderer(),
                 new BoldCommentRenderer(),

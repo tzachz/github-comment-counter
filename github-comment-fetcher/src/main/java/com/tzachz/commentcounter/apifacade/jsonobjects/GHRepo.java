@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -31,9 +33,7 @@ public class GHRepo {
 
         GHRepo ghRepo = (GHRepo) o;
 
-        if (name != null ? !name.equals(ghRepo.name) : ghRepo.name != null) return false;
-
-        return true;
+        return Objects.equals(name, ghRepo.name);
     }
 
     @Override

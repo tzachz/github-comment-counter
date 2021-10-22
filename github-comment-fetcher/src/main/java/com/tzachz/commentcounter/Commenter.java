@@ -1,8 +1,5 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHRepo;
 
@@ -26,7 +23,7 @@ public class Commenter {
     public Commenter(String username, String userURL) {
         this.username = username;
         this.userURL = userURL;
-        this.comments = Maps.newHashMap();
+        this.comments = new HashMap<>();
     }
 
     public void addComment(GHComment comment, GHRepo repo) {
@@ -42,11 +39,11 @@ public class Commenter {
     }
 
     public List<GHComment> getComments() {
-        return ImmutableList.copyOf(comments.keySet());
+        return List.copyOf(comments.keySet());
     }
 
     public Set<GHRepo> getRepos() {
-        return ImmutableSet.copyOf(comments.values());
+        return Set.copyOf(comments.values());
     }
 
     public GHRepo getRepoFor(GHComment comment) {
