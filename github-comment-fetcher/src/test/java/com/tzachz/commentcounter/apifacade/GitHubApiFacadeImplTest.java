@@ -1,16 +1,14 @@
 package com.tzachz.commentcounter.apifacade;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.apifacade.jsonobjects.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -61,7 +59,7 @@ public class GitHubApiFacadeImplTest {
 
     @Test
     public void getOrgReposCallsOrgReposResource() {
-        ImmutableSet<GHRepo> repos = ImmutableSet.of(new GHRepo("repo1"), new GHRepo("repo2"));
+        Set<GHRepo> repos = Set.of(new GHRepo("repo1"), new GHRepo("repo2"));
         when(orgReposResource.getRepos(ORG_NAME)).thenReturn(repos);
         Set<GHRepo> result = apiFacade.getOrgRepos(ORG_NAME);
         assertThat(result, containsInAnyOrder(repos.toArray()));
@@ -70,7 +68,7 @@ public class GitHubApiFacadeImplTest {
     @Test
     public void getCommentsCallsCommentResource() {
         Date since = new Date();
-        ArrayList<GHComment> comments = Lists.newArrayList(createCommentBy("user1"), createCommentBy("user2"));
+        List<GHComment> comments = List.of(createCommentBy("user1"), createCommentBy("user2"));
         when(commentsResource.getUserComments(ORG_NAME, "repo1", since)).thenReturn(comments);
         assertThat(apiFacade.getRepoComments(ORG_NAME, "repo1", since), containsInAnyOrder(comments.toArray()));
     }
@@ -84,7 +82,7 @@ public class GitHubApiFacadeImplTest {
 
     @Test
     public void getEmojiMapCallsEmojisResource() {
-        EmojisMap emojisMap = new EmojisMap(ImmutableMap.of(":smile:", "http://smile"));
+        EmojisMap emojisMap = new EmojisMap(Map.of(":smile:", "http://smile"));
         when(emojisResource.getEmojisMap()).thenReturn(emojisMap);
         assertThat(emojisResource.getEmojisMap(), is(emojisMap));
     }

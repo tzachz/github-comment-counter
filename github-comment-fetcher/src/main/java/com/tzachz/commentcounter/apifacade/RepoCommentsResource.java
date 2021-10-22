@@ -18,7 +18,7 @@ import java.util.List;
  */
 class RepoCommentsResource extends GitHubResource {
 
-    private static final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private final DateFormat SINCE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     RepoCommentsResource(Credentials credentials, String url) {
         super(credentials, url);

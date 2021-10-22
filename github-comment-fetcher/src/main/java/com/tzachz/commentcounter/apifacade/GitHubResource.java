@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class GitHubResource {
 
-    private final static Logger logger = LoggerFactory.getLogger(GitHubResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(GitHubResource.class);
 
     private static final int MAX_PAGES = 500;
 
@@ -35,14 +35,14 @@ public abstract class GitHubResource {
     }
 
     protected <T> T get(String url, final Class<T> type) {
-        logger.info("fetching URL: " + url);
+        logger.info(String.format("fetching URL: %s", url));
         return client.resource(url).get(type);
     }
 
     <T> void scanPages(WebResource resource, GenericType<List<T>> type, PageProcessor<T> processor) {
         int totalItems = 0;
         for (int page = 1; page <= MAX_PAGES; page++) {
-            logger.debug("Reading page {} from {}", page, resource.toString());
+            logger.debug("Reading page {} from {}", page, resource);
             List<T> events = resource.queryParam("page", Integer.toString(page)).get(type);
             totalItems += events.size();
             processor.process(events);
@@ -50,7 +50,7 @@ public abstract class GitHubResource {
                 break;
             }
         }
-        logger.info("{} items read from {}", totalItems, resource.toString());
+        logger.info("{} items read from {}", totalItems, resource);
     }
 
     protected interface PageProcessor<T> {

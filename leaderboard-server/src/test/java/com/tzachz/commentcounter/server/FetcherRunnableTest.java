@@ -1,6 +1,5 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.CommentFetcher;
 import com.tzachz.commentcounter.GHCommentBuilder;
@@ -10,7 +9,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -40,7 +39,7 @@ public class FetcherRunnableTest {
 
     @Test
     public void fetchesAndStores() {
-        ArrayList<Comment> comments = Lists.newArrayList(new Comment(commentBuilder.createComment("u1", "url"), new GHRepo("r")));
+        List<Comment> comments = List.of(new Comment(commentBuilder.createComment("u1", "url"), new GHRepo("r")));
         when(fetcher.getComments()).thenReturn(comments);
         runnable.run();
         verify(store).set(comments);
@@ -55,7 +54,7 @@ public class FetcherRunnableTest {
 
     @Test
     public void exceptionInStoreIsSwallowed() {
-        ArrayList<Comment> comments = Lists.newArrayList();
+        List<Comment> comments = List.of();
         when(fetcher.getComments()).thenReturn(comments);
         doThrow(new RuntimeException()).when(store).set(comments);
         runnable.run();

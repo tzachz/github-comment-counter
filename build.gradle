@@ -15,6 +15,7 @@ sonarqube {
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: 'jacoco'
 
     project.group = 'com.tzachz'
     project.version = "0.1.$BUILD_NUMBER"
@@ -25,9 +26,21 @@ allprojects {
     }
 
     test {
+        doFirst {
+            // see https://discuss.gradle.org/t/getting-classnotfoundexception-org-jacoco-agent-rt-internal-9dd1198-premain-with-1-7s-jacoco-plugin/1444/3
+            systemProperties['user.dir'] = workingDir
+        }
         beforeTest { descriptor ->
             logger.lifecycle("Running " + descriptor)
         }
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled = true
+            csv.enabled = false
+        }
+        dependsOn test
     }
 }
 

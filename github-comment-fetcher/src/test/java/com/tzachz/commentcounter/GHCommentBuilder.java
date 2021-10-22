@@ -1,6 +1,5 @@
 package com.tzachz.commentcounter;
 
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHComment;
 import com.tzachz.commentcounter.apifacade.jsonobjects.GHUser;
 
@@ -17,7 +16,7 @@ public class GHCommentBuilder {
     }
 
     public Collection<GHComment> createCommentCollection(String username, String pullRequestURL) {
-        return Lists.newArrayList(createComment(username, pullRequestURL));
+        return List.of(createComment(username, pullRequestURL));
     }
 
     public GHComment createComment(String username, String pullRequestURL) {

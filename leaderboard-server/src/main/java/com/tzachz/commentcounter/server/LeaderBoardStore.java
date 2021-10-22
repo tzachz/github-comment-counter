@@ -1,8 +1,6 @@
 package com.tzachz.commentcounter.server;
 
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.tzachz.commentcounter.Clock;
 import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.Commenter;
@@ -39,7 +37,7 @@ public class LeaderBoardStore {
     }
 
     public List<Commenter> get(String name) {
-        return isLoaded(name)? store.get(Period.valueOf(name)) : Collections.<Commenter>emptyList();
+        return isLoaded(name)? store.get(Period.valueOf(name.toUpperCase())) : Collections.emptyList();
     }
 
     public EmojisMap getEmojiMap() {
@@ -47,7 +45,7 @@ public class LeaderBoardStore {
     }
 
     public boolean isLoaded(String name) {
-        return store.containsKey(Period.valueOf(name));
+        return store.containsKey(Period.valueOf(name.toUpperCase()));
     }
 
     private Collection<Comment> filterByRecency(List<Comment> comments, int daysBack) {
@@ -56,7 +54,7 @@ public class LeaderBoardStore {
     }
 
     private List<Commenter> aggregate(final Collection<Comment> comments) {
-        Map<String, Commenter> userComments = Maps.newHashMap();
+        Map<String, Commenter> userComments = new HashMap<>();
         for (Comment comment : comments) {
             final GHUser user = comment.getComment().getUser();
             String userLogin = user.getLogin();
@@ -65,6 +63,6 @@ public class LeaderBoardStore {
             }
             userComments.get(userLogin).addComment(comment.getComment(), comment.getRepo());
         }
-        return Lists.newArrayList(userComments.values());
+        return List.copyOf(userComments.values());
     }
 }

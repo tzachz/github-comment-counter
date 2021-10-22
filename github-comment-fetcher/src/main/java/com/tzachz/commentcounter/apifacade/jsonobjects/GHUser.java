@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tzachz
@@ -46,9 +48,7 @@ public class GHUser {
 
         GHUser ghUser = (GHUser) o;
 
-        if (login != null ? !login.equals(ghUser.login) : ghUser.login != null) return false;
-
-        return true;
+        return Objects.equals(login, ghUser.login);
     }
 
     @Override

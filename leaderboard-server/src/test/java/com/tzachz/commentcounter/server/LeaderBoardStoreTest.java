@@ -1,6 +1,5 @@
 package com.tzachz.commentcounter.server;
 
-import com.google.common.collect.Lists;
 import com.tzachz.commentcounter.Clock;
 import com.tzachz.commentcounter.Comment;
 import com.tzachz.commentcounter.GHCommentBuilder;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,35 +42,35 @@ public class LeaderBoardStoreTest {
     private LeaderBoardStore store;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
         when(clock.getLocalDateNow()).thenReturn(now);
     }
 
     @Test
-    public void storeStartsUnloaded() throws Exception {
+    public void storeStartsUnloaded() {
         assertThat(store.isLoaded("today"), is(false));
         assertThat(store.isLoaded("week"), is(false));
         assertThat(store.isLoaded("month"), is(false));
     }
 
     @Test
-    public void setLoadsAllPeriods() throws Exception {
-        store.set(Lists.<Comment>newArrayList());
+    public void setLoadsAllPeriods() {
+        store.set(List.of());
         assertThat(store.isLoaded("today"), is(true));
         assertThat(store.isLoaded("week"), is(true));
         assertThat(store.isLoaded("month"), is(true));
     }
 
     @Test
-    public void setCallsEmojiStoreLoad() throws Exception {
-        store.set(Lists.<Comment>newArrayList());
+    public void setCallsEmojiStoreLoad() {
+        store.set(List.of());
         verify(emojiStore).load();
     }
 
     @Test
-    public void todayExcludesEarlierComments() throws Exception {
-        ArrayList<Comment> comments = Lists.newArrayList(
+    public void todayExcludesEarlierComments() {
+        List<Comment> comments = List.of(
                 createComment("user1", now.toDate(), "repo1"),
                 createComment("user1", now.minusDays(2).toDate(), "repo1"));
         store.set(comments);
@@ -81,8 +79,8 @@ public class LeaderBoardStoreTest {
     }
 
     @Test
-    public void usersAggregatedSeparately() throws Exception {
-        ArrayList<Comment> comments = Lists.newArrayList(
+    public void usersAggregatedSeparately() {
+        List<Comment> comments = List.of(
                 createComment("user1", now.toDate(), "repo1"),
                 createComment("user1", now.toDate(), "repo2"),
                 createComment("user2", now.toDate(), "repo1"));
