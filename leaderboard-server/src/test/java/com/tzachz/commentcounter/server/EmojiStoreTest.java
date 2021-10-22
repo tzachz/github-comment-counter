@@ -25,29 +25,29 @@ public class EmojiStoreTest {
     private EmojiStore store;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         initMocks(this);
         when(apiFacade.getEmojiMap()).thenReturn(EMOJIS_MAP);
     }
 
     @Test
-    public void constructorDoesNotCallFacade() throws Exception {
+    public void constructorDoesNotCallFacade() {
         verifyNoMoreInteractions(apiFacade);
     }
 
     @Test
-    public void getWithoutLoadReturnsEmptyMap() throws Exception {
+    public void getWithoutLoadReturnsEmptyMap() {
         assertThat(store.getMap().getEmojiCodes(), hasSize(0));
     }
 
     @Test
-    public void getAfterLoadReturnsLoadedValue() throws Exception {
+    public void getAfterLoadReturnsLoadedValue() {
         store.load();
         assertThat(store.getMap(), is(EMOJIS_MAP));
     }
 
     @Test
-    public void secondLoadDoesNothing() throws Exception {
+    public void secondLoadDoesNothing() {
         store.load();
         store.load();
         verify(apiFacade, times(1)).getEmojiMap();

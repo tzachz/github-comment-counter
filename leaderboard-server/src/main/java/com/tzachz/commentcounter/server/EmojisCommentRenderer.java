@@ -15,11 +15,15 @@ public class EmojisCommentRenderer implements CommentRenderer {
 
     @Override
     public String render(String comment) {
-        for (String emojiCode : emojisMap.getEmojiCodes()) {
-            String emojiMarkdown = toEmojiMarkdown(emojiCode);
-            comment = comment.replace(emojiMarkdown, createImage(emojiMarkdown, emojisMap.getLink(emojiCode)));
-        }
-        return comment;
+        return emojisMap.getEmojiCodes().stream()
+                .reduce(
+                        comment,
+                        (updated, emojiCode) -> {
+                            final var emojiMarkdown = toEmojiMarkdown(emojiCode);
+                            return updated.replace(emojiMarkdown, createImage(emojiMarkdown, emojisMap.getLink(emojiCode)));
+                        },
+                        (c1, c2) -> c2
+                );
     }
 
     private String toEmojiMarkdown(String emojiCode) {

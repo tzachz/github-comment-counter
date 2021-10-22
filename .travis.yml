@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - openjdk8
+  - openjdk11
 
 script: "./gradlew clean test stage -Dtoken=$CI_USER_TOKEN -PBUILD_NUMBER=$TRAVIS_BUILD_NUMBER"
 
