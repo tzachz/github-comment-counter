@@ -48,7 +48,7 @@ public class LeaderBoardServiceTest {
         when(environment.managedScheduledExecutorService(anyString(), anyInt())).thenReturn(executorService);
         this.service = new LeaderBoardService() {
             @Override
-            protected GitHubApiFacade getApiFacade(LeaderBoardServerConfiguration configuration) {
+            protected GitHubApiFacade GetApiFacade(LeaderBoardServerConfiguration configuration) {
                 return apiFacade;
             }
         };
