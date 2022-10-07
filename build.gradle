@@ -49,6 +49,7 @@ subprojects { project ->
         compile 'com.google.guava:guava:14.0.1'
         compile 'joda-time:joda-time:2.2'
         compile 'org.slf4j:slf4j-api:1.7.5'
+        compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
         testCompile 'org.hamcrest:hamcrest-library:1.3'
         testCompile 'org.mockito:mockito-core:1.9.0'
@@ -73,4 +74,3 @@ idea.project.ipr {
         provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
     }
 }
-
